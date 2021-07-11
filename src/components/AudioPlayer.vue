@@ -1,5 +1,9 @@
+/* Move Volume to vueX store at some point */
 <template>
   <div id="wrapper">
+    <v-card-text>
+      <v-slider color="purple" thumb-color="purple" track-color="blue" max="1.0" step="0.1" v-model="volume" prepend-icon="mdi-volume-high" @change="volumeController()" ></v-slider>
+    </v-card-text>
     <li v-for="station in stations" :key="station.title">
       {{ station.title }}
       <v-btn
@@ -46,6 +50,7 @@ export default {
       radioMuted: false,
       sound: null,
       soundID: null,
+      volume: 1,
       stations: [
         {
           title: "HipHop Hits",
@@ -96,13 +101,18 @@ export default {
     },
     /* MUTE Radio  pass .playID */
     muteRadio(soundID) {
-      (this.radioMuted = true), this.sound.mute(true, soundID);
+      (this.radioMuted = true), this.sound.fade(1.0, 0.0, 1200, soundID);
       console.log("Radio Muted");
     },
     /* UNMUTE Radio */
     unmuteRadio(soundID) {
-      (this.radioMuted = false), this.sound.mute(false, soundID);
+      (this.radioMuted = false), this.sound.fade(0.0, 1, 1200, soundID);
       console.log("Radio Unmuted");
+    },
+
+    /* Volume Slider */
+    volumeController() {
+      this.sound.volume(this.volume);
     },
   },
 };
