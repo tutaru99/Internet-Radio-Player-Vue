@@ -17,3 +17,9 @@ export default Vue.extend({
   }),
 });
 </script>
+
+<style lang="scss">
+.v-application--is-ltr .v-messages{
+  display: none !important;
+}
+</style>

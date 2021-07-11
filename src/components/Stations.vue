@@ -6,9 +6,7 @@
           <v-card class="pa-2" outlined tile>
             <h1 class="text-center">Radio Stations</h1>
             <p>Sort, Search // if possible display current song, mb tags for stations</p>
-            <p>
-              Buttons: Next/Previous Station
-            </p>
+            fix play buttons changing all at once
           </v-card>
           <!-- Plater -->
           <h1 class="text-center">Radio Player</h1>

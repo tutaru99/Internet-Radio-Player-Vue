@@ -1,40 +1,61 @@
 /* Move Volume to vueX store at some point */
 <template>
   <div id="wrapper">
-    <v-card-text>
-      <v-slider color="purple" thumb-color="purple" track-color="blue" max="1.0" step="0.1" v-model="volume" prepend-icon="mdi-volume-high" @change="volumeController()" ></v-slider>
-    </v-card-text>
-    <li v-for="station in stations" :key="station.title">
-      {{ station.title }}
-      <v-btn
-        elevation="2"
-        fab
-        outlined
-        color="purple"
-        @click="isRadioPlaying(station.src)"
-      >
-        <v-icon dark v-if="!radioStarted">
-          mdi-play
-        </v-icon>
-        <v-icon dark v-if="radioStarted">
-          mdi-pause
-        </v-icon>
-      </v-btn>
-      <v-btn
-        elevation="2"
-        fab
-        outlined
-        color="purple"
-        @click="isRadioMuted(soundID)"
-      >
-        <v-icon dark v-if="!radioMuted">
-          mdi-volume-variant-off
-        </v-icon>
-        <v-icon dark v-if="radioMuted">
-          mdi-volume-source
-        </v-icon>
-      </v-btn>
-      {{ soundID }}
+    <v-row align="center"  class="d-flex">
+      <v-col cols="9" sm="10" md="11" xs="9">
+        <v-slider
+          color="purple"
+          thumb-color="purple"
+          track-color="blue"
+          max="1.0"
+          step="0.1"
+          v-model="volume"
+          prepend-icon="mdi-volume-high"
+          @change="volumeController()"
+          @click:prepend="isRadioMuted(soundID)"
+        ></v-slider>
+      </v-col>
+      <v-col cols="3" sm="2" md="1" xs="3">
+        <v-btn
+          elevation="2"
+          fab
+          outlined
+          color="purple"
+          @click="isRadioMuted(soundID)"
+        >
+          <v-icon dark v-if="!radioMuted">
+            mdi-volume-variant-off
+          </v-icon>
+          <v-icon dark v-if="radioMuted">
+            mdi-volume-source
+          </v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
+    <li v-for="station in stations" :key="station.id">
+      <v-row>
+        <v-col>
+          <v-card class="pa-2" outlined tile>
+            <h1 class="text-center">{{ station.title }} {{ soundID }}</h1>
+            <v-row no-gutters justify="space-between">
+              <v-btn
+                elevation="2"
+                fab
+                outlined
+                color="purple"
+                @click="isRadioPlaying(station.src)"
+              >
+                <v-icon dark v-if="!radioStarted">
+                  mdi-play
+                </v-icon>
+                <v-icon dark v-if="radioStarted">
+                  mdi-pause
+                </v-icon>
+              </v-btn>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
     </li>
   </div>
 </template>
@@ -50,14 +71,14 @@ export default {
       radioMuted: false,
       sound: null,
       soundID: null,
-      volume: 1,
+      volume: .4,
       stations: [
         {
-          title: "HipHop Hits",
-          src: "https://streaming.radio.co/s97881c7e0/listen",
+          title: "Anison.FM",
+          src: "https://pool.anison.fm:9000/AniSonFM(320)",
         },
         {
-          title: "HipHop Hits 2",
+          title: "Hip-Hop Hits",
           src: "https://streaming.radio.co/s97881c7e0/listen",
         },
       ],
@@ -81,7 +102,7 @@ export default {
       this.sound.play();
       this.soundID = this.sound.play();
 
-      console.log(this.sound.play());
+      console.log(this.soundID);
       console.log(stationSrc, "Radio Playing", this.sound);
     },
     /* PAUSE Radio */
@@ -100,13 +121,13 @@ export default {
       }
     },
     /* MUTE Radio  pass .playID */
-    muteRadio(soundID) {
-      (this.radioMuted = true), this.sound.fade(1.0, 0.0, 1200, soundID);
+    muteRadio() {
+      (this.radioMuted = true), this.sound.fade(this.volume, 0.0, 1200);
       console.log("Radio Muted");
     },
     /* UNMUTE Radio */
-    unmuteRadio(soundID) {
-      (this.radioMuted = false), this.sound.fade(0.0, 1, 1200, soundID);
+    unmuteRadio() {
+      (this.radioMuted = false), this.sound.fade(0.0, this.volume, 1200);
       console.log("Radio Unmuted");
     },
 
@@ -127,4 +148,5 @@ export default {
 li {
   list-style-type: none;
 }
+
 </style>
