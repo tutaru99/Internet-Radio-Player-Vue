@@ -1,8 +1,14 @@
 <template>
   <div>
-    <v-btn @click="interacted()">
-      Play
-    </v-btn>
+    <li v-for="station in stations" :key="station.title">
+      {{ station.title }}
+      <v-btn @click="startRadio(station.src)">
+        Play
+      </v-btn>
+      <v-btn @click="stopRadio(station.src)">
+        Stop
+      </v-btn>
+    </li>
   </div>
 </template>
 
@@ -13,21 +19,33 @@ export default {
   name: "Lobby",
   data() {
     return {
-      userInteracted: false,
+      radioStarted: false,
+      sound: null,
+      stations: [
+        {
+          title: "HipHop Hits",
+          src: "https://streaming.radio.co/s97881c7e0/listen",
+        },
+        {
+          title: "HipHop Hits 2",
+          src: "https://streaming.radio.co/s97881c7e0/listen",
+        },
+      ],
     };
   },
   methods: {
-    interacted: function() {
-      this.userInteracted = true;
-      let sound = new Howl({
-        src: [require("../assets/audio/teddy.mp3")],
+    startRadio(stationSrc) {
+      this.radioStarted = true;
+      this.sound = new Howl({
+        src: stationSrc,
         html5: true,
-        onend: function() {
-          console.log("Finished Playing Song");
-        },
       });
-
-      sound.play();
+      this.sound.play();
+      console.log(stationSrc, "Radio Playing");
+    },
+    stopRadio() {
+      this.sound.stop();
+      console.log("Radio Stopped");
     },
   },
 };
