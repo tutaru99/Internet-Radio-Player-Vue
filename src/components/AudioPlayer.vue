@@ -1,13 +1,36 @@
 <template>
-  <div>
+  <div id="wrapper">
     <li v-for="station in stations" :key="station.title">
       {{ station.title }}
-      <v-btn @click="startRadio(station.src)">
-        Play
+      <v-btn
+        elevation="2"
+        fab
+        outlined
+        color="purple"
+        @click="isRadioPlaying(station.src)"
+      >
+        <v-icon dark v-if="!radioStarted">
+          mdi-play
+        </v-icon>
+        <v-icon dark v-if="radioStarted">
+          mdi-pause
+        </v-icon>
       </v-btn>
-      <v-btn @click="stopRadio(station.src)">
-        Stop
+      <v-btn
+        elevation="2"
+        fab
+        outlined
+        color="purple"
+        @click="isRadioMuted(soundID)"
+      >
+        <v-icon dark v-if="!radioMuted">
+          mdi-volume-variant-off
+        </v-icon>
+        <v-icon dark v-if="radioMuted">
+          mdi-volume-source
+        </v-icon>
       </v-btn>
+      {{ soundID }}
     </li>
   </div>
 </template>
@@ -20,7 +43,9 @@ export default {
   data() {
     return {
       radioStarted: false,
+      radioMuted: false,
       sound: null,
+      soundID: null,
       stations: [
         {
           title: "HipHop Hits",
@@ -34,6 +59,14 @@ export default {
     };
   },
   methods: {
+    isRadioPlaying(stationSrc) {
+      if (this.radioStarted === false) {
+        this.startRadio(stationSrc);
+      } else {
+        this.stopRadio();
+      }
+    },
+    /* START Radio */
     startRadio(stationSrc) {
       this.radioStarted = true;
       this.sound = new Howl({
@@ -41,12 +74,47 @@ export default {
         html5: true,
       });
       this.sound.play();
-      console.log(stationSrc, "Radio Playing");
+      this.soundID = this.sound.play();
+
+      console.log(this.sound.play());
+      console.log(stationSrc, "Radio Playing", this.sound);
     },
+    /* PAUSE Radio */
     stopRadio() {
-      this.sound.stop();
+      this.radioStarted = false;
+      this.sound.unload();
       console.log("Radio Stopped");
+    },
+
+    /* MUTE Handler */
+    isRadioMuted(soundID) {
+      if (this.radioMuted === false) {
+        this.muteRadio(soundID);
+      } else {
+        this.unmuteRadio(soundID);
+      }
+    },
+    /* MUTE Radio  pass .playID */
+    muteRadio(soundID) {
+      (this.radioMuted = true), this.sound.mute(true, soundID);
+      console.log("Radio Muted");
+    },
+    /* UNMUTE Radio */
+    unmuteRadio(soundID) {
+      (this.radioMuted = false), this.sound.mute(false, soundID);
+      console.log("Radio Unmuted");
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+#wrapper {
+  border: 1px solid purple;
+  border-radius: 20px;
+  padding: 15px 15px;
+}
+li {
+  list-style-type: none;
+}
+</style>

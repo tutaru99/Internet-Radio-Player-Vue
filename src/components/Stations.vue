@@ -5,15 +5,16 @@
         <v-col align-self="center">
           <v-card class="pa-2" outlined tile>
             <h1 class="text-center">Radio Stations</h1>
+            <p>Done: Play/Stop, Mute/Unmute</p>
             <p>Sort, Search // if possible display current song</p>
             <p>
-              Buttons: Play, Pause, Adjust Sound Level, Next/Previous Station
+              Buttons: Adjust Sound Level, Next/Previous Station
             </p>
           </v-card>
           <!-- Plater -->
-          <h2>Audio Player</h2>
+          <h1 class="text-center">Radio Player</h1>
           <div>
-            <AudioPlayer :sources="audioSources" :loop="true"></AudioPlayer>
+            <AudioPlayer />
           </div>
         </v-col>
       </v-row>
@@ -23,7 +24,6 @@
 
 <script>
 import AudioPlayer from "./AudioPlayer.vue";
-import VueHowler from "vue-howler";
 export default {
   components: {
     AudioPlayer,
@@ -31,14 +31,8 @@ export default {
 
   data() {
     return {
-      audioSources: ["assets/audio/okawari.mp3", "assets/audio/teddy.mp3"],
+
     };
   },
 };
 </script>
-
-<style lang="scss" scoped>
-#wrapper {
-  background-color: rgb(190, 170, 170);
-}
-</style>
