@@ -5,12 +5,14 @@
         <v-col align-self="center">
           <v-card class="pa-2" outlined tile>
             <h1 class="text-center">Radio Stations</h1>
-            <p>Sort, Search // if possible display current song, mb tags for stations</p>
-            fix play buttons changing all at once
+            <p>
+              Sort, Search // if possible display current song, mb tags for
+              stations
+            </p>
           </v-card>
-          <!-- Plater -->
+          <!-- Player -->
           <h1 class="text-center">Radio Player</h1>
-          <div>
+          <div id="player">
             <AudioPlayer />
           </div>
         </v-col>
@@ -27,9 +29,14 @@ export default {
   },
 
   data() {
-    return {
-
-    };
+    return {};
   },
 };
 </script>
+
+<style scoped>
+#player {
+  background-color: black;
+  border-radius: 15px;
+}
+</style>

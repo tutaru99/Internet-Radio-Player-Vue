@@ -1,7 +1,7 @@
 /* Move Volume to vueX store at some point */
 <template>
   <div id="wrapper">
-    <v-row align="center"  class="d-flex">
+    <v-row align="center" class="d-flex">
       <v-col cols="9" sm="10" md="11" xs="9">
         <v-slider
           color="purple"
@@ -10,7 +10,9 @@
           max="1.0"
           step="0.1"
           v-model="volume"
-          prepend-icon="mdi-volume-high"
+          :prepend-icon="
+            radioMuted ? 'mdi-volume-high' : 'mdi-volume-variant-off'
+          "
           @change="volumeController()"
           @click:prepend="isRadioMuted(soundID)"
         ></v-slider>
@@ -32,23 +34,23 @@
         </v-btn>
       </v-col>
     </v-row>
-    <li v-for="station in stations" :key="station.id">
+    <li v-for="(station, index) in stations" :key="index">
       <v-row>
         <v-col>
           <v-card class="pa-2" outlined tile>
-            <h1 class="text-center">{{ station.title }} {{ soundID }}</h1>
-            <v-row no-gutters justify="space-between">
+            <h1 class="text-center">{{ station.title }}</h1>
+            <v-row no-gutters>
               <v-btn
                 elevation="2"
                 fab
                 outlined
                 color="purple"
-                @click="isRadioPlaying(station.src)"
+                @click="isRadioPlaying(station.src, station.playing, index)"
               >
-                <v-icon dark v-if="!radioStarted">
+                <v-icon dark v-if="!station.playing">
                   mdi-play
                 </v-icon>
-                <v-icon dark v-if="radioStarted">
+                <v-icon dark v-if="station.playing">
                   mdi-pause
                 </v-icon>
               </v-btn>
@@ -71,43 +73,47 @@ export default {
       radioMuted: false,
       sound: null,
       soundID: null,
-      volume: .4,
+      volume: 0.6,
       stations: [
         {
           title: "Anison.FM",
           src: "https://pool.anison.fm:9000/AniSonFM(320)",
+          playing: false,
         },
         {
           title: "Hip-Hop Hits",
           src: "https://streaming.radio.co/s97881c7e0/listen",
+          playing: false,
         },
       ],
     };
   },
   methods: {
-    isRadioPlaying(stationSrc) {
-      if (this.radioStarted === false) {
-        this.startRadio(stationSrc);
+    isRadioPlaying(stationSrc, playing, index) {
+      if (playing === false) {
+        this.startRadio(stationSrc, index);
       } else {
-        this.stopRadio();
+        this.stopRadio(index);
       }
     },
     /* START Radio */
-    startRadio(stationSrc) {
-      this.radioStarted = true;
+    startRadio(stationSrc, index) {
+      this.stations[index].playing = true;
       this.sound = new Howl({
         src: stationSrc,
         html5: true,
+        volume: this.volume,
       });
       this.sound.play();
+      Howler.volume(this.volume);
       this.soundID = this.sound.play();
 
       console.log(this.soundID);
       console.log(stationSrc, "Radio Playing", this.sound);
     },
     /* PAUSE Radio */
-    stopRadio() {
-      this.radioStarted = false;
+    stopRadio(index) {
+      this.stations[index].playing = false;
       this.sound.unload();
       console.log("Radio Stopped");
     },
@@ -148,5 +154,4 @@ export default {
 li {
   list-style-type: none;
 }
-
 </style>

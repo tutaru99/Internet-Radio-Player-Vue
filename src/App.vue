@@ -20,6 +20,9 @@ export default Vue.extend({
 
 <style lang="scss">
 .v-application--is-ltr .v-messages{
-  display: none !important;
+  display: none;
+}
+.v-icon.v-icon.v-icon--link {
+color: purple;
 }
 </style>
