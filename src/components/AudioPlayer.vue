@@ -45,7 +45,9 @@
                 fab
                 outlined
                 color="purple"
-                @click="isRadioPlaying(station.src, station.playing, index)"
+                @click="
+                  isRadioPlaying(station.src, station.playing, soundID, index)
+                "
               >
                 <v-icon dark v-if="!station.playing">
                   mdi-play
@@ -69,6 +71,7 @@ export default {
   name: "Lobby",
   data() {
     return {
+      arrayID: null,
       radioStarted: false,
       radioMuted: false,
       sound: null,
@@ -89,8 +92,13 @@ export default {
     };
   },
   methods: {
-    isRadioPlaying(stationSrc, playing, index) {
-      if (playing === false) {
+    isRadioPlaying(stationSrc, isplaying, soundID, index) {
+      if (isplaying === false && this.radioStarted === false) {
+        this.startRadio(stationSrc, index);
+      } else if (isplaying === false && this.radioStarted === true) {
+        Howler.stop();
+        console.log("Howler Stop");
+        this.stopRadio(this.arrayID);
         this.startRadio(stationSrc, index);
       } else {
         this.stopRadio(index);
@@ -98,23 +106,25 @@ export default {
     },
     /* START Radio */
     startRadio(stationSrc, index) {
+      this.radioStarted = true;
+      this.arrayID = index;
       this.stations[index].playing = true;
       this.sound = new Howl({
         src: stationSrc,
         html5: true,
         volume: this.volume,
       });
-      this.sound.play();
       Howler.volume(this.volume);
+      // Howler.stop();
       this.soundID = this.sound.play();
 
-      console.log(this.soundID);
+      // console.log(this.soundID);
       console.log(stationSrc, "Radio Playing", this.sound);
     },
     /* PAUSE Radio */
     stopRadio(index) {
       this.stations[index].playing = false;
-      this.sound.unload();
+      (this.radioStarted = false), this.sound.unload();
       console.log("Radio Stopped");
     },
 
