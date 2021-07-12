@@ -11,7 +11,7 @@
           step="0.1"
           v-model="volume"
           :prepend-icon="
-            radioMuted ? 'mdi-volume-high' : 'mdi-volume-variant-off'
+            !radioMuted ? 'mdi-volume-high' : 'mdi-volume-variant-off'
           "
           @change="volumeController()"
           @click:prepend="isRadioMuted(soundID)"
@@ -25,10 +25,10 @@
           color="purple"
           @click="isRadioMuted(soundID)"
         >
-          <v-icon dark v-if="!radioMuted">
+          <v-icon dark v-if="radioMuted">
             mdi-volume-variant-off
           </v-icon>
-          <v-icon dark v-if="radioMuted">
+          <v-icon dark v-if="!radioMuted">
             mdi-volume-source
           </v-icon>
         </v-btn>
