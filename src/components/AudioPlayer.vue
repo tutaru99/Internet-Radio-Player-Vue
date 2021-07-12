@@ -1,66 +1,88 @@
 /* Move Volume to vueX store at some point */
 <template>
   <div id="wrapper">
-    <v-row align="center" class="d-flex">
-      <v-col cols="9" sm="10" md="11" xs="9">
-        <v-slider
-          :color="!radioMuted ? 'purple' : 'purple'"
-          thumb-color="purple"
-          :track-color="!radioMuted ? 'blue' : 'red darken-2'"
-          max="1.0"
-          step="0.05"
-          v-model="volume"
-          :prepend-icon="
-            !radioMuted ? 'mdi-volume-high' : 'mdi-volume-variant-off'
-          "
-          @change="volumeController()"
-          @click:prepend="isRadioMuted(soundID)"
-        ></v-slider>
-      </v-col>
-      <v-col sm="2" md="1" xs="3">
-        <v-btn
-          elevation="2"
-          fab
-          outlined
-          color="purple"
-          @click="isRadioMuted(soundID)"
+    <v-col cols="12">
+      <v-row align="center" class="d-flex">
+        <v-col cols="9" sm="10" md="10" xs="11">
+          <v-slider
+            :color="!radioMuted ? 'purple' : 'purple'"
+            thumb-color="purple"
+            :track-color="!radioMuted ? 'blue' : 'red darken-2'"
+            max="1.0"
+            step="0.05"
+            v-model="volume"
+            :prepend-icon="
+              !radioMuted ? 'mdi-volume-high' : 'mdi-volume-variant-off'
+            "
+            @change="volumeController()"
+            @click:prepend="isRadioMuted(soundID)"
+          ></v-slider>
+        </v-col>
+        <v-col
+          class="d-flex justify-end"
+          offset-sm="1"
+          offset-md="1"
+          cols="3"
+          sm="1"
+          md="1"
+          xs="1"
         >
-          <v-icon dark v-if="radioMuted">
-            mdi-volume-variant-off
-          </v-icon>
-          <v-icon dark v-if="!radioMuted">
-            mdi-volume-source
-          </v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-    <li v-for="(station, index) in stations" :key="index">
-      <v-row>
-        <v-col>
-          <v-card class="pa-2" outlined tile>
-            <h1 class="text-center">{{ station.title }}</h1>
-            <v-row no-gutters>
-              <v-btn
-                elevation="2"
-                fab
-                outlined
-                color="purple"
-                @click="
-                  isRadioPlaying(station.src, station.playing, soundID, index)
-                "
-              >
-                <v-icon dark v-if="!station.playing">
-                  mdi-play
-                </v-icon>
-                <v-icon dark v-if="station.playing">
-                  mdi-pause
-                </v-icon>
-              </v-btn>
-            </v-row>
-          </v-card>
+          <v-btn
+            elevation="2"
+            fab
+            outlined
+            color="purple"
+            @click="isRadioMuted(soundID)"
+            class="mr-1"
+          >
+            <v-icon dark v-if="radioMuted">
+              mdi-volume-variant-off
+            </v-icon>
+            <v-icon dark v-if="!radioMuted">
+              mdi-volume-source
+            </v-icon>
+          </v-btn>
         </v-col>
       </v-row>
-    </li>
+      <v-row class="mt-5">
+        <v-col>
+          <li v-for="(station, index) in stations" :key="index">
+            <v-row>
+              <v-col>
+                <v-card id="stationsWrapper" class="pa-2" outlined tile>
+                  <h2 class="text-center">{{ station.title }}</h2>
+                  <v-row id="information" no-gutters d-flex>
+                    <v-btn
+                      elevation="2"
+                      fab
+                      outlined
+                      color="purple"
+                      @click="
+                        isRadioPlaying(
+                          station.src,
+                          station.playing,
+                          soundID,
+                          index
+                        )
+                      "
+                    >
+                      <v-icon dark v-if="!station.playing">
+                        mdi-play
+                      </v-icon>
+                      <v-icon dark v-if="station.playing">
+                        mdi-pause
+                      </v-icon>
+                    </v-btn>
+                    <h3 class="ml-2">Genres:</h3>
+                    <h3 class="ml-5">Currently Playing:</h3>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
+          </li>
+        </v-col>
+      </v-row>
+    </v-col>
   </div>
 </template>
 
@@ -97,7 +119,7 @@ export default {
         this.startRadio(stationSrc, index);
       } else if (isplaying === false && this.radioStarted === true) {
         Howler.stop();
-        console.log("Howler Stop");
+        console.log("Howler Fully Stopped everything");
         this.stopRadio(this.arrayID);
         this.startRadio(stationSrc, index);
       } else {
@@ -115,11 +137,8 @@ export default {
         volume: this.volume,
       });
       Howler.volume(this.volume);
-      // Howler.stop();
       this.soundID = this.sound.play();
-
-      // console.log(this.soundID);
-      console.log(stationSrc, "Radio Playing", this.sound);
+      console.log("Radio Started Playing");
     },
     /* PAUSE Radio */
     stopRadio(index) {
@@ -163,5 +182,11 @@ export default {
 }
 li {
   list-style-type: none;
+}
+#stationsWrapper {
+  border-radius: 15px !important;
+}
+#information {
+  align-items: center;
 }
 </style>

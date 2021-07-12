@@ -3,18 +3,14 @@
     <v-container>
       <v-row no-gutters>
         <v-col align-self="center">
-          <v-card class="pa-2" outlined tile>
-            <h1 class="text-center">Radio Stations</h1>
-            <p>
-              Sort, Search // if possible display current song, mb tags for
-              stations
-            </p>
-          </v-card>
           <!-- Player -->
-          <h1 class="text-center">Radio Player</h1>
-          <div id="player">
-            <AudioPlayer />
-          </div>
+          <v-row no-gutters d-flex justify="center">
+            <v-col cols="8" lg="6">
+              <div id="player">
+                <AudioPlayer />
+              </div>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
     </v-container>

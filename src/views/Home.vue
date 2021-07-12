@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="mainwrapper">
     <v-img
       :src="require('../assets/logo.svg')"
       class="my-3"
@@ -22,3 +22,6 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+</style>
