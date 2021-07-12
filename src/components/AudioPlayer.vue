@@ -4,11 +4,11 @@
     <v-row align="center" class="d-flex">
       <v-col cols="9" sm="10" md="11" xs="9">
         <v-slider
-          color="purple"
+          :color="!radioMuted ? 'purple' : 'purple'"
           thumb-color="purple"
-          track-color="blue"
+          :track-color="!radioMuted ? 'blue' : 'red darken-2'"
           max="1.0"
-          step="0.1"
+          step="0.05"
           v-model="volume"
           :prepend-icon="
             !radioMuted ? 'mdi-volume-high' : 'mdi-volume-variant-off'
@@ -17,7 +17,7 @@
           @click:prepend="isRadioMuted(soundID)"
         ></v-slider>
       </v-col>
-      <v-col cols="3" sm="2" md="1" xs="3">
+      <v-col sm="2" md="1" xs="3">
         <v-btn
           elevation="2"
           fab
