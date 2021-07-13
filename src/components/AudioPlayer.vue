@@ -168,7 +168,13 @@ export default {
 
     /* Volume Slider */
     volumeController() {
-      this.sound.volume(this.volume);
+      if (this.radioStarted === false) {
+        this.volume;
+        console.log("volume ", this.volume);
+      } else {
+        this.sound.volume(this.volume);
+        console.log("volume ", this.volume);
+      }
     },
   },
 };
