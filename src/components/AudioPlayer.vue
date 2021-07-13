@@ -198,6 +198,13 @@ export default {
           imageSrc:
             "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
         },
+        {
+          title: "Hip-Hop Hits",
+          src: "https://streaming.radio.co/s97881c7e0/listen",
+          playing: false,
+          imageSrc:
+            "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
+        },
       ],
     };
   },
