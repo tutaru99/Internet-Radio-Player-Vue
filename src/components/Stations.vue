@@ -1,18 +1,12 @@
 <template>
-  <div id="wrapper">
-    <v-container>
-      <v-row no-gutters>
-        <v-col align-self="center">
+  <div>
+    <v-container id="wrapper">
           <!-- Player -->
-          <v-row no-gutters d-flex justify="center">
-            <v-col cols="8" lg="6">
-              <div id="player">
+          <v-row no-gutters justify="center">
+            <v-col cols="12" md="12" lg="12">
                 <AudioPlayer />
-              </div>
             </v-col>
           </v-row>
-        </v-col>
-      </v-row>
     </v-container>
   </div>
 </template>
@@ -31,8 +25,5 @@ export default {
 </script>
 
 <style scoped>
-#player {
-  background-color: black;
-  border-radius: 15px;
-}
+
 </style>

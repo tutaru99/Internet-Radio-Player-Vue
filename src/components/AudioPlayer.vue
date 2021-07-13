@@ -1,7 +1,51 @@
 /* Move Volume to vueX store at some point */
 <template>
-  <div id="wrapper">
+  <div>
     <v-col cols="12">
+      <v-row class="mt-5" id="Stationswrapper">
+        <v-col  id="AudioPlayerWrapper" cols="12" md="3" lg="4">
+          <div>
+            <h2 style="color: white;">Current Radio Card with random info</h2>
+          </div>
+        </v-col>
+       
+        <v-col>
+          <li v-for="(station, index) in stations" :key="index">
+            <v-row>
+              <v-col>
+           
+                  <h2>{{ station.title }}</h2>
+                  <v-row id="information" no-gutters d-flex>
+                    <v-btn
+                      elevation="2"
+                      fab
+                      outlined
+                      color="purple"
+                      @click="
+                        isRadioPlaying(
+                          station.src,
+                          station.playing,
+                          soundID,
+                          index
+                        )
+                      "
+                    >
+                      <v-icon dark v-if="!station.playing">
+                        mdi-play
+                      </v-icon>
+                      <v-icon dark v-if="station.playing">
+                        mdi-pause
+                      </v-icon>
+                    </v-btn>
+                    <h3 class="ml-2">Genres:</h3>
+                    <h3 class="ml-5">Currently Playing:</h3>
+                  </v-row>
+              </v-col>
+            </v-row>
+          </li>
+        </v-col>
+      </v-row>
+      <v-col cols="12"> </v-col>
       <v-row align="center" class="d-flex">
         <v-col cols="9" sm="10" md="10" xs="11">
           <v-slider
@@ -42,44 +86,6 @@
               mdi-volume-source
             </v-icon>
           </v-btn>
-        </v-col>
-      </v-row>
-      <v-row class="mt-5">
-        <v-col>
-          <li v-for="(station, index) in stations" :key="index">
-            <v-row>
-              <v-col>
-                <v-card id="stationsWrapper" class="pa-2" outlined tile>
-                  <h2 class="text-center">{{ station.title }}</h2>
-                  <v-row id="information" no-gutters d-flex>
-                    <v-btn
-                      elevation="2"
-                      fab
-                      outlined
-                      color="purple"
-                      @click="
-                        isRadioPlaying(
-                          station.src,
-                          station.playing,
-                          soundID,
-                          index
-                        )
-                      "
-                    >
-                      <v-icon dark v-if="!station.playing">
-                        mdi-play
-                      </v-icon>
-                      <v-icon dark v-if="station.playing">
-                        mdi-pause
-                      </v-icon>
-                    </v-btn>
-                    <h3 class="ml-2">Genres:</h3>
-                    <h3 class="ml-5">Currently Playing:</h3>
-                  </v-row>
-                </v-card>
-              </v-col>
-            </v-row>
-          </li>
         </v-col>
       </v-row>
     </v-col>
@@ -187,18 +193,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#wrapper {
-  border: 1px solid purple;
-  border-radius: 20px;
-  padding: 15px 15px;
-}
 li {
   list-style-type: none;
 }
-#stationsWrapper {
-  border-radius: 15px !important;
-}
+
 #information {
   align-items: center;
+}
+
+#AudioPlayerWrapper {
+  background-color: #16171b;
+}
+#Stationswrapper{
+   background-color: #19191d
+;
 }
 </style>
