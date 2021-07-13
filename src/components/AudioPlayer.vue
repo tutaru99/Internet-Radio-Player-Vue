@@ -114,10 +114,14 @@ export default {
     };
   },
   methods: {
+    /* Check if radio is playing */
     isRadioPlaying(stationSrc, isplaying, soundID, index) {
       if (isplaying === false && this.radioStarted === false) {
         this.startRadio(stationSrc, index);
-      } else if (isplaying === false && this.radioStarted === true) {
+      } /* If another station is already playing stop that instance and start another station */ else if (
+        isplaying === false &&
+        this.radioStarted === true
+      ) {
         Howler.stop();
         console.log("Howler Fully Stopped everything");
         this.stopRadio(this.arrayID);
@@ -126,6 +130,7 @@ export default {
         this.stopRadio(index);
       }
     },
+
     /* START Radio */
     startRadio(stationSrc, index) {
       this.radioStarted = true;
@@ -155,7 +160,8 @@ export default {
         this.unmuteRadio(soundID);
       }
     },
-    /* MUTE Radio  pass .playID */
+
+    /* MUTE Radio */
     muteRadio() {
       (this.radioMuted = true), this.sound.fade(this.volume, 0.0, 1200);
       console.log("Radio Muted");
