@@ -3,7 +3,7 @@
   <div>
     <v-col cols="12">
       <v-row class="mt-5" id="Stationswrapper">
-        <v-col id="AudioPlayerWrapper" cols="12" md="3" lg="4">
+        <v-col id="AudioPlayerWrapper" class="py-2" cols="12" md="3" lg="4">
           <div>
             <h3 class="text-center">
               The Radio
@@ -11,8 +11,8 @@
           </div>
         </v-col>
 
-        <v-col style="padding: 0">
-          <div id="tableWrapper">
+        <v-col style="padding: 0" class="py-2">
+          <div id="tableWrapper" class="section">
             <li v-for="(station, index) in stations" :key="index">
               <v-row>
                 <v-col>
@@ -20,7 +20,7 @@
                     <template>
                       <tbody>
                         <tr>
-                          <td width="10%">
+                          <td width="5%">
                             <v-btn
                               icon
                               color="white"
@@ -41,7 +41,7 @@
                               </v-icon>
                             </v-btn>
                           </td>
-                          <td width="15%">
+                          <td width="25%">
                             <v-img
                               contain
                               max-height="80"
@@ -52,8 +52,22 @@
                             >
                             </v-img>
                           </td>
-                          <td width="60%">
+                          <td width="55">
                             <h3>{{ station.title }}</h3>
+                          </td>
+                          <td width="15%">
+                            <v-btn icon>
+                              <v-icon dark style="color: #E0E0E0">
+                                mdi-heart-outline
+                              </v-icon>
+                            </v-btn>
+                          </td>
+                          <td width="10%">
+                            <v-btn icon>
+                              <v-icon dark style="color: #E0E0E0">
+                                mdi-dots-horizontal
+                              </v-icon>
+                            </v-btn>
                           </td>
                         </tr>
                       </tbody>
@@ -73,7 +87,7 @@
           <v-slider
             :color="!radioMuted ? 'white' : 'white'"
             thumb-color="white"
-            :track-color="!radioMuted ? 'black' : 'red darken-2'"
+            :track-color="!radioMuted ? 'grey darken-1' : 'red darken-2'"
             max="1.0"
             step="0.05"
             v-model="volume"
@@ -93,12 +107,7 @@
           md="1"
           xs="1"
         >
-          <v-btn
-           icon
-            color="white"
-            @click="isRadioMuted(soundID)"
-            class="mr-1"
-          >
+          <v-btn icon color="white" @click="isRadioMuted(soundID)" class="mr-1">
             <v-icon dark v-if="radioMuted">
               mdi-volume-variant-off
             </v-icon>
@@ -272,12 +281,29 @@ td {
 #controllerWrapper {
   background: hsla(338, 39%, 21%, 1);
 
-background: radial-gradient(circle, hsla(338, 39%, 21%, 1) 0%, hsla(338, 39%, 21%, 1) 16%, hsla(280, 9%, 13%, 1) 45%, hsla(310, 20%, 17%, 1) 76%);
+  background: radial-gradient(
+    circle,
+    hsla(338, 39%, 21%, 1) 0%,
+    hsla(338, 39%, 21%, 1) 16%,
+    hsla(280, 9%, 13%, 1) 45%,
+    hsla(310, 20%, 17%, 1) 76%
+  );
 
-background: -moz-radial-gradient(circle, hsla(338, 39%, 21%, 1) 0%, hsla(338, 39%, 21%, 1) 16%, hsla(280, 9%, 13%, 1) 45%, hsla(310, 20%, 17%, 1) 76%);
+  background: -moz-radial-gradient(
+    circle,
+    hsla(338, 39%, 21%, 1) 0%,
+    hsla(338, 39%, 21%, 1) 16%,
+    hsla(280, 9%, 13%, 1) 45%,
+    hsla(310, 20%, 17%, 1) 76%
+  );
 
-background: -webkit-radial-gradient(circle, hsla(338, 39%, 21%, 1) 0%, hsla(338, 39%, 21%, 1) 16%, hsla(280, 9%, 13%, 1) 45%, hsla(310, 20%, 17%, 1) 76%);
-
+  background: -webkit-radial-gradient(
+    circle,
+    hsla(338, 39%, 21%, 1) 0%,
+    hsla(338, 39%, 21%, 1) 16%,
+    hsla(280, 9%, 13%, 1) 45%,
+    hsla(310, 20%, 17%, 1) 76%
+  );
 
   border-end-start-radius: 20px;
   border-end-end-radius: 20px;
@@ -286,5 +312,20 @@ background: -webkit-radial-gradient(circle, hsla(338, 39%, 21%, 1) 0%, hsla(338,
   height: 500px;
   overflow: auto;
   overflow-x: hidden;
+}
+
+.section::-webkit-scrollbar {
+  width: 20px;
+}
+
+.section::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.section::-webkit-scrollbar-thumb {
+  border-radius: 80px;
+  border: 5px solid transparent;
+  background-clip: content-box;
+  background-color: rgb(66, 66, 66);
 }
 </style>
