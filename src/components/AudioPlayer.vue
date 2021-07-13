@@ -3,11 +3,33 @@
   <div>
     <v-col cols="12">
       <v-row class="mt-5" id="Stationswrapper">
-        <v-col id="AudioPlayerWrapper" class="py-2" cols="12" md="3" lg="4">
+        <v-col
+          align="center"
+          id="AudioPlayerWrapper"
+          class="py-2"
+          cols="12"
+          md="3"
+          lg="4"
+        >
           <div>
             <h3 class="text-center">
               The Radio
             </h3>
+          </div>
+          <v-img contain max-height="200" src="../assets/logo.png"></v-img>
+          <h2 class="text-center">Radio Name</h2>
+          <h3 class="text-center">Genre or Tags</h3>
+          <div class="mt-6">
+            <v-btn class="pa-5" icon>
+              <v-icon dark style="color: #E0E0E0">
+                mdi-heart-outline
+              </v-icon>
+            </v-btn>
+            <v-btn class="pa-5" icon>
+              <v-icon dark style="color: #E0E0E0">
+                mdi-dots-horizontal
+              </v-icon>
+            </v-btn>
           </div>
         </v-col>
 
@@ -83,8 +105,14 @@
       <!-- RADIO CONTROLS -->
 
       <v-row align="center" class="d-flex" id="controllerWrapper">
-        <v-col cols="9" sm="10" md="10" xs="11">
+        <v-col cols="12" sm="12" md="12" xs="12" class="d-flex space-between">
+          <v-btn class="ml-2" fab outlined x-small color="white">
+            <v-icon dark>
+              mdi-play
+            </v-icon>
+          </v-btn>
           <v-slider
+            class="ml-7"
             :color="!radioMuted ? 'white' : 'white'"
             thumb-color="white"
             :track-color="!radioMuted ? 'grey darken-1' : 'red darken-2'"
@@ -97,17 +125,13 @@
             @change="volumeController()"
             @click:prepend="isRadioMuted(soundID)"
           ></v-slider>
-        </v-col>
-        <v-col
-          class="d-flex justify-end"
-          offset-sm="1"
-          offset-md="1"
-          cols="3"
-          sm="1"
-          md="1"
-          xs="1"
-        >
-          <v-btn icon color="white" @click="isRadioMuted(soundID)" class="mr-1">
+
+          <v-btn
+            icon
+            color="white"
+            @click="isRadioMuted(soundID)"
+            class="mr-1 ml-7"
+          >
             <v-icon dark v-if="radioMuted">
               mdi-volume-variant-off
             </v-icon>
@@ -268,7 +292,10 @@ li {
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
 }
-h3 {
+h3,
+h1,
+h2,
+p {
   color: #e1e1e1;
 }
 p {
@@ -279,6 +306,8 @@ td {
   background-color: #19191d;
 }
 #controllerWrapper {
+  border-end-start-radius: 20px;
+  border-end-end-radius: 20px;
   background: hsla(338, 39%, 21%, 1);
 
   background: radial-gradient(
@@ -304,9 +333,6 @@ td {
     hsla(280, 9%, 13%, 1) 45%,
     hsla(310, 20%, 17%, 1) 76%
   );
-
-  border-end-start-radius: 20px;
-  border-end-end-radius: 20px;
 }
 #tableWrapper {
   height: 500px;
