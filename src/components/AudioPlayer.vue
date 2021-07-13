@@ -3,55 +3,77 @@
   <div>
     <v-col cols="12">
       <v-row class="mt-5" id="Stationswrapper">
-        <v-col  id="AudioPlayerWrapper" cols="12" md="3" lg="4">
+        <v-col id="AudioPlayerWrapper" cols="12" md="3" lg="4">
           <div>
-            <h2 style="color: white;">Current Radio Card with random info</h2>
+            <h3 class="text-center">
+              The Radio
+            </h3>
           </div>
         </v-col>
-       
-        <v-col>
-          <li v-for="(station, index) in stations" :key="index">
-            <v-row>
-              <v-col>
-           
-                  <h2>{{ station.title }}</h2>
-                  <v-row id="information" no-gutters d-flex>
-                    <v-btn
-                      elevation="2"
-                      fab
-                      outlined
-                      color="purple"
-                      @click="
-                        isRadioPlaying(
-                          station.src,
-                          station.playing,
-                          soundID,
-                          index
-                        )
-                      "
-                    >
-                      <v-icon dark v-if="!station.playing">
-                        mdi-play
-                      </v-icon>
-                      <v-icon dark v-if="station.playing">
-                        mdi-pause
-                      </v-icon>
-                    </v-btn>
-                    <h3 class="ml-2">Genres:</h3>
-                    <h3 class="ml-5">Currently Playing:</h3>
-                  </v-row>
-              </v-col>
-            </v-row>
-          </li>
+
+        <v-col style="padding: 0">
+          <div id="tableWrapper">
+            <li v-for="(station, index) in stations" :key="index">
+              <v-row>
+                <v-col>
+                  <v-simple-table dark id="tableHeight">
+                    <template>
+                      <tbody>
+                        <tr>
+                          <td width="10%">
+                            <v-btn
+                              icon
+                              color="white"
+                              @click="
+                                isRadioPlaying(
+                                  station.src,
+                                  station.playing,
+                                  soundID,
+                                  index
+                                )
+                              "
+                            >
+                              <v-icon dark v-if="!station.playing">
+                                mdi-play
+                              </v-icon>
+                              <v-icon dark v-if="station.playing">
+                                mdi-pause
+                              </v-icon>
+                            </v-btn>
+                          </td>
+                          <td width="15%">
+                            <v-img
+                              contain
+                              max-height="80"
+                              max-width="80"
+                              min-height="80"
+                              min-width="80"
+                              :src="station.imageSrc"
+                            >
+                            </v-img>
+                          </td>
+                          <td width="60%">
+                            <h3>{{ station.title }}</h3>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </v-col>
+              </v-row>
+            </li>
+          </div>
         </v-col>
       </v-row>
-      <v-col cols="12"> </v-col>
-      <v-row align="center" class="d-flex">
+
+      <!-- RADIO CONTROLS -->
+
+      <v-row align="center" class="d-flex" id="controllerWrapper">
         <v-col cols="9" sm="10" md="10" xs="11">
           <v-slider
-            :color="!radioMuted ? 'purple' : 'purple'"
-            thumb-color="purple"
-            :track-color="!radioMuted ? 'blue' : 'red darken-2'"
+            :color="!radioMuted ? 'white' : 'white'"
+            thumb-color="white"
+            :track-color="!radioMuted ? 'black' : 'red darken-2'"
             max="1.0"
             step="0.05"
             v-model="volume"
@@ -72,10 +94,8 @@
           xs="1"
         >
           <v-btn
-            elevation="2"
-            fab
-            outlined
-            color="purple"
+           icon
+            color="white"
             @click="isRadioMuted(soundID)"
             class="mr-1"
           >
@@ -110,11 +130,40 @@ export default {
           title: "Anison.FM",
           src: "https://pool.anison.fm:9000/AniSonFM(320)",
           playing: false,
+          imageSrc: "https://anison.fm/images/logo_h_summer.png",
         },
         {
           title: "Hip-Hop Hits",
           src: "https://streaming.radio.co/s97881c7e0/listen",
           playing: false,
+          imageSrc:
+            "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
+        },
+        {
+          title: "Anison.FM",
+          src: "https://pool.anison.fm:9000/AniSonFM(320)",
+          playing: false,
+          imageSrc: "https://anison.fm/images/logo_h_summer.png",
+        },
+        {
+          title: "Hip-Hop Hits",
+          src: "https://streaming.radio.co/s97881c7e0/listen",
+          playing: false,
+          imageSrc:
+            "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
+        },
+        {
+          title: "Anison.FM",
+          src: "https://pool.anison.fm:9000/AniSonFM(320)",
+          playing: false,
+          imageSrc: "https://anison.fm/images/logo_h_summer.png",
+        },
+        {
+          title: "Hip-Hop Hits",
+          src: "https://streaming.radio.co/s97881c7e0/listen",
+          playing: false,
+          imageSrc:
+            "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
         },
       ],
     };
@@ -203,9 +252,39 @@ li {
 
 #AudioPlayerWrapper {
   background-color: #16171b;
+  border-top-left-radius: 20px;
 }
-#Stationswrapper{
-   background-color: #19191d
-;
+#Stationswrapper {
+  background-color: #19191d;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+h3 {
+  color: #e1e1e1;
+}
+p {
+  color: #38393c;
+  font-weight: bold;
+}
+td {
+  background-color: #19191d;
+}
+#controllerWrapper {
+  background: hsla(338, 39%, 21%, 1);
+
+background: radial-gradient(circle, hsla(338, 39%, 21%, 1) 0%, hsla(338, 39%, 21%, 1) 16%, hsla(280, 9%, 13%, 1) 45%, hsla(310, 20%, 17%, 1) 76%);
+
+background: -moz-radial-gradient(circle, hsla(338, 39%, 21%, 1) 0%, hsla(338, 39%, 21%, 1) 16%, hsla(280, 9%, 13%, 1) 45%, hsla(310, 20%, 17%, 1) 76%);
+
+background: -webkit-radial-gradient(circle, hsla(338, 39%, 21%, 1) 0%, hsla(338, 39%, 21%, 1) 16%, hsla(280, 9%, 13%, 1) 45%, hsla(310, 20%, 17%, 1) 76%);
+
+
+  border-end-start-radius: 20px;
+  border-end-end-radius: 20px;
+}
+#tableWrapper {
+  height: 500px;
+  overflow: auto;
+  overflow-x: hidden;
 }
 </style>

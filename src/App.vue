@@ -23,7 +23,7 @@ export default Vue.extend({
   display: none;
 }
 .v-icon.v-icon.v-icon--link {
-  color: purple;
+  color: white;
 }
 #mainWrapper {
   background-color: rgb(43, 38, 38);
