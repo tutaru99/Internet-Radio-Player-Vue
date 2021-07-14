@@ -2,8 +2,6 @@
 <template>
   <div>
     <v-col cols="12">
-      <h3>{{ stationData }}</h3>
-      <h3>{{ stationDataIndex }}</h3>
       <v-row class="mt-5" id="Stationswrapper">
         <v-col
           align="center"
@@ -18,8 +16,12 @@
               The Radio
             </h3>
           </div>
-          <v-img contain max-height="200" src="../assets/logo.png"></v-img>
-          <h2 class="text-center">Radio Name</h2>
+          <v-img v-if="this.stationData.imageSrc" contain max-height="200" :src='this.stationData.imageSrc'></v-img>
+          <v-img v-else contain max-height="200" src="../assets/radioplaceholder.jpg"></v-img>
+
+          <h2 v-if="this.stationData.title" class="text-center">{{ this.stationData.title }}</h2>
+          <h2 v-else class="text-center">Station</h2>
+
           <h3 class="text-center">Genre or Tags</h3>
 
           <div class="mt-6">
@@ -240,15 +242,16 @@ export default {
       console.log(this.stationData, this.stationDataIndex);
 
       if (this.stationData.length === 0) {
-        console.log("empty station data")
+        console.log("empty station data");
         return;
       }
       if (this.stationData.playing === false && this.radioStarted === false) {
         this.startRadio(this.stationData.src, this.stationDataIndex);
         this.radioPaused = false;
-      }
-      else if (
-        this.stationData.playing === false && this.radioStarted === true) {
+      } else if (
+        this.stationData.playing === false &&
+        this.radioStarted === true
+      ) {
         Howler.stop();
         console.log("Howler Fully Stopped everything");
         this.stopRadio(this.arrayID);
