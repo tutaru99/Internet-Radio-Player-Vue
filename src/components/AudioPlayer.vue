@@ -2,6 +2,8 @@
 <template>
   <div>
     <v-col cols="12">
+      <h3>{{ stationData }}</h3>
+      <h3>{{ stationDataIndex }}</h3>
       <v-row class="mt-5" id="Stationswrapper">
         <v-col
           align="center"
@@ -19,6 +21,7 @@
           <v-img contain max-height="200" src="../assets/logo.png"></v-img>
           <h2 class="text-center">Radio Name</h2>
           <h3 class="text-center">Genre or Tags</h3>
+
           <div class="mt-6">
             <v-btn class="pa-5" icon>
               <v-icon dark style="color: #E0E0E0">
@@ -52,7 +55,8 @@
                                   station.playing,
                                   soundID,
                                   index
-                                )
+                                ),
+                                  storeStationData(station, index)
                               "
                             >
                               <v-icon dark v-if="!station.playing">
@@ -106,11 +110,24 @@
 
       <v-row align="center" class="d-flex" id="controllerWrapper">
         <v-col cols="12" sm="12" md="12" xs="12" class="d-flex space-between">
-          <v-btn class="ml-2" fab outlined x-small color="white">
-            <v-icon dark>
+          <!-- Play/Stop Controlls -->
+          <v-btn
+            class="ml-2"
+            fab
+            outlined
+            x-small
+            color="white"
+            @click="isRadioPaused()"
+          >
+            <v-icon dark v-if="radioPaused">
               mdi-play
             </v-icon>
+            <v-icon dark v-else>
+              mdi-stop
+            </v-icon>
           </v-btn>
+
+          <!-- Volume Slider -->
           <v-slider
             class="ml-7"
             :color="!radioMuted ? 'white' : 'white'"
@@ -152,9 +169,12 @@ export default {
   name: "Lobby",
   data() {
     return {
+      stationData: [],
+      stationDataIndex: null,
       arrayID: null,
       radioStarted: false,
       radioMuted: false,
+      radioPaused: true,
       sound: null,
       soundID: null,
       volume: 0.6,
@@ -208,11 +228,41 @@ export default {
       ],
     };
   },
+
   methods: {
+    storeStationData(station, index) {
+      this.stationData = station;
+      this.stationDataIndex = index;
+      console.log(station, index);
+    },
+
+    isRadioPaused() {
+      console.log(this.stationData, this.stationDataIndex);
+
+      if (this.stationData.length === 0) {
+        console.log("empty station data")
+        return;
+      }
+      if (this.stationData.playing === false && this.radioStarted === false) {
+        this.startRadio(this.stationData.src, this.stationDataIndex);
+        this.radioPaused = false;
+      }
+      else if (
+        this.stationData.playing === false && this.radioStarted === true) {
+        Howler.stop();
+        console.log("Howler Fully Stopped everything");
+        this.stopRadio(this.arrayID);
+      } else {
+        this.stopRadio(this.stationDataIndex);
+        this.radioPaused = true;
+      }
+    },
+
     /* Check if radio is playing */
     isRadioPlaying(stationSrc, isplaying, soundID, index) {
       if (isplaying === false && this.radioStarted === false) {
         this.startRadio(stationSrc, index);
+        this.radioPaused = false;
       } /* If another station is already playing stop that instance and start another station */ else if (
         isplaying === false &&
         this.radioStarted === true
@@ -223,6 +273,7 @@ export default {
         this.startRadio(stationSrc, index);
       } else {
         this.stopRadio(index);
+        this.radioPaused = true;
       }
     },
 
@@ -360,9 +411,6 @@ td {
   border: 5px solid transparent;
   background-clip: content-box;
   background-color: rgb(66, 66, 66);
-}
-::-webkit-scrollbar {
-  display: block !important;
 }
 * ::-webkit-scrollbar {
   display: block !important;

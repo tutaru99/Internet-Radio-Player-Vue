@@ -3,7 +3,7 @@
     <v-container id="wrapper">
       <!-- Player -->
       <v-row no-gutters justify="center">
-        <v-col cols="10" md="9" lg="10">
+        <v-col cols="12" xs="12" sm="12" md="9" lg="10">
           <AudioPlayer />
         </v-col>
       </v-row>
