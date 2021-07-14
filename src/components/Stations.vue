@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-container id="wrapper">
-          <!-- Player -->
-          <v-row no-gutters justify="center">
-            <v-col cols="12" md="12" lg="12">
-                <AudioPlayer />
-            </v-col>
-          </v-row>
+      <!-- Player -->
+      <v-row no-gutters justify="center">
+        <v-col cols="10" md="9" lg="10">
+          <AudioPlayer />
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -24,6 +24,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

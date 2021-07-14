@@ -361,4 +361,10 @@ td {
   background-clip: content-box;
   background-color: rgb(66, 66, 66);
 }
+::-webkit-scrollbar {
+  display: block !important;
+}
+* ::-webkit-scrollbar {
+  display: block !important;
+}
 </style>
