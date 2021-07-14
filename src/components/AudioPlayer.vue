@@ -16,13 +16,27 @@
               The Radio
             </h3>
           </div>
-          <v-img v-if="this.stationData.imageSrc" contain max-height="200" :src='this.stationData.imageSrc'></v-img>
-          <v-img v-else contain max-height="200" src="../assets/radioplaceholder.jpg"></v-img>
+          <v-img
+            class="mt-3"
+            v-if="this.stationData.imageSrc"
+            contain
+            max-height="200"
+            :src="this.stationData.imageSrc"
+          ></v-img>
+          <v-img
+            class="mt-3"
+            v-else
+            contain
+            max-height="200"
+            src="../assets/radioplaceholder.jpg"
+          ></v-img>
 
-          <h2 v-if="this.stationData.title" class="text-center">{{ this.stationData.title }}</h2>
-          <h2 v-else class="text-center">Station</h2>
+          <h2 v-if="this.stationData.title" class="text-center mt-3">
+            {{ this.stationData.title }}
+          </h2>
+          <h2 v-else class="text-center mt-3">Station</h2>
 
-          <h3 class="text-center">Genre or Tags</h3>
+          <h3 class="text-center mt-4">Genre or Tags</h3>
 
           <div class="mt-6">
             <v-btn class="pa-5" icon>
@@ -43,7 +57,7 @@
             <li v-for="(station, index) in stations" :key="index">
               <v-row>
                 <v-col>
-                  <v-simple-table dark id="tableHeight">
+                  <v-simple-table dark>
                     <template>
                       <tbody>
                         <tr>
@@ -220,13 +234,6 @@ export default {
           imageSrc:
             "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
         },
-        {
-          title: "Hip-Hop Hits",
-          src: "https://streaming.radio.co/s97881c7e0/listen",
-          playing: false,
-          imageSrc:
-            "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
-        },
       ],
     };
   },
@@ -358,13 +365,17 @@ h1,
 h2,
 p {
   color: #e1e1e1;
+  cursor: default;
 }
 p {
   color: #38393c;
   font-weight: bold;
 }
-td {
-  background-color: #19191d;
+tr:hover {
+  background-color: #16171b !important;
+}
+tr {
+  background-color: #19191d !important;
 }
 #controllerWrapper {
   border-end-start-radius: 20px;
