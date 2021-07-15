@@ -15,6 +15,7 @@
             <h3 class="text-center">
               The Radio
             </h3>
+            <canvas id="canvas" width="1000" height="150"></canvas>
           </div>
           <v-img
             class="mt-16"
@@ -405,15 +406,74 @@ export default {
       this.radioStarted = true;
       this.arrayID = index;
       this.stations[index].playing = true;
+
+
+
+  let dataArray = [];
+let bufferLength = null;
+let analyser = null;
+let canvas = document.querySelector('#canvas');
+let ctx = canvas.getContext('2d');
+let WIDTH = canvas.width;
+let HEIGHT = canvas.height;
+
+
+
+
       this.sound = new Howl({
         src: stationSrc,
         html5: true,
         volume: this.volume,
       });
+
+
+analyser = Howler.ctx.createAnalyser();
+  Howler.masterGain.connect(analyser);
+  analyser.connect(Howler.ctx.destination);
+ 
+  analyser.fftSize = 2048;
+  analyser.smoothingTimeConstant = 0.5;
+  bufferLength = analyser.frequencyBinCount;
+  dataArray = new Uint8Array(analyser.fftSize);
+  draw();
+function draw() {
+   analyser.getByteFrequencyData(dataArray);
+  analyser.getByteTimeDomainData(dataArray);
+   requestAnimationFrame(draw);
+  
+  var sliceWidth = WIDTH * 1.0 / bufferLength;
+  var x = 0;
+  var frequencyBins = analyser.fftSize / 2;
+  var scale = Math.log(frequencyBins - 1) / WIDTH;
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#fff";
+  ctx.beginPath();
+  x = 0;
+  console.log( dataArray[0])
+  for (var i = 0; i < bufferLength; i++) {
+    var v = dataArray[i] / 128.0;
+    var y = v * HEIGHT / 2;
+
+    if (i === 0) {
+      ctx.moveTo(x, y );
+    } else {
+      ctx.lineTo(x, y);
+    }
+    x += sliceWidth;
+  }
+  ctx.lineTo(WIDTH, dataArray / 128.0 * HEIGHT / 2);
+  ctx.stroke();
+}
+
+
       Howler.volume(this.volume);
       this.soundID = this.sound.play();
       console.log("Radio Started Playing");
     },
+    
     /* PAUSE Radio */
     stopRadio(index) {
       this.stations[index].playing = false;
