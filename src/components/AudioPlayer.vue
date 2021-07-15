@@ -39,6 +39,10 @@
             {{ this.stationData.genres }}
           </p>
 
+          <p v-if="this.stationData.website" class="text-center">
+           <a :href='this.stationData.website' target="_blank">Website</a>
+          </p>
+
           <div class="mt-6">
             <v-btn class="pa-5" icon>
               <v-icon dark style="color: #E0E0E0">
@@ -270,16 +274,71 @@ export default {
           playing: false,
           imageSrc:
             "https://fastcast4u.com/player/radioisekai/_user/logo/r/radioisekai/ch0.png",
-          genres: "Anime Asiatic Kpop Krock Jpop Jrock Others",
+          genres: "Anime Kpop Krock Jpop Jrock Others",
           website: "https://www.radioisekai.com/",
+        },
+        {
+          title: "Nei-Di's ACG",
+          src: "http://106.104.32.86:8080/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://images-na.ssl-images-amazon.com/images/I/61ent1CSpRL.png",
+          genres: "Anime",
+        },
+        {
+          title: "Mi-Soul",
+          src: "http://178.159.3.22:8177/;stream/1",
+          playing: false,
+          imageSrc: "https://mi-soul.com/wp-content/uploads/play.gif",
+          genres: "Soul R&B House Reggae Hip Hop Dance Soulful Music",
+          website: "http://mi-soul.com"
         },
         {
           title: "Hip-Hop Hits",
           src: "https://streaming.radio.co/s97881c7e0/listen",
           playing: false,
-          imageSrc:
-            "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
-          genres: "Hip Hop, Adult Hits, Classic Hip Hop",
+          imageSrc: "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
+          genres: "Hip Hop Adult Hits Classic Hip Hop",
+        },
+        {
+          title: "Jake Radio Live",
+          src: "http://188.165.192.5:8015/autodj",
+          playing: false,
+          imageSrc:"https://jakeradiolive.com/wp-content/uploads/2019/11/773eba52-880d-4ae4-aa5b-b0cd8ae2fa3a_200x200.png",
+          genres: "Hip Hop",
+          website: "https://jakeradiolive.com",
+        },
+        {
+          title: "Hip Hop Request # 1 In Hip-Hop and RnB",
+          src: "http://149.56.175.167:5461/;stream/1",
+          playing: false,
+          imageSrc:"https://hiphoprequest.com/wp-content/uploads/2020/02/HHRlogo-300x128.png",
+          genres: "Hip Hop Urban Contemporary R&B and Urban",
+          website: "http://www.hiphoprequest.com",
+        },
+        {
+          title: "Dance UK Radio",
+          src: "https://uk2.internet-radio.com/proxy/danceradiouk?mp=/stream;",
+          playing: false,
+          imageSrc:"https://danceradiouk.com/wp-content/uploads/2021/02/druk1-350.png",
+          genres: "Dance House Trance Techno Top 40",
+          website: "https://danceradiouk.com/",
+        },
+        {
+          title: "LIFE CHILL MUSIC",
+          src: "http://aska.ru-hoster.com:8053/autodj",
+          playing: false,
+          imageSrc:"http://www.lifechillmusic.com/wp-content/uploads/2019/12/Logo-original.png",
+          genres: "Chill Chillout Downtempo Ambient Lounge",
+          website: "http://www.lifechillmusic.com/",
+        },
+        {
+          title: "BEST SMOOTH JAZZ - UK",
+          src: "http://64.95.243.43:8002/;stream/1",
+          playing: false,
+          imageSrc:"https://i.ytimg.com/vi/4s2RD4e5ZwU/maxresdefault.jpg",
+          genres: "Smooth Jazz",
+          website: "http://bestsmoothjazz.com",
         },
       ],
     };
@@ -475,5 +534,9 @@ tr {
 }
 * ::-webkit-scrollbar {
   display: block !important;
+}
+a {
+  text-decoration: none;
+  font-size: 0.9em;
 }
 </style>
