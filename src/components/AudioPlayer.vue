@@ -55,6 +55,9 @@
               </v-icon>
             </v-btn>
           </div>
+          <canvas width="300" height="300">
+  An alternative text describing what your canvas displays.
+</canvas>
         </v-col>
 
         <v-col style="padding: 0">
@@ -410,6 +413,25 @@ export default {
         html5: true,
         volume: this.volume,
       });
+
+
+      /* Hooking into Howler to be able to analyze sound */
+      // Create an analyser node in the Howler WebAudio context
+      var analyser = Howler.ctx.createAnalyser();
+      // Connect the masterGain -> analyser (disconnecting masterGain -> destination)
+      Howler.masterGain.connect(analyser);
+      console.log(analyser, "analyser");
+      analyser.fftSize = 2048;
+      var bufferLength = analyser.frequencyBinCount;
+      var dataArray = new Uint8Array(bufferLength);
+      analyser.getByteTimeDomainData(dataArray);
+      console.log(dataArray, "dataArray");
+
+
+
+
+
+
       Howler.volume(this.volume);
       this.soundID = this.sound.play();
       console.log("Radio Started Playing");
