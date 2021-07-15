@@ -55,9 +55,9 @@
               </v-icon>
             </v-btn>
           </div>
-          <canvas width="300" height="300">
-  An alternative text describing what your canvas displays.
-</canvas>
+          <!-- <canvas width="300" height="300">
+            An alternative text describing what your canvas displays.
+          </canvas> -->
         </v-col>
 
         <v-col style="padding: 0">
