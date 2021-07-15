@@ -2,9 +2,8 @@
   <div id="mainwrapper">
     <v-img
       :src="require('../assets/logo.svg')"
-      class="my-3"
       contain
-      height="150"
+      height="100"
     />
     <Stations />
   </div>

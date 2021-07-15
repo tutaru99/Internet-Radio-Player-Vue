@@ -17,14 +17,14 @@
             </h3>
           </div>
           <v-img
-            class="mt-3"
+            class="mt-16"
             v-if="this.stationData.imageSrc"
             contain
             max-height="200"
             :src="this.stationData.imageSrc"
           ></v-img>
           <v-img
-            class="mt-3"
+            class="mt-16"
             v-else
             contain
             max-height="200"
@@ -34,9 +34,10 @@
           <h2 v-if="this.stationData.title" class="text-center mt-3">
             {{ this.stationData.title }}
           </h2>
-          <h2 v-else class="text-center mt-3">Station</h2>
 
-          <h3 class="text-center mt-4">Genre or Tags</h3>
+          <p v-if="this.stationData.genres" class="text-center mt-4">
+            {{ this.stationData.genres }}
+          </p>
 
           <div class="mt-6">
             <v-btn class="pa-5" icon>
@@ -52,8 +53,19 @@
           </div>
         </v-col>
 
-        <v-col style="padding: 0" class="py-2">
+        <v-col style="padding: 0">
           <div id="tableWrapper" class="section">
+            <v-row class="px-3 pr-10" justify="space-between">
+              <v-col cols="12" md="6"> </v-col>
+              <v-col cols="12" md="5">
+                <v-autocomplete
+                  label="Search"
+                  prepend-icon="mdi-magnify"
+                  dark
+                ></v-autocomplete>
+              </v-col>
+            </v-row>
+
             <li v-for="(station, index) in stations" :key="index">
               <v-row>
                 <v-col>
@@ -83,7 +95,18 @@
                               </v-icon>
                             </v-btn>
                           </td>
-                          <td width="25%">
+                          <td
+                            width="25%"
+                            @click="
+                              isRadioPlaying(
+                                station.src,
+                                station.playing,
+                                soundID,
+                                index
+                              ),
+                                storeStationData(station, index)
+                            "
+                          >
                             <v-img
                               contain
                               max-height="80"
@@ -94,7 +117,18 @@
                             >
                             </v-img>
                           </td>
-                          <td width="55">
+                          <td
+                            width="55"
+                            @click="
+                              isRadioPlaying(
+                                station.src,
+                                station.playing,
+                                soundID,
+                                index
+                              ),
+                                storeStationData(station, index)
+                            "
+                          >
                             <h3>{{ station.title }}</h3>
                           </td>
                           <td width="15%">
@@ -124,7 +158,7 @@
 
       <!-- RADIO CONTROLS -->
 
-      <v-row align="center" class="d-flex" id="controllerWrapper">
+      <v-row align="center" class="d-flex pt-2" id="controllerWrapper">
         <v-col cols="12" sm="12" md="12" xs="12" class="d-flex space-between">
           <!-- Play/Stop Controlls -->
           <v-btn
@@ -200,6 +234,44 @@ export default {
           src: "https://pool.anison.fm:9000/AniSonFM(320)",
           playing: false,
           imageSrc: "https://anison.fm/images/logo_h_summer.png",
+          genres: "Anime, Variety",
+          website: "http://www.anison.fm",
+        },
+        {
+          title: "BakaRadio.net",
+          src: "http://144.217.203.184:8398/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://www.bakaradio.net/wp-content/uploads/2015/12/bkrlogo.png",
+          genres: "Anime",
+          website: "http://www.bakaradio.net",
+        },
+        {
+          title: "JapanNext",
+          src: "http://198.50.158.92:8803/;stream/1",
+          playing: false,
+          imageSrc:
+            "http://1.bp.blogspot.com/-WYvLtD46Tik/XHuMLFCHJTI/AAAAAAAAHag/zil8qukJvU8eWZvlbqIHZT8Ej9NZ-dRvwCK4BGAYYCw/s1600/Logo%2Bcopia.png",
+          genres: "Anime",
+          website: "http://www.japan-next.blogspot.com",
+        },
+        {
+          title: "Tsubaki Web Radio",
+          src: "http://stream.tsubakianimeradio.com:9000/;stream/1",
+          playing: false,
+          imageSrc:
+            "http://tsubakianimeradio.com/wp-content/uploads/2020/08/logo-new.png",
+          genres: "Anime Openings Endings OST Japan Japanese Jpop Jrock",
+          website: "http://tsubakianimeradio.com",
+        },
+        {
+          title: "Radio Isekai",
+          src: "http://66.70.249.70:5080/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://fastcast4u.com/player/radioisekai/_user/logo/r/radioisekai/ch0.png",
+          genres: "Anime Asiatic Kpop Krock Jpop Jrock Others",
+          website: "https://www.radioisekai.com/",
         },
         {
           title: "Hip-Hop Hits",
@@ -207,32 +279,7 @@ export default {
           playing: false,
           imageSrc:
             "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
-        },
-        {
-          title: "Anison.FM",
-          src: "https://pool.anison.fm:9000/AniSonFM(320)",
-          playing: false,
-          imageSrc: "https://anison.fm/images/logo_h_summer.png",
-        },
-        {
-          title: "Hip-Hop Hits",
-          src: "https://streaming.radio.co/s97881c7e0/listen",
-          playing: false,
-          imageSrc:
-            "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
-        },
-        {
-          title: "Anison.FM",
-          src: "https://pool.anison.fm:9000/AniSonFM(320)",
-          playing: false,
-          imageSrc: "https://anison.fm/images/logo_h_summer.png",
-        },
-        {
-          title: "Hip-Hop Hits",
-          src: "https://streaming.radio.co/s97881c7e0/listen",
-          playing: false,
-          imageSrc:
-            "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
+          genres: "Hip Hop, Adult Hits, Classic Hip Hop",
         },
       ],
     };
