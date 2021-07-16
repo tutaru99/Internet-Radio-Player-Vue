@@ -1,4 +1,3 @@
-/* Move Volume to vueX store at some point */
 <template>
   <div>
     <v-col cols="12">
@@ -105,7 +104,7 @@
                             </v-btn>
                           </td>
                           <td
-                            width="25%"
+                            width="15%"
                             @click="
                               isRadioPlaying(
                                 station.src,
@@ -127,7 +126,7 @@
                             </v-img>
                           </td>
                           <td
-                            width="55"
+                            width="65"
                             @click="
                               isRadioPlaying(
                                 station.src,
@@ -140,7 +139,7 @@
                           >
                             <h3>{{ station.title }}</h3>
                           </td>
-                          <td width="15%">
+                          <td width="10%">
                             <v-btn icon>
                               <v-icon dark style="color: #E0E0E0">
                                 mdi-heart-outline
@@ -220,7 +219,7 @@
     </v-col>
   </div>
 </template>
-
+/* Save -Liked- and volume into local storage and later mb sorting by genre*/
 <script>
 import { Howl, Howler } from "howler";
 
@@ -236,7 +235,7 @@ export default {
       radioPaused: true,
       sound: null,
       soundID: null,
-      volume: 0.6,
+      volume: this.$store.state.volume,
       stations: [
         {
           title: "Anison.FM",
@@ -247,7 +246,7 @@ export default {
           website: "http://www.anison.fm",
         },
         {
-          title: "BakaRadio.net",
+          title: "BakaRadio",
           src: "http://144.217.203.184:8398/;stream/1",
           playing: false,
           imageSrc:
@@ -265,7 +264,7 @@ export default {
           website: "http://www.japan-next.blogspot.com",
         },
         {
-          title: "Tsubaki Web Radio",
+          title: "Tsubaki Radio",
           src: "http://stream.tsubakianimeradio.com:9000/;stream/1",
           playing: false,
           imageSrc:
@@ -353,7 +352,6 @@ export default {
       ],
     };
   },
-
   methods: {
     storeStationData(station, index) {
       this.stationData = station;
@@ -414,8 +412,8 @@ export default {
         volume: this.volume,
       });
 
-
-      /* Hooking into Howler to be able to analyze sound */
+      /* Hooking into Howler to be able to analyze sound via Audio Nodes*/
+      // ____________________________________________________
       // Create an analyser node in the Howler WebAudio context
       // var analyser = Howler.ctx.createAnalyser();
       // // Connect the masterGain -> analyser (disconnecting masterGain -> destination)
@@ -426,14 +424,13 @@ export default {
       // var dataArray = new Uint8Array(bufferLength);
       // analyser.getByteTimeDomainData(dataArray);
       // console.log(dataArray, "dataArray");
+      // ____________________________________________________
 
-
-
-
-      Howler.volume(this.volume);
       this.soundID = this.sound.play();
       console.log("Radio Started Playing");
+      Howler.masterGain.gain.value = this.volume;
     },
+
     /* PAUSE Radio */
     stopRadio(index) {
       this.stations[index].playing = false;
@@ -464,9 +461,10 @@ export default {
     /* Volume Slider */
     volumeController() {
       if (this.radioStarted === false) {
-        this.volume;
+        this.$store.commit("volumeSlider", this.volume);
         console.log("volume ", this.volume);
       } else {
+        this.$store.commit("volumeSlider", this.volume);
         this.sound.volume(this.volume);
         console.log("volume ", this.volume);
       }
