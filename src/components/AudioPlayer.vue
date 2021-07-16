@@ -43,8 +43,11 @@
           </p>
 
           <div class="mt-6">
-            <v-btn class="pa-5" icon>
-              <v-icon dark style="color: #E0E0E0">
+            <v-btn icon>
+              <v-icon v-if="stationData.liked" dark style="color: red">
+                mdi-heart
+              </v-icon>
+              <v-icon v-else dark style="color: #E0E0E0">
                 mdi-heart-outline
               </v-icon>
             </v-btn>
@@ -140,8 +143,15 @@
                             <h3>{{ station.title }}</h3>
                           </td>
                           <td width="10%">
-                            <v-btn icon>
-                              <v-icon dark style="color: #E0E0E0">
+                            <v-btn icon @click="likeStation(index)">
+                              <v-icon
+                                v-if="station.liked"
+                                dark
+                                style="color: red"
+                              >
+                                mdi-heart
+                              </v-icon>
+                              <v-icon v-else dark style="color: #E0E0E0">
                                 mdi-heart-outline
                               </v-icon>
                             </v-btn>
@@ -244,6 +254,7 @@ export default {
           imageSrc: "https://anison.fm/images/logo_h_summer.png",
           genres: "Anime Variety",
           website: "http://www.anison.fm",
+          liked: false,
         },
         {
           title: "BakaRadio",
@@ -253,6 +264,7 @@ export default {
             "https://www.bakaradio.net/wp-content/uploads/2015/12/bkrlogo.png",
           genres: "Anime",
           website: "http://www.bakaradio.net",
+          liked: false,
         },
         {
           title: "JapanNext",
@@ -262,6 +274,7 @@ export default {
             "http://1.bp.blogspot.com/-WYvLtD46Tik/XHuMLFCHJTI/AAAAAAAAHag/zil8qukJvU8eWZvlbqIHZT8Ej9NZ-dRvwCK4BGAYYCw/s1600/Logo%2Bcopia.png",
           genres: "Anime",
           website: "http://www.japan-next.blogspot.com",
+          liked: false,
         },
         {
           title: "Tsubaki Radio",
@@ -271,6 +284,7 @@ export default {
             "http://tsubakianimeradio.com/wp-content/uploads/2020/08/logo-new.png",
           genres: "Anime Openings Endings OST Japan Japanese Jpop Jrock",
           website: "http://tsubakianimeradio.com",
+          liked: false,
         },
         {
           title: "Radio Isekai",
@@ -280,6 +294,7 @@ export default {
             "https://fastcast4u.com/player/radioisekai/_user/logo/r/radioisekai/ch0.png",
           genres: "Anime Kpop Krock Jpop Jrock Others",
           website: "https://www.radioisekai.com/",
+          liked: false,
         },
         {
           title: "Nei-Di's ACG",
@@ -288,6 +303,7 @@ export default {
           imageSrc:
             "https://images-na.ssl-images-amazon.com/images/I/61ent1CSpRL.png",
           genres: "Anime",
+          liked: false,
         },
         {
           title: "Mi-Soul",
@@ -296,6 +312,7 @@ export default {
           imageSrc: "https://mi-soul.com/wp-content/uploads/play.gif",
           genres: "Soul R&B House Reggae Hip Hop Dance Soulful Music",
           website: "http://mi-soul.com",
+          liked: false,
         },
         {
           title: "Hip-Hop Hits",
@@ -304,6 +321,7 @@ export default {
           imageSrc:
             "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
           genres: "Hip Hop Adult Hits Classic Hip Hop",
+          liked: false,
         },
         {
           title: "Jake Radio Live",
@@ -313,6 +331,7 @@ export default {
             "https://jakeradiolive.com/wp-content/uploads/2019/11/773eba52-880d-4ae4-aa5b-b0cd8ae2fa3a_200x200.png",
           genres: "Hip Hop",
           website: "https://jakeradiolive.com",
+          liked: false,
         },
         {
           title: "Hip Hop Request # 1 In Hip-Hop and RnB",
@@ -322,6 +341,7 @@ export default {
             "https://hiphoprequest.com/wp-content/uploads/2020/02/HHRlogo-300x128.png",
           genres: "Hip Hop Urban Contemporary R&B and Urban",
           website: "http://www.hiphoprequest.com",
+          liked: false,
         },
         {
           title: "Dance UK Radio",
@@ -331,6 +351,7 @@ export default {
             "https://danceradiouk.com/wp-content/uploads/2021/02/druk1-350.png",
           genres: "Dance House Trance Techno Top 40",
           website: "https://danceradiouk.com/",
+          liked: false,
         },
         {
           title: "LIFE CHILL MUSIC",
@@ -340,6 +361,7 @@ export default {
             "http://www.lifechillmusic.com/wp-content/uploads/2019/12/Logo-original.png",
           genres: "Chill Chillout Downtempo Ambient Lounge",
           website: "http://www.lifechillmusic.com/",
+          liked: false,
         },
         {
           title: "BEST SMOOTH JAZZ - UK",
@@ -348,6 +370,7 @@ export default {
           imageSrc: "https://i.ytimg.com/vi/4s2RD4e5ZwU/maxresdefault.jpg",
           genres: "Smooth Jazz",
           website: "http://bestsmoothjazz.com",
+          liked: false,
         },
       ],
     };
@@ -460,14 +483,16 @@ export default {
 
     /* Volume Slider */
     volumeController() {
+      this.$store.commit("volumeSlider", this.volume);
       if (this.radioStarted === false) {
-        this.$store.commit("volumeSlider", this.volume);
         console.log("volume ", this.volume);
       } else {
-        this.$store.commit("volumeSlider", this.volume);
         this.sound.volume(this.volume);
         console.log("volume ", this.volume);
       }
+    },
+    likeStation(index) {
+      this.stations[index].liked = !this.stations[index].liked;
     },
   },
 };
