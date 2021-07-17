@@ -557,6 +557,8 @@ export default {
       // console.log(dataArray, "dataArray");
       // ____________________________________________________
 
+      // getByteFrequencyData(dataArray);         doesnt work
+
       this.soundID = this.sound.play();
       console.log("Radio Started Playing");
       Howler.masterGain.gain.value = this.volume;
