@@ -1,10 +1,5 @@
 <template>
   <div id="mainwrapper">
-    <v-img
-      :src="require('../assets/logo.svg')"
-      contain
-      height="100"
-    />
     <Stations />
   </div>
 </template>
@@ -22,4 +17,5 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

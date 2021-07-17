@@ -19,6 +19,9 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+*{
+font-family: 'Encode Sans SC', sans-serif;
+}
 .v-application--is-ltr .v-messages {
   display: none;
 }
@@ -26,7 +29,8 @@ export default Vue.extend({
   color: white;
 }
 #mainWrapper {
-  background-color: rgb(43, 38, 38);
+  // background-color: rgb(43, 38, 38);
+  background-color: #16171bfa;
 }
 html {
   // overflow-y: hidden !important;

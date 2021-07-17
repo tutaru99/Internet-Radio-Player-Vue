@@ -2,6 +2,53 @@
   <div>
     <v-col cols="12">
       <v-row class="mt-5" id="Stationswrapper">
+        <v-col cols="12">
+          <v-row class="header">
+            <v-col cols="4">
+              <div>
+                <h3 class="text-center">
+                  The Radio
+                </h3>
+              </div>
+            </v-col>
+            <v-col cols="8" md="8">
+              <div class="d-flex flex-row-reverse">
+                <v-btn
+                  width="100"
+                  text
+                  color="white"
+                  class="mr-2"
+                  @click="filterCategory('Anime')"
+                  >Anime</v-btn
+                >
+                <v-btn
+                  width="100"
+                  text
+                  color="white"
+                  class="mr-2"
+                  @click="filterCategory('HipHop')"
+                  >HipHop</v-btn
+                >
+                <v-btn
+                  width="100"
+                  text
+                  color="white"
+                  class="mr-2"
+                  @click="filterCategory('Chill')"
+                  >Chill</v-btn
+                >
+                <v-btn
+                  width="100"
+                  text
+                  color="white"
+                  class=""
+                  @click="filterCategory('All')"
+                  >All</v-btn
+                >
+              </div>
+            </v-col>
+          </v-row>
+        </v-col>
         <v-col
           align="center"
           id="AudioPlayerWrapper"
@@ -10,13 +57,8 @@
           md="3"
           lg="4"
         >
-          <div>
-            <h3 class="text-center">
-              The Radio
-            </h3>
-          </div>
           <v-img
-            class="mt-16"
+            class="mt-10"
             v-if="this.stationData.imageSrc"
             contain
             max-height="200"
@@ -64,20 +106,7 @@
 
         <v-col style="padding: 0">
           <div id="tableWrapper" class="section">
-            <v-row class="px-3 pr-10" justify="space-between">
-              <v-col cols="12" md="6"> </v-col>
-              <v-col cols="12" md="5">
-                <v-autocomplete
-                  label="Search"
-                  prepend-icon="mdi-magnify"
-                  dark
-                  :items="stations"
-                  item-text="title"
-                ></v-autocomplete>
-              </v-col>
-            </v-row>
-
-            <li v-for="(station, index) in stations" :key="index">
+            <li v-for="station in selectedFilterGenre" :key="station.id">
               <v-row>
                 <v-col>
                   <v-simple-table dark>
@@ -93,9 +122,9 @@
                                   station.src,
                                   station.playing,
                                   soundID,
-                                  index
+                                  station.id
                                 ),
-                                  storeStationData(station, index)
+                                  storeStationData(station, station.id)
                               "
                             >
                               <v-icon dark v-if="!station.playing">
@@ -113,7 +142,8 @@
                                 station.src,
                                 station.playing,
                                 soundID,
-                                index
+                                index,
+                                station.id
                               ),
                                 storeStationData(station, index)
                             "
@@ -135,15 +165,16 @@
                                 station.src,
                                 station.playing,
                                 soundID,
-                                index
+                                index,
+                                station.id
                               ),
-                                storeStationData(station, index)
+                                storeStationData(station, station.id)
                             "
                           >
                             <h3>{{ station.title }}</h3>
                           </td>
                           <td width="10%">
-                            <v-btn icon @click="likeStation(index)">
+                            <v-btn icon @click="likeStation(station.id)">
                               <v-icon
                                 v-if="station.liked"
                                 dark
@@ -248,64 +279,7 @@ export default {
       volume: this.$store.state.volume,
       stations: [
         {
-          title: "Anison.FM",
-          src: "https://pool.anison.fm:9000/AniSonFM(320)",
-          playing: false,
-          imageSrc: "https://anison.fm/images/logo_h_summer.png",
-          genres: "Anime Variety",
-          website: "http://www.anison.fm",
-          liked: false,
-        },
-        {
-          title: "BakaRadio",
-          src: "http://144.217.203.184:8398/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://www.bakaradio.net/wp-content/uploads/2015/12/bkrlogo.png",
-          genres: "Anime",
-          website: "http://www.bakaradio.net",
-          liked: false,
-        },
-        {
-          title: "JapanNext",
-          src: "http://198.50.158.92:8803/;stream/1",
-          playing: false,
-          imageSrc:
-            "http://1.bp.blogspot.com/-WYvLtD46Tik/XHuMLFCHJTI/AAAAAAAAHag/zil8qukJvU8eWZvlbqIHZT8Ej9NZ-dRvwCK4BGAYYCw/s1600/Logo%2Bcopia.png",
-          genres: "Anime",
-          website: "http://www.japan-next.blogspot.com",
-          liked: false,
-        },
-        {
-          title: "Tsubaki Radio",
-          src: "http://stream.tsubakianimeradio.com:9000/;stream/1",
-          playing: false,
-          imageSrc:
-            "http://tsubakianimeradio.com/wp-content/uploads/2020/08/logo-new.png",
-          genres: "Anime Openings Endings OST Japan Japanese Jpop Jrock",
-          website: "http://tsubakianimeradio.com",
-          liked: false,
-        },
-        {
-          title: "Radio Isekai",
-          src: "http://66.70.249.70:5080/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://fastcast4u.com/player/radioisekai/_user/logo/r/radioisekai/ch0.png",
-          genres: "Anime Kpop Krock Jpop Jrock Others",
-          website: "https://www.radioisekai.com/",
-          liked: false,
-        },
-        {
-          title: "Nei-Di's ACG",
-          src: "http://106.104.32.86:8080/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://images-na.ssl-images-amazon.com/images/I/61ent1CSpRL.png",
-          genres: "Anime",
-          liked: false,
-        },
-        {
+          id: 0,
           title: "Mi-Soul",
           src: "http://178.159.3.22:8177/;stream/1",
           playing: false,
@@ -313,37 +287,22 @@ export default {
           genres: "Soul R&B House Reggae Hip Hop Dance Soulful Music",
           website: "http://mi-soul.com",
           liked: false,
+          genre: "HipHop",
         },
+
         {
-          title: "Hip-Hop Hits",
-          src: "https://streaming.radio.co/s97881c7e0/listen",
+          id: 1,
+          title: "Anison.FM",
+          src: "https://pool.anison.fm:9000/AniSonFM(320)",
           playing: false,
-          imageSrc:
-            "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
-          genres: "Hip Hop Adult Hits Classic Hip Hop",
+          imageSrc: "https://anison.fm/images/logo_h_summer.png",
+          genres: "Anime Variety",
+          website: "http://www.anison.fm",
           liked: false,
+          genre: "Anime",
         },
         {
-          title: "Jake Radio Live",
-          src: "http://188.165.192.5:8015/autodj",
-          playing: false,
-          imageSrc:
-            "https://jakeradiolive.com/wp-content/uploads/2019/11/773eba52-880d-4ae4-aa5b-b0cd8ae2fa3a_200x200.png",
-          genres: "Hip Hop",
-          website: "https://jakeradiolive.com",
-          liked: false,
-        },
-        {
-          title: "Hip Hop Request # 1 In Hip-Hop and RnB",
-          src: "http://149.56.175.167:5461/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://hiphoprequest.com/wp-content/uploads/2020/02/HHRlogo-300x128.png",
-          genres: "Hip Hop Urban Contemporary R&B and Urban",
-          website: "http://www.hiphoprequest.com",
-          liked: false,
-        },
-        {
+          id: 2,
           title: "Dance UK Radio",
           src: "https://uk2.internet-radio.com/proxy/danceradiouk?mp=/stream;",
           playing: false,
@@ -352,8 +311,120 @@ export default {
           genres: "Dance House Trance Techno Top 40",
           website: "https://danceradiouk.com/",
           liked: false,
+          genre: "Chill",
+        },
+
+        {
+          id: 3,
+          title: "JapanNext",
+          src: "http://198.50.158.92:8803/;stream/1",
+          playing: false,
+          imageSrc:
+            "http://1.bp.blogspot.com/-WYvLtD46Tik/XHuMLFCHJTI/AAAAAAAAHag/zil8qukJvU8eWZvlbqIHZT8Ej9NZ-dRvwCK4BGAYYCw/s1600/Logo%2Bcopia.png",
+          genres: "Anime",
+          website: "http://www.japan-next.blogspot.com",
+          liked: false,
+          genre: "Anime",
+        },
+
+        {
+          id: 4,
+          title: "Radio Isekai",
+          src: "http://66.70.249.70:5080/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://fastcast4u.com/player/radioisekai/_user/logo/r/radioisekai/ch0.png",
+          genres: "Anime Kpop Krock Jpop Jrock Others",
+          website: "https://www.radioisekai.com/",
+          liked: false,
+          genre: "Anime",
         },
         {
+          id: 5,
+          title: "Jake Radio Live",
+          src: "http://188.165.192.5:8015/autodj",
+          playing: false,
+          imageSrc:
+            "https://jakeradiolive.com/wp-content/uploads/2019/11/773eba52-880d-4ae4-aa5b-b0cd8ae2fa3a_200x200.png",
+          genres: "Hip Hop",
+          website: "https://jakeradiolive.com",
+          liked: false,
+          genre: "HipHop",
+        },
+        {
+          id: 6,
+          title: "Nei-Di's ACG",
+          src: "http://106.104.32.86:8080/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://images-na.ssl-images-amazon.com/images/I/61ent1CSpRL.png",
+          genres: "Anime",
+          liked: false,
+          genre: "Anime",
+        },
+
+        {
+          id: 7,
+          title: "Tsubaki Radio",
+          src: "http://stream.tsubakianimeradio.com:9000/;stream/1",
+          playing: false,
+          imageSrc:
+            "http://tsubakianimeradio.com/wp-content/uploads/2020/08/logo-new.png",
+          genres: "Anime Openings Endings OST Japan Japanese Jpop Jrock",
+          website: "http://tsubakianimeradio.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 8,
+          title: "Hip-Hop Hits",
+          src: "https://streaming.radio.co/s97881c7e0/listen",
+          playing: false,
+          imageSrc:
+            "https://direct.rhapsody.com/imageserver/images/alb.320331229/500x500.jpg",
+          genres: "Hip Hop Adult Hits Classic Hip Hop",
+          liked: false,
+          genre: "HipHop",
+        },
+
+        {
+          id: 9,
+          title: "BakaRadio",
+          src: "http://144.217.203.184:8398/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://www.bakaradio.net/wp-content/uploads/2015/12/bkrlogo.png",
+          genres: "Anime",
+          website: "http://www.bakaradio.net",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 10,
+          title: "Hip Hop Request # 1 In Hip-Hop and RnB",
+          src: "http://149.56.175.167:5461/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://hiphoprequest.com/wp-content/uploads/2020/02/HHRlogo-300x128.png",
+          genres: "Hip Hop Urban Contemporary R&B and Urban",
+          website: "http://www.hiphoprequest.com",
+          liked: false,
+          genre: "HipHop",
+        },
+
+        {
+          id: 11,
+          title: "BEST SMOOTH JAZZ - UK",
+          src: "http://64.95.243.43:8002/;stream/1",
+          playing: false,
+          imageSrc: "https://i.ytimg.com/vi/4s2RD4e5ZwU/maxresdefault.jpg",
+          genres: "Smooth Jazz",
+          website: "http://bestsmoothjazz.com",
+          liked: false,
+          genre: "Chill",
+        },
+        {
+          id: 12,
           title: "LIFE CHILL MUSIC",
           src: "http://aska.ru-hoster.com:8053/autodj",
           playing: false,
@@ -362,20 +433,57 @@ export default {
           genres: "Chill Chillout Downtempo Ambient Lounge",
           website: "http://www.lifechillmusic.com/",
           liked: false,
-        },
-        {
-          title: "BEST SMOOTH JAZZ - UK",
-          src: "http://64.95.243.43:8002/;stream/1",
-          playing: false,
-          imageSrc: "https://i.ytimg.com/vi/4s2RD4e5ZwU/maxresdefault.jpg",
-          genres: "Smooth Jazz",
-          website: "http://bestsmoothjazz.com",
-          liked: false,
+          genre: "Chill",
         },
       ],
+      selectedGenre: "All",
     };
   },
+  computed: {
+    selectedFilterGenre: function() {
+      if (this.selectedGenre === "Anime") {
+        return this.stations.filter(function(u) {
+          console.log("filter", u.genre);
+          return u.genre === "Anime";
+        });
+      }
+      if (this.selectedGenre === "Chill") {
+        return this.stations.filter(function(u) {
+          console.log("filter", u.genre);
+          return u.genre === "Chill";
+        });
+      }
+      if (this.selectedGenre === "HipHop") {
+        return this.stations.filter(function(u) {
+          console.log("filter", u.genre);
+          return u.genre === "HipHop";
+        });
+      }
+      if (this.selectedGenre === "All") {
+        return this.stations;
+      }
+      return this.stations;
+    },
+  },
   methods: {
+    filterCategory(category) {
+      if (category === "Anime") {
+        console.log("filter", category);
+        this.selectedGenre = "Anime";
+      }
+      if (category === "All") {
+        console.log("filter", category);
+        this.selectedGenre = "All";
+      }
+      if (category === "HipHop") {
+        console.log("filter", category);
+        this.selectedGenre = "HipHop";
+      }
+      if (category === "Chill") {
+        console.log("filter", category);
+        this.selectedGenre = "Chill";
+      }
+    },
     storeStationData(station, index) {
       this.stationData = station;
       this.stationDataIndex = index;
@@ -406,9 +514,9 @@ export default {
     },
 
     /* Check if radio is playing */
-    isRadioPlaying(stationSrc, isplaying, soundID, index) {
+    isRadioPlaying(stationSrc, isplaying, soundID, stationID) {
       if (isplaying === false && this.radioStarted === false) {
-        this.startRadio(stationSrc, index);
+        this.startRadio(stationSrc, stationID);
         this.radioPaused = false;
       } /* If another station is already playing stop that instance and start another station */ else if (
         isplaying === false &&
@@ -417,18 +525,18 @@ export default {
         Howler.stop();
         console.log("Howler Fully Stopped everything");
         this.stopRadio(this.arrayID);
-        this.startRadio(stationSrc, index);
+        this.startRadio(stationSrc, stationID);
       } else {
-        this.stopRadio(index);
+        this.stopRadio(stationID);
         this.radioPaused = true;
       }
     },
 
     /* START Radio */
-    startRadio(stationSrc, index) {
+    startRadio(stationSrc, stationID) {
       this.radioStarted = true;
-      this.arrayID = index;
-      this.stations[index].playing = true;
+      this.arrayID = stationID;
+      this.stations[stationID].playing = true;
       this.sound = new Howl({
         src: stationSrc,
         html5: true,
@@ -455,8 +563,8 @@ export default {
     },
 
     /* PAUSE Radio */
-    stopRadio(index) {
-      this.stations[index].playing = false;
+    stopRadio(stationID) {
+      this.stations[stationID].playing = false;
       (this.radioStarted = false), this.sound.unload();
       console.log("Radio Stopped");
     },
@@ -491,14 +599,19 @@ export default {
         console.log("volume ", this.volume);
       }
     },
-    likeStation(index) {
-      this.stations[index].liked = !this.stations[index].liked;
+    likeStation(stationID) {
+      this.stations[stationID].liked = !this.stations[stationID].liked;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.header {
+  background-color: #16171b;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
 li {
   list-style-type: none;
 }
@@ -563,7 +676,7 @@ tr {
   );
 }
 #tableWrapper {
-  height: 500px;
+  height: 77vh;
   overflow: auto;
   overflow-x: hidden;
 }
