@@ -546,18 +546,20 @@ export default {
       /* Hooking into Howler to be able to analyze sound via Audio Nodes*/
       // ____________________________________________________
       // Create an analyser node in the Howler WebAudio context
-      // var analyser = Howler.ctx.createAnalyser();
-      // // Connect the masterGain -> analyser (disconnecting masterGain -> destination)
-      // Howler.masterGain.connect(analyser);
-      // console.log(analyser, "analyser");
-      // analyser.fftSize = 2048;
-      // var bufferLength = analyser.frequencyBinCount;
-      // var dataArray = new Uint8Array(bufferLength);
-      // analyser.getByteTimeDomainData(dataArray);
-      // console.log(dataArray, "dataArray");
+      var analyser = Howler.ctx.createAnalyser();
+      // Connect the masterGain -> analyser (disconnecting masterGain -> destination)
+      Howler.masterGain.connect(analyser);
+      console.log(analyser, "analyser");
+      analyser.fftSize = 2048;
+      var bufferLength = analyser.frequencyBinCount;
+      var dataArray = new Uint8Array(bufferLength);
+      analyser.getByteTimeDomainData(dataArray);
+      console.log("getByteTimeDomainData -", dataArray);
       // ____________________________________________________
 
-      // getByteFrequencyData(dataArray);         doesnt work
+     analyser.getByteFrequencyData(dataArray);
+     console.log("getByteFrequencyData - ", dataArray)
+
 
       this.soundID = this.sound.play();
       console.log("Radio Started Playing");
