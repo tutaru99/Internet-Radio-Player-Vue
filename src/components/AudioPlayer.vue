@@ -142,7 +142,6 @@
                                 station.src,
                                 station.playing,
                                 soundID,
-                                index,
                                 station.id
                               ),
                                 storeStationData(station, index)
@@ -165,7 +164,6 @@
                                 station.src,
                                 station.playing,
                                 soundID,
-                                index,
                                 station.id
                               ),
                                 storeStationData(station, station.id)
