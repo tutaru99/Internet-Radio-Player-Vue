@@ -98,6 +98,11 @@
                 mdi-dots-horizontal
               </v-icon>
             </v-btn>
+            <div class="mt-9">
+            <transition name="fade" v-if="radioStarted">
+              <AudioWave />
+            </transition>
+            </div>
           </div>
           <!-- <canvas width="300" height="300">
             An alternative text describing what your canvas displays.
@@ -258,12 +263,16 @@
     </v-col>
   </div>
 </template>
-/* Save -Liked- and volume into local storage and later mb sorting by genre*/
 <script>
 import { Howl, Howler } from "howler";
+import AudioWave from "../components/AudioWave";
 
 export default {
   name: "Lobby",
+
+  components: {
+    AudioWave,
+  },
   data() {
     return {
       stationData: [],
@@ -701,5 +710,13 @@ tr {
 a {
   text-decoration: none;
   font-size: 0.8em;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
