@@ -1,6 +1,9 @@
 <template>
   <div>
     <v-col cols="12">
+      <v-btn text color="white" @click="testAnalyzer()">
+        Get Frequency Data
+      </v-btn>
       <v-row class="mt-5" id="Stationswrapper">
         <v-col cols="12">
           <v-row class="header">
@@ -530,6 +533,80 @@ export default {
       }
     },
 
+    testAnalyzer() {
+      var audio = new Howl({
+        src: ['https://pool.anison.fm:9000/AniSonFM(320)'],
+        html5: true,
+        volume: this.volume,
+      });
+
+        audio.play();
+        const audioCtx = Howler.ctx;
+        const audioSourceNode = audioCtx.createMediaElementSource(audio._sounds[0]._node);
+        console.log('Audio CTX', audioCtx);
+
+        const analyser = audioCtx.createAnalyser();
+        console.log('Audio Source Node - ', audioSourceNode);
+
+
+        analyser.fftsize = 512;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        //Set up audio node network
+        audioSourceNode.connect(analyser);
+        analyser.connect(audioCtx.destination);
+
+        analyser.getByteFrequencyData(dataArray)
+        console.log('Frequency Data - ', dataArray)
+
+
+        /* Testing */
+        // var analyser =  this.analyser = Howler.ctx.createAnalyser();
+        // Howler.masterGain.connect(analyser);
+        // analyser.connect(Howler.ctx.destination);
+        // analyser.fftSize = 256;
+        // var bufferLength = analyser.frequencyBinCount;
+        // var dataArray = new Uint8Array(bufferLength);
+        // console.log('dataArray', dataArray)
+
+
+
+      /* 1st method from git issues */
+      // const audio = new Howl({ src: 'http://64.95.243.43:8002/;stream/1', html5: true})
+      // const audioCtx = Howler.ctx;
+
+      // console.log(audio)
+      // // Create analyser node
+      // const audioSourceNode = audioCtx.createMediaElementSource(audio._sounds[0]._node);
+      // console.log(audioSourceNode)
+
+      // const analyser = audioCtx.createAnalyser();
+      // analyser.fftsize = 32768;
+      // const bufferLength = analyser.frequencyBinCount;
+      // const dataArray = new Uint8Array(bufferLength);
+
+      // //Set up audio node network
+      // audioSourceNode.connect(analyser);
+      // analyser.connect(audioCtx.destination);
+
+      // analyser.getByteFrequencyData(dataArray) // Returns data as intended
+
+      // console.log(dataArray)
+
+
+
+
+      /* 2nd method from git issues */
+      //  let context = audio._sounds[0]._node.context;
+      //  let src = audio._sounds[0]._node.bufferSource;
+      // var analyser = context.createAnalyser();
+      //  src.connect(analyser);
+      //  console.log(analyser)
+      // analyser.fftSize = 512;
+      // let bufferLength = analyser.frequencyBinCount;
+      // dataArray = new Uint8Array(bufferLength);
+    },
     /* START Radio */
     startRadio(stationSrc, stationID) {
       this.radioStarted = true;
@@ -555,9 +632,8 @@ export default {
       console.log("getByteTimeDomainData -", dataArray);
       // ____________________________________________________
 
-     analyser.getByteFrequencyData(dataArray);
-     console.log("getByteFrequencyData - ", dataArray)
-
+      analyser.getByteFrequencyData(dataArray);
+      console.log("getByteFrequencyData - ", dataArray);
 
       this.soundID = this.sound.play();
       console.log("Radio Started Playing");
