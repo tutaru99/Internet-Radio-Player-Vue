@@ -535,7 +535,7 @@ export default {
 
     testAnalyzer() {
       var audio = new Howl({
-        src: ['https://pool.anison.fm:9000/AniSonFM(320)'],
+        src: ['http://149.56.175.167:5461/;stream/1'],
         html5: true,
         volume: this.volume,
       });
@@ -559,7 +559,7 @@ export default {
 
         analyser.getByteFrequencyData(dataArray)
         console.log('Frequency Data - ', dataArray)
-
+    
 
         /* Testing */
         // var analyser =  this.analyser = Howler.ctx.createAnalyser();
