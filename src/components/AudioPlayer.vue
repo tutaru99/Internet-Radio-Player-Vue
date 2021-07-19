@@ -18,6 +18,7 @@
                   text
                   color="white"
                   class="mr-2"
+                  :class="this.selectedGenre === 'Anime' ? 'red darken-4' : '' "
                   @click="filterCategory('Anime')"
                   >Anime</v-btn
                 >
@@ -26,6 +27,7 @@
                   text
                   color="white"
                   class="mr-2"
+                  :class="this.selectedGenre === 'HipHop' ? 'red darken-4' : '' "
                   @click="filterCategory('HipHop')"
                   >HipHop</v-btn
                 >
@@ -34,6 +36,7 @@
                   text
                   color="white"
                   class="mr-2"
+                  :class="this.selectedGenre === 'Chill' ? 'red darken-4' : '' "
                   @click="filterCategory('Chill')"
                   >Chill</v-btn
                 >
@@ -456,19 +459,16 @@ export default {
     selectedFilterGenre: function() {
       if (this.selectedGenre === "Anime") {
         return this.stations.filter(function(u) {
-          console.log("filter", u.genre);
           return u.genre === "Anime";
         });
       }
       if (this.selectedGenre === "Chill") {
         return this.stations.filter(function(u) {
-          console.log("filter", u.genre);
           return u.genre === "Chill";
         });
       }
       if (this.selectedGenre === "HipHop") {
         return this.stations.filter(function(u) {
-          console.log("filter", u.genre);
           return u.genre === "HipHop";
         });
       }
@@ -481,19 +481,15 @@ export default {
   methods: {
     filterCategory(category) {
       if (category === "Anime") {
-        console.log("filter", category);
         this.selectedGenre = "Anime";
       }
       if (category === "All") {
-        console.log("filter", category);
         this.selectedGenre = "All";
       }
       if (category === "HipHop") {
-        console.log("filter", category);
         this.selectedGenre = "HipHop";
       }
       if (category === "Chill") {
-        console.log("filter", category);
         this.selectedGenre = "Chill";
       }
     },
@@ -503,10 +499,9 @@ export default {
     },
 
     isRadioPaused() {
-      console.log(this.stationData, this.stationDataIndex);
 
       if (this.stationData.length === 0) {
-        console.log("empty station data");
+        console.log("No Station Selected");
         return;
       }
       if (this.stationData.playing === false && this.radioStarted === false) {
@@ -607,10 +602,9 @@ export default {
     volumeController() {
       this.$store.commit("volumeSlider", this.volume);
       if (this.radioStarted === false) {
-        console.log("volume ", this.volume);
+        return
       } else {
         this.sound.volume(this.volume);
-        console.log("volume ", this.volume);
       }
     },
     likeStation(stationID) {
