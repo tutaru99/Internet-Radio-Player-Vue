@@ -58,21 +58,24 @@
             md="3"
             lg="4"
           >
+              <transition name="fade">
+          <div  v-if="this.stationData.imageSrc">
             <v-img
               class="mt-10"
-              v-if="this.stationData.imageSrc"
               contain
               max-height="200"
               :src="this.stationData.imageSrc"
             ></v-img>
-            <v-img
-              class="mt-16"
-              v-else
-              contain
-              max-height="200"
-              src="../assets/radioplaceholder.jpg"
-            ></v-img>
-
+            </div>
+              <div v-else>
+              <v-img
+                class="mt-16"
+                contain
+                max-height="200"
+                src="../assets/radioplaceholder.jpg"
+              ></v-img>
+            </div>
+            </transition>
             <h2 v-if="this.stationData.title" class="text-center mt-3">
               {{ this.stationData.title }}
             </h2>
@@ -151,7 +154,7 @@
                                   soundID,
                                   station.id
                                 ),
-                                  storeStationData(station, index)
+                                  storeStationData(station, station.id)
                               "
                             >
                               <v-img
@@ -494,10 +497,9 @@ export default {
         this.selectedGenre = "Chill";
       }
     },
-    storeStationData(station, index) {
+    storeStationData(station, id) {
       this.stationData = station;
-      this.stationDataIndex = index;
-      console.log(station, index);
+      this.stationDataIndex = id;
     },
 
     isRadioPaused() {
