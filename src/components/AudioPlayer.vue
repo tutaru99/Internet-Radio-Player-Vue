@@ -122,10 +122,14 @@
               <li v-for="station in selectedFilterGenre" :key="station.id">
                 <v-row>
                   <v-col>
-                    <v-simple-table dark>
+                    <v-simple-table dark class="red">
                       <template>
                         <tbody>
-                          <tr>
+                          <tr
+                            :class="
+                              station.playing === true ? 'PlayingStation' : ''
+                            "
+                          >
                             <td width="5%">
                               <v-btn
                                 icon
@@ -243,7 +247,7 @@
             class="ml-7"
             :color="!radioMuted ? 'white' : 'white'"
             thumb-color="white"
-            :track-color="!radioMuted ? 'grey darken-1' : 'red darken-2'"
+            :track-color="!radioMuted ? 'grey darken-1' : 'red darken-4'"
             max="1.0"
             step="0.05"
             v-model="volume"
@@ -568,6 +572,10 @@ export default {
       this.soundID = this.sound.play();
       console.log("Radio Started Playing");
       Howler.masterGain.gain.value = this.volume;
+      if (this.radioMuted === true) {
+        this.muteRadioOnStart()
+
+      }
     },
 
     /* PAUSE Radio */
@@ -588,19 +596,29 @@ export default {
 
     /* MUTE Radio */
     muteRadio() {
-      (this.radioMuted = true), this.sound.fade(this.volume, 0.0, 1200);
-      console.log("Radio Muted");
+      if (this.radioStarted === false) {
+        return;
+      } else {
+        (this.radioMuted = true), this.sound.fade(this.volume, 0.0, 1200);
+        console.log("Radio Muted");
+      }
     },
     /* UNMUTE Radio */
     unmuteRadio() {
       (this.radioMuted = false), this.sound.fade(0.0, this.volume, 1200);
       console.log("Radio Unmuted");
     },
-
+      /* MUTE Radio instantly if u chose to mute before starting any station */
+    muteRadioOnStart() {
+        this.sound.fade(this.volume, 0.0, 0);
+    },
     /* Volume Slider */
     volumeController() {
       this.$store.commit("volumeSlider", this.volume);
       if (this.radioStarted === false) {
+        return;
+      }
+      if (this.radioMuted === true) {
         return;
       } else {
         this.sound.volume(this.volume);
@@ -687,7 +705,12 @@ tr {
   overflow: auto;
   overflow-x: hidden;
 }
-
+.PlayingStation {
+  background-color: #b71c1c !important;
+}
+.PlayingStation:hover {
+  background-color: #b71c1c !important;
+}
 .section::-webkit-scrollbar {
   width: 20px;
 }
