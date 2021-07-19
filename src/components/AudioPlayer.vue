@@ -438,6 +438,10 @@ export default {
         },
       ],
       selectedGenre: "All",
+      analyser: null,
+      gainNode: null,
+      drawTimer: null,
+      frequency: [],
     };
   },
   computed: {
@@ -617,28 +621,49 @@ export default {
         html5: true,
         volume: this.volume,
       });
-
-      /* Hooking into Howler to be able to analyze sound via Audio Nodes*/
-      // ____________________________________________________
       // Create an analyser node in the Howler WebAudio context
       var analyser = Howler.ctx.createAnalyser();
-      // Connect the masterGain -> analyser (disconnecting masterGain -> destination)
+      var dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      Howler.ctx.createGain = Howler.ctx.createGain || Howler.ctx.createGainNode;
+      var gainNode = Howler.ctx.createGain();
+      gainNode.gain.setValueAtTime(1, Howler.ctx.currentTime);
       Howler.masterGain.connect(analyser);
-      console.log(analyser, "analyser");
-      analyser.fftSize = 2048;
-      var bufferLength = analyser.frequencyBinCount;
-      var dataArray = new Uint8Array(bufferLength);
-      analyser.getByteTimeDomainData(dataArray);
-      console.log("getByteTimeDomainData -", dataArray);
-      // ____________________________________________________
+      analyser.connect(gainNode);
+      gainNode.connect(Howler.ctx.destination);
 
-      analyser.getByteFrequencyData(dataArray);
-      console.log("getByteFrequencyData - ", dataArray);
-
+      // Starting Playing Audio
       this.soundID = this.sound.play();
       console.log("Radio Started Playing");
-      Howler.masterGain.gain.value = this.volume;
+
+      // Defining variables so they can be used globally
+      this.analyser = analyser;
+      this.gainNode = gainNode;
+      this.frequency = dataArray;
+      // Call function to show frequency data
+      this.drawAudioVisualizer();
     },
+ // Start getting Frequency Data
+  drawAudioVisualizer(){
+    // Animation ends when gain reaches 0
+    if(this.gainNode.gain.value === 0){
+
+      if(this.drawTimer){
+        window.cancelAnimationFrame(this.drawTimer);
+        return;
+      }
+    }
+    // Set 0 to 1. Drawing becomes smoother when it is closer to 0
+    this.analyser.smoothingTimeConstant = 0.1;
+    // FFT size
+    this.analyser.fftSize = 1024;
+    // Store the waveform data in the frequency domain in an array of arguments
+    this.analyser.getByteFrequencyData(this.frequency);
+    // Draw every frame
+    this.drawTimer = window.requestAnimationFrame(this.drawAudioVisualizer.bind(this));
+    console.log(this.frequency)
+  },
+
 
     /* PAUSE Radio */
     stopRadio(stationID) {
