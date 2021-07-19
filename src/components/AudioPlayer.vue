@@ -18,7 +18,7 @@
                   text
                   color="white"
                   class="mr-2"
-                  :class="this.selectedGenre === 'Anime' ? 'red darken-4' : '' "
+                  :class="this.selectedGenre === 'Anime' ? 'red darken-4' : ''"
                   @click="filterCategory('Anime')"
                   >Anime</v-btn
                 >
@@ -27,7 +27,7 @@
                   text
                   color="white"
                   class="mr-2"
-                  :class="this.selectedGenre === 'HipHop' ? 'red darken-4' : '' "
+                  :class="this.selectedGenre === 'HipHop' ? 'red darken-4' : ''"
                   @click="filterCategory('HipHop')"
                   >HipHop</v-btn
                 >
@@ -36,7 +36,7 @@
                   text
                   color="white"
                   class="mr-2"
-                  :class="this.selectedGenre === 'Chill' ? 'red darken-4' : '' "
+                  :class="this.selectedGenre === 'Chill' ? 'red darken-4' : ''"
                   @click="filterCategory('Chill')"
                   >Chill</v-btn
                 >
@@ -61,23 +61,23 @@
             md="3"
             lg="4"
           >
-              <transition name="fade">
-          <div  v-if="this.stationData.imageSrc">
-            <v-img
-              class="mt-10"
-              contain
-              max-height="200"
-              :src="this.stationData.imageSrc"
-            ></v-img>
-            </div>
+            <transition name="fade">
+              <div v-if="this.stationData.imageSrc">
+                <v-img
+                  class="mt-10"
+                  contain
+                  max-height="200"
+                  :src="this.stationData.imageSrc"
+                ></v-img>
+              </div>
               <div v-else>
-              <v-img
-                class="mt-16"
-                contain
-                max-height="200"
-                src="../assets/radioplaceholder.jpg"
-              ></v-img>
-            </div>
+                <v-img
+                  class="mt-16"
+                  contain
+                  max-height="200"
+                  src="../assets/radioplaceholder.jpg"
+                ></v-img>
+              </div>
             </transition>
             <h2 v-if="this.stationData.title" class="text-center mt-3">
               {{ this.stationData.title }}
@@ -499,7 +499,6 @@ export default {
     },
 
     isRadioPaused() {
-
       if (this.stationData.length === 0) {
         console.log("No Station Selected");
         return;
@@ -602,7 +601,7 @@ export default {
     volumeController() {
       this.$store.commit("volumeSlider", this.volume);
       if (this.radioStarted === false) {
-        return
+        return;
       } else {
         this.sound.volume(this.volume);
       }
