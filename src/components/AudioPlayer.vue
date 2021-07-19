@@ -49,79 +49,123 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col
-          align="center"
-          id="AudioPlayerWrapper"
-          class="py-2"
-          cols="12"
-          md="3"
-          lg="4"
-        >
-          <v-img
-            class="mt-10"
-            v-if="this.stationData.imageSrc"
-            contain
-            max-height="200"
-            :src="this.stationData.imageSrc"
-          ></v-img>
-          <v-img
-            class="mt-16"
-            v-else
-            contain
-            max-height="200"
-            src="../assets/radioplaceholder.jpg"
-          ></v-img>
+        <transition name="fade" appear>
+          <v-col
+            align="center"
+            id="AudioPlayerWrapper"
+            class="py-2"
+            cols="12"
+            md="3"
+            lg="4"
+          >
+            <v-img
+              class="mt-10"
+              v-if="this.stationData.imageSrc"
+              contain
+              max-height="200"
+              :src="this.stationData.imageSrc"
+            ></v-img>
+            <v-img
+              class="mt-16"
+              v-else
+              contain
+              max-height="200"
+              src="../assets/radioplaceholder.jpg"
+            ></v-img>
 
-          <h2 v-if="this.stationData.title" class="text-center mt-3">
-            {{ this.stationData.title }}
-          </h2>
+            <h2 v-if="this.stationData.title" class="text-center mt-3">
+              {{ this.stationData.title }}
+            </h2>
 
-          <p v-if="this.stationData.genres" class="text-center mt-4">
-            {{ this.stationData.genres }}
-          </p>
+            <p v-if="this.stationData.genres" class="text-center mt-4">
+              {{ this.stationData.genres }}
+            </p>
 
-          <p v-if="this.stationData.website" class="text-center">
-            <a :href="this.stationData.website" target="_blank">Website</a>
-          </p>
+            <p v-if="this.stationData.website" class="text-center">
+              <a :href="this.stationData.website" target="_blank">Website</a>
+            </p>
 
-          <div class="mt-6">
-            <v-btn icon>
-              <v-icon v-if="stationData.liked" dark style="color: red">
-                mdi-heart
-              </v-icon>
-              <v-icon v-else dark style="color: #E0E0E0">
-                mdi-heart-outline
-              </v-icon>
-            </v-btn>
-            <v-btn class="pa-5" icon>
-              <v-icon dark style="color: #E0E0E0">
-                mdi-dots-horizontal
-              </v-icon>
-            </v-btn>
-            <div class="mt-9">
-            <transition name="fade" v-if="radioStarted">
-              <AudioWave />
-            </transition>
+            <div class="mt-6">
+              <v-btn icon>
+                <v-icon v-if="stationData.liked" dark style="color: red">
+                  mdi-heart
+                </v-icon>
+                <v-icon v-else dark style="color: #E0E0E0">
+                  mdi-heart-outline
+                </v-icon>
+              </v-btn>
+              <v-btn class="pa-5" icon>
+                <v-icon dark style="color: #E0E0E0">
+                  mdi-dots-horizontal
+                </v-icon>
+              </v-btn>
+              <div class="mt-9">
+                <transition name="fade" v-if="radioStarted">
+                  <AudioWave />
+                </transition>
+              </div>
             </div>
-          </div>
-          <!-- <canvas width="300" height="300">
+            <!-- <canvas width="300" height="300">
             An alternative text describing what your canvas displays.
           </canvas> -->
-        </v-col>
-
+          </v-col>
+        </transition>
         <v-col style="padding: 0">
-          <div id="tableWrapper" class="section">
-            <li v-for="station in selectedFilterGenre" :key="station.id">
-              <v-row>
-                <v-col>
-                  <v-simple-table dark>
-                    <template>
-                      <tbody>
-                        <tr>
-                          <td width="5%">
-                            <v-btn
-                              icon
-                              color="white"
+          <transition name="fade" appear>
+            <div id="tableWrapper" class="section">
+              <li v-for="station in selectedFilterGenre" :key="station.id">
+                <v-row>
+                  <v-col>
+                    <v-simple-table dark>
+                      <template>
+                        <tbody>
+                          <tr>
+                            <td width="5%">
+                              <v-btn
+                                icon
+                                color="white"
+                                @click="
+                                  isRadioPlaying(
+                                    station.src,
+                                    station.playing,
+                                    soundID,
+                                    station.id
+                                  ),
+                                    storeStationData(station, station.id)
+                                "
+                              >
+                                <v-icon dark v-if="!station.playing">
+                                  mdi-play
+                                </v-icon>
+                                <v-icon dark v-if="station.playing">
+                                  mdi-pause
+                                </v-icon>
+                              </v-btn>
+                            </td>
+                            <td
+                              width="15%"
+                              @click="
+                                isRadioPlaying(
+                                  station.src,
+                                  station.playing,
+                                  soundID,
+                                  station.id
+                                ),
+                                  storeStationData(station, index)
+                              "
+                            >
+                              <v-img
+                                contain
+                                max-height="80"
+                                max-width="80"
+                                min-height="80"
+                                min-width="80"
+                                :src="station.imageSrc"
+                              >
+                              </v-img>
+                            </td>
+                            <td
+                              width="65"
                               @click="
                                 isRadioPlaying(
                                   station.src,
@@ -132,79 +176,38 @@
                                   storeStationData(station, station.id)
                               "
                             >
-                              <v-icon dark v-if="!station.playing">
-                                mdi-play
-                              </v-icon>
-                              <v-icon dark v-if="station.playing">
-                                mdi-pause
-                              </v-icon>
-                            </v-btn>
-                          </td>
-                          <td
-                            width="15%"
-                            @click="
-                              isRadioPlaying(
-                                station.src,
-                                station.playing,
-                                soundID,
-                                station.id
-                              ),
-                                storeStationData(station, index)
-                            "
-                          >
-                            <v-img
-                              contain
-                              max-height="80"
-                              max-width="80"
-                              min-height="80"
-                              min-width="80"
-                              :src="station.imageSrc"
-                            >
-                            </v-img>
-                          </td>
-                          <td
-                            width="65"
-                            @click="
-                              isRadioPlaying(
-                                station.src,
-                                station.playing,
-                                soundID,
-                                station.id
-                              ),
-                                storeStationData(station, station.id)
-                            "
-                          >
-                            <h3>{{ station.title }}</h3>
-                          </td>
-                          <td width="10%">
-                            <v-btn icon @click="likeStation(station.id)">
-                              <v-icon
-                                v-if="station.liked"
-                                dark
-                                style="color: red"
-                              >
-                                mdi-heart
-                              </v-icon>
-                              <v-icon v-else dark style="color: #E0E0E0">
-                                mdi-heart-outline
-                              </v-icon>
-                            </v-btn>
-                          </td>
-                          <td width="10%">
-                            <v-btn icon>
-                              <v-icon dark style="color: #E0E0E0">
-                                mdi-dots-horizontal
-                              </v-icon>
-                            </v-btn>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </template>
-                  </v-simple-table>
-                </v-col>
-              </v-row>
-            </li>
-          </div>
+                              <h3>{{ station.title }}</h3>
+                            </td>
+                            <td width="10%">
+                              <v-btn icon @click="likeStation(station.id)">
+                                <v-icon
+                                  v-if="station.liked"
+                                  dark
+                                  style="color: red"
+                                >
+                                  mdi-heart
+                                </v-icon>
+                                <v-icon v-else dark style="color: #E0E0E0">
+                                  mdi-heart-outline
+                                </v-icon>
+                              </v-btn>
+                            </td>
+                            <td width="10%">
+                              <v-btn icon>
+                                <v-icon dark style="color: #E0E0E0">
+                                  mdi-dots-horizontal
+                                </v-icon>
+                              </v-btn>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </template>
+                    </v-simple-table>
+                  </v-col>
+                </v-row>
+              </li>
+            </div>
+          </transition>
         </v-col>
       </v-row>
 
@@ -713,10 +716,17 @@ a {
 }
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 1.2s ease-in-out;
 }
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+.fade-enter-active {
+  transition: opacity 1.2s ease-in-out;
+}
+.fade-enter-to {
+  transition: opacity 1.2s ease-in-out;
 }
 </style>
