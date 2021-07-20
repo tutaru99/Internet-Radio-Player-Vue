@@ -111,9 +111,6 @@
                 </transition>
               </div>
             </div>
-            <!-- <canvas width="300" height="300">
-            An alternative text describing what your canvas displays.
-          </canvas> -->
           </v-col>
         </transition>
         <v-col style="padding: 0">
@@ -295,6 +292,7 @@ export default {
       sound: null,
       soundID: null,
       volume: this.$store.state.volume,
+      selectedGenre: "All",
       stations: [
         {
           id: 0,
@@ -448,7 +446,6 @@ export default {
           genre: "Chill",
         },
       ],
-      selectedGenre: "All",
     };
   },
   computed: {
@@ -518,7 +515,8 @@ export default {
       if (isplaying === false && this.radioStarted === false) {
         this.startRadio(stationSrc, stationID);
         this.radioPaused = false;
-      } /* If another station is already playing stop that instance and start another station */ else if (
+      } /* If another station is already playing stop that instance and start another station */
+      else if (
         isplaying === false &&
         this.radioStarted === true
       ) {
@@ -541,23 +539,10 @@ export default {
         html5: true,
         volume: this.volume,
       });
-      /* Hooking into Howler to be able to analyze sound via Audio Nodes*/
-      // ____________________________________________________
-      // Create an analyser node in the Howler WebAudio context
-      // var analyser = Howler.ctx.createAnalyser();
-      // // Connect the masterGain -> analyser (disconnecting masterGain -> destination)
-      // Howler.masterGain.connect(analyser);
-      // console.log(analyser, "analyser");
-      // analyser.fftSize = 2048;
-      // var bufferLength = analyser.frequencyBinCount;
-      // var dataArray = new Uint8Array(bufferLength);
-      // analyser.getByteTimeDomainData(dataArray);
-      // console.log(dataArray, "dataArray");
-      // ____________________________________________________
-      // getByteFrequencyData(dataArray);         doesnt work
       this.soundID = this.sound.play();
       console.log("Radio Started Playing");
       Howler.masterGain.gain.value = this.volume;
+
       if (this.radioMuted === true) {
         this.muteRadioOnStart()
       }
