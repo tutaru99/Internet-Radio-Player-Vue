@@ -1,26 +1,92 @@
 <template>
   <div>
-
+    <v-col cols="12">
+      <v-row align="center" justify="center" class="d-flex">
+        <div class="p-view">
+          <h1 class="text-center">
+            AudioVisualizer<br />
+            [ howler.js + SVG ]
+          </h1>
+          <div class="p-view__box" id="js-view">
+            <svg
+              ref="jssvg"
+              class="p-view__svg"
+              id="js-svg"
+              xmlns="http://www.w3.org/2000/svg"
+              width="600"
+              height="400"
+              viewBox="0 0 600 400"
+              preserveAspectRatio="none"
+            >
+              <path
+                ref="path"
+                d="M0,200 L600,200"
+                stroke="#fff"
+                stroke-width="0.5"
+                fill="none"
+              />
+            </svg>
+          </div>
+          <div>
+            <v-row align="center" justify="center" class="d-flex">
+              <v-btn class="" @click="playAudio()">
+                Start Music
+              </v-btn>
+              <v-btn class="ml-4" @click="stopAudio()">
+                STOP AUDIO
+              </v-btn>
+            </v-row>
+          </div>
+        </div>
+      </v-row>
+    </v-col>
   </div>
 </template>
 
 <script>
+import { Howl, Howler } from "howler";
 export default {
-  data: {},
+  data() {
+    return {
+      sound: null,
+      analyser: null,
+      gainNode: null,
+      drawTimer: null,
+      frequency: [],
+      playing: false,
+    };
+  },
   methods: {
-    startRadio(stationSrc, stationID) {
-      this.radioStarted = true;
-      this.arrayID = stationID;
-      this.stations[stationID].playing = true;
-      this.sound = new Howl({
+    playAudio() {
+      this.createVisualizerData();
+      this.initAudioVisualizer();
+      this.drawAudioVisualizer();
+    },
+    createVisualizerData() {
+      this.drawTimer = null;
+      var sound = new Howl({
         src: require("@/assets/audio.mp3"),
         format: ["mp3", "aac"],
-        volume: this.volume,
+        loop: true,
+        volume: 1,
       });
+      sound.play();
+      this.sound = sound;
+    },
+
+    stopAudio() {
+      this.sound.stop();
+      if (this.drawTimer) {
+        window.cancelAnimationFrame(this.drawTimer);
+        return;
+      }
+    },
+
+    initAudioVisualizer() {
       // Create an analyser node in the Howler WebAudio context
       var analyser = Howler.ctx.createAnalyser();
       var dataArray = new Uint8Array(analyser.frequencyBinCount);
-      console.log(analyser);
+      // console.log(analyser);
       Howler.ctx.createGain =
         Howler.ctx.createGain || Howler.ctx.createGainNode;
       var gainNode = Howler.ctx.createGain();
@@ -30,17 +96,15 @@ export default {
       gainNode.connect(Howler.ctx.destination);
 
       // Starting Playing Audio
-      this.soundID = this.sound.play();
+      //   this.sound.play();
       console.log("Radio Started Playing");
 
       // Defining variables so they can be used globally
       this.analyser = analyser;
       this.gainNode = gainNode;
       this.frequency = dataArray;
-      // Call function to show frequency data
-      this.drawAudioVisualizer();
     },
-    // Start getting Frequency Data
+
     drawAudioVisualizer() {
       // Animation ends when gain reaches 0
       if (this.gainNode.gain.value === 0) {
@@ -52,17 +116,48 @@ export default {
       // Set 0 to 1. Drawing becomes smoother when it is closer to 0
       this.analyser.smoothingTimeConstant = 0.1;
       // FFT size
-      this.analyser.fftSize = 1024;
+      this.analyser.fftSize = 512;
       // Store the waveform data in the frequency domain in an array of arguments
       this.analyser.getByteFrequencyData(this.frequency);
       // Draw every frame
       this.drawTimer = window.requestAnimationFrame(
         this.drawAudioVisualizer.bind(this)
       );
-      console.log(this.frequency);
+      //  console.log(this.frequency);
+      const barWidth =
+        (document.getElementById("js-svg").width.baseVal.value * 1.5) /
+        this.analyser.frequencyBinCount;
+      this.drawSvgPath(barWidth);
+      this.drawTimer = window.requestAnimationFrame(
+        this.drawAudioVisualizer.bind(this)
+      );
+    },
+
+    drawSvgPath(barWidth) {
+      let d = "M";
+      const frequency = this.frequency;
+      frequency.forEach((y, i) => {
+        const x = i * barWidth;
+        const value = frequency[i];
+        const percent = value / 255;
+        const yBase = i % 2 === 0 ? 1 : -1;
+        const height =
+          this.$refs.jssvg.height.baseVal.value / 2 +
+          (this.$refs.jssvg.height.baseVal.value / 2) *
+            percent *
+            -1 *
+            yBase *
+            this.gainNode.gain.value;
+        d += `${x} ${height},`;
+      });
+      this.$refs.path.setAttribute("d", d);
     },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+h1 {
+  color: #fff;
+}
+</style>

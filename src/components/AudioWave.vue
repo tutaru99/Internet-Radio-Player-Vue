@@ -7,7 +7,6 @@
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 50 38.05"
       >
-        <title>Audio Wave</title>
         <path
           id="Line_1"
           data-name="Line 1"
@@ -63,10 +62,6 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-body {
-  background: #101010;
-}
-
 .loader {
   display: flex;
   align-items: center;
@@ -76,11 +71,11 @@ body {
 
 #wave {
   height: 70px;
-  width: 70px;
+  width: 80px;
   fill: #fff;
 }
 
-@for $i from 1 through 9 {
+@for $i from 1 through 11 {
   #Line_#{$i} {
     animation: pulse 1s infinite;
     animation-delay: $i * 0.15s;
