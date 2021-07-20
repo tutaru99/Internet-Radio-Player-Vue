@@ -1,9 +1,6 @@
 <template>
   <div>
     <v-col cols="12">
-      <v-btn text color="white" @click="testAnalyzer()">
-        Get Frequency Data
-      </v-btn>
       <v-row class="mt-5" id="Stationswrapper">
         <v-col cols="12">
           <v-row class="header">
@@ -21,6 +18,7 @@
                   text
                   color="white"
                   class="mr-2"
+                  :class="this.selectedGenre === 'Anime' ? 'red darken-4' : ''"
                   @click="filterCategory('Anime')"
                   >Anime</v-btn
                 >
@@ -29,6 +27,7 @@
                   text
                   color="white"
                   class="mr-2"
+                  :class="this.selectedGenre === 'HipHop' ? 'red darken-4' : ''"
                   @click="filterCategory('HipHop')"
                   >HipHop</v-btn
                 >
@@ -37,6 +36,7 @@
                   text
                   color="white"
                   class="mr-2"
+                  :class="this.selectedGenre === 'Chill' ? 'red darken-4' : ''"
                   @click="filterCategory('Chill')"
                   >Chill</v-btn
                 >
@@ -52,74 +52,108 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col
-          align="center"
-          id="AudioPlayerWrapper"
-          class="py-2"
-          cols="12"
-          md="3"
-          lg="4"
-        >
-          <v-img
-            class="mt-10"
-            v-if="this.stationData.imageSrc"
-            contain
-            max-height="200"
-            :src="this.stationData.imageSrc"
-          ></v-img>
-          <v-img
-            class="mt-16"
-            v-else
-            contain
-            max-height="200"
-            src="../assets/radioplaceholder.jpg"
-          ></v-img>
+        <transition name="fade" appear>
+          <v-col
+            align="center"
+            id="AudioPlayerWrapper"
+            class="py-2"
+            cols="12"
+            md="3"
+            lg="4"
+          >
+            <transition name="fade">
+              <div v-if="this.stationData.imageSrc">
+                <v-img
+                  class="mt-10"
+                  contain
+                  max-height="200"
+                  :src="this.stationData.imageSrc"
+                ></v-img>
+              </div>
+              <div v-else>
+                <v-img
+                  class="mt-16"
+                  contain
+                  max-height="200"
+                  src="../assets/radioplaceholder.jpg"
+                ></v-img>
+              </div>
+            </transition>
+            <h2 v-if="this.stationData.title" class="text-center mt-3">
+              {{ this.stationData.title }}
+            </h2>
 
-          <h2 v-if="this.stationData.title" class="text-center mt-3">
-            {{ this.stationData.title }}
-          </h2>
+            <p v-if="this.stationData.genres" class="text-center mt-4">
+              {{ this.stationData.genres }}
+            </p>
 
-          <p v-if="this.stationData.genres" class="text-center mt-4">
-            {{ this.stationData.genres }}
-          </p>
+            <p v-if="this.stationData.website" class="text-center">
+              <a :href="this.stationData.website" target="_blank">Website</a>
+            </p>
 
-          <p v-if="this.stationData.website" class="text-center">
-            <a :href="this.stationData.website" target="_blank">Website</a>
-          </p>
-
-          <div class="mt-6">
-            <v-btn icon>
-              <v-icon v-if="stationData.liked" dark style="color: red">
-                mdi-heart
-              </v-icon>
-              <v-icon v-else dark style="color: #E0E0E0">
-                mdi-heart-outline
-              </v-icon>
-            </v-btn>
-            <v-btn class="pa-5" icon>
-              <v-icon dark style="color: #E0E0E0">
-                mdi-dots-horizontal
-              </v-icon>
-            </v-btn>
-          </div>
-          <!-- <canvas width="300" height="300">
+            <div class="mt-6">
+              <v-btn icon>
+                <v-icon v-if="stationData.liked" dark style="color: red">
+                  mdi-heart
+                </v-icon>
+                <v-icon v-else dark style="color: #E0E0E0">
+                  mdi-heart-outline
+                </v-icon>
+              </v-btn>
+              <v-btn class="pa-5" icon>
+                <v-icon dark style="color: #E0E0E0">
+                  mdi-dots-horizontal
+                </v-icon>
+              </v-btn>
+              <div class="mt-9">
+                <transition name="fade" v-if="radioStarted">
+                  <AudioWave />
+                </transition>
+              </div>
+            </div>
+            <!-- <canvas width="300" height="300">
             An alternative text describing what your canvas displays.
           </canvas> -->
-        </v-col>
-
+          </v-col>
+        </transition>
         <v-col style="padding: 0">
-          <div id="tableWrapper" class="section">
-            <li v-for="station in selectedFilterGenre" :key="station.id">
-              <v-row>
-                <v-col>
-                  <v-simple-table dark>
-                    <template>
-                      <tbody>
-                        <tr>
-                          <td width="5%">
-                            <v-btn
-                              icon
-                              color="white"
+          <transition name="fade" appear>
+            <div id="tableWrapper" class="section">
+              <li v-for="station in selectedFilterGenre" :key="station.id">
+                <v-row>
+                  <v-col>
+                    <v-simple-table dark class="red">
+                      <template>
+                        <tbody>
+                          <tr
+                            :class="
+                              station.playing === true ? 'PlayingStation' : ''
+                            "
+                          >
+                            <td width="5%">
+                              <v-btn
+                                icon
+                                color="white"
+                                @click="
+                                  isRadioPlaying(
+                                    station.src,
+                                    station.playing,
+                                    soundID,
+                                    station.id
+                                  ),
+                                    storeStationData(station, station.id)
+                                "
+                              >
+                                <v-icon dark v-if="!station.playing">
+                                  mdi-play
+                                </v-icon>
+                                <v-icon dark v-if="station.playing">
+                                  mdi-pause
+                                </v-icon>
+                              </v-btn>
+                            </td>
+                            <td
+                              width="15%"
                               @click="
                                 isRadioPlaying(
                                   station.src,
@@ -130,79 +164,60 @@
                                   storeStationData(station, station.id)
                               "
                             >
-                              <v-icon dark v-if="!station.playing">
-                                mdi-play
-                              </v-icon>
-                              <v-icon dark v-if="station.playing">
-                                mdi-pause
-                              </v-icon>
-                            </v-btn>
-                          </td>
-                          <td
-                            width="15%"
-                            @click="
-                              isRadioPlaying(
-                                station.src,
-                                station.playing,
-                                soundID,
-                                station.id
-                              ),
-                                storeStationData(station, index)
-                            "
-                          >
-                            <v-img
-                              contain
-                              max-height="80"
-                              max-width="80"
-                              min-height="80"
-                              min-width="80"
-                              :src="station.imageSrc"
-                            >
-                            </v-img>
-                          </td>
-                          <td
-                            width="65"
-                            @click="
-                              isRadioPlaying(
-                                station.src,
-                                station.playing,
-                                soundID,
-                                station.id
-                              ),
-                                storeStationData(station, station.id)
-                            "
-                          >
-                            <h3>{{ station.title }}</h3>
-                          </td>
-                          <td width="10%">
-                            <v-btn icon @click="likeStation(station.id)">
-                              <v-icon
-                                v-if="station.liked"
-                                dark
-                                style="color: red"
+                              <v-img
+                                contain
+                                max-height="80"
+                                max-width="80"
+                                min-height="80"
+                                min-width="80"
+                                :src="station.imageSrc"
                               >
-                                mdi-heart
-                              </v-icon>
-                              <v-icon v-else dark style="color: #E0E0E0">
-                                mdi-heart-outline
-                              </v-icon>
-                            </v-btn>
-                          </td>
-                          <td width="10%">
-                            <v-btn icon>
-                              <v-icon dark style="color: #E0E0E0">
-                                mdi-dots-horizontal
-                              </v-icon>
-                            </v-btn>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </template>
-                  </v-simple-table>
-                </v-col>
-              </v-row>
-            </li>
-          </div>
+                              </v-img>
+                            </td>
+                            <td
+                              width="65"
+                              @click="
+                                isRadioPlaying(
+                                  station.src,
+                                  station.playing,
+                                  soundID,
+                                  station.id
+                                ),
+                                  storeStationData(station, station.id)
+                              "
+                            >
+                              <h3>{{ station.title }}</h3>
+                            </td>
+                            <td width="10%">
+                              <v-btn icon @click="likeStation(station.id)">
+                                <v-icon
+                                  v-if="station.liked"
+                                  dark
+                                  style="color: red"
+                                >
+                                  mdi-heart
+                                </v-icon>
+                                <v-icon v-else dark style="color: #E0E0E0">
+                                  mdi-heart-outline
+                                </v-icon>
+                              </v-btn>
+                            </td>
+                            <td width="10%">
+                              <v-btn icon>
+                                <v-icon dark style="color: #E0E0E0">
+                                  mdi-dots-horizontal
+                                </v-icon>
+                              </v-btn>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </template>
+                    </v-simple-table>
+                  </v-col>
+                </v-row>
+              </li>
+            </div>
+          </transition>
         </v-col>
       </v-row>
 
@@ -232,7 +247,7 @@
             class="ml-7"
             :color="!radioMuted ? 'white' : 'white'"
             thumb-color="white"
-            :track-color="!radioMuted ? 'grey darken-1' : 'red darken-2'"
+            :track-color="!radioMuted ? 'grey darken-1' : 'red darken-4'"
             max="1.0"
             step="0.05"
             v-model="volume"
@@ -261,12 +276,14 @@
     </v-col>
   </div>
 </template>
-/* Save -Liked- and volume into local storage and later mb sorting by genre*/
 <script>
 import { Howl, Howler } from "howler";
-
+import AudioWave from "../components/AudioWave";
 export default {
   name: "Lobby",
+  components: {
+    AudioWave,
+  },
   data() {
     return {
       stationData: [],
@@ -290,7 +307,6 @@ export default {
           liked: false,
           genre: "HipHop",
         },
-
         {
           id: 1,
           title: "Anison.FM",
@@ -314,7 +330,6 @@ export default {
           liked: false,
           genre: "Chill",
         },
-
         {
           id: 3,
           title: "JapanNext",
@@ -327,7 +342,6 @@ export default {
           liked: false,
           genre: "Anime",
         },
-
         {
           id: 4,
           title: "Radio Isekai",
@@ -363,7 +377,6 @@ export default {
           liked: false,
           genre: "Anime",
         },
-
         {
           id: 7,
           title: "Tsubaki Radio",
@@ -387,7 +400,6 @@ export default {
           liked: false,
           genre: "HipHop",
         },
-
         {
           id: 9,
           title: "BakaRadio",
@@ -412,7 +424,6 @@ export default {
           liked: false,
           genre: "HipHop",
         },
-
         {
           id: 11,
           title: "BEST SMOOTH JAZZ - UK",
@@ -438,29 +449,22 @@ export default {
         },
       ],
       selectedGenre: "All",
-      analyser: null,
-      gainNode: null,
-      drawTimer: null,
-      frequency: [],
     };
   },
   computed: {
     selectedFilterGenre: function() {
       if (this.selectedGenre === "Anime") {
         return this.stations.filter(function(u) {
-          console.log("filter", u.genre);
           return u.genre === "Anime";
         });
       }
       if (this.selectedGenre === "Chill") {
         return this.stations.filter(function(u) {
-          console.log("filter", u.genre);
           return u.genre === "Chill";
         });
       }
       if (this.selectedGenre === "HipHop") {
         return this.stations.filter(function(u) {
-          console.log("filter", u.genre);
           return u.genre === "HipHop";
         });
       }
@@ -473,33 +477,25 @@ export default {
   methods: {
     filterCategory(category) {
       if (category === "Anime") {
-        console.log("filter", category);
         this.selectedGenre = "Anime";
       }
       if (category === "All") {
-        console.log("filter", category);
         this.selectedGenre = "All";
       }
       if (category === "HipHop") {
-        console.log("filter", category);
         this.selectedGenre = "HipHop";
       }
       if (category === "Chill") {
-        console.log("filter", category);
         this.selectedGenre = "Chill";
       }
     },
-    storeStationData(station, index) {
+    storeStationData(station, id) {
       this.stationData = station;
-      this.stationDataIndex = index;
-      console.log(station, index);
+      this.stationDataIndex = id;
     },
-
     isRadioPaused() {
-      console.log(this.stationData, this.stationDataIndex);
-
       if (this.stationData.length === 0) {
-        console.log("empty station data");
+        console.log("No Station Selected");
         return;
       }
       if (this.stationData.playing === false && this.radioStarted === false) {
@@ -517,7 +513,6 @@ export default {
         this.radioPaused = true;
       }
     },
-
     /* Check if radio is playing */
     isRadioPlaying(stationSrc, isplaying, soundID, stationID) {
       if (isplaying === false && this.radioStarted === false) {
@@ -536,145 +531,43 @@ export default {
         this.radioPaused = true;
       }
     },
-
-    testAnalyzer() {
-      // var audio = new Howl({
-      //   src: ['http://149.56.175.167:5461/;stream/1'],
-      //   volume: this.volume,
-      //   html5: true,
-      //   format: ['mp3', 'aac'],
-      // });
-
-      //   audio.play();
-      //   var test = new (window.AudioContext || window.webkitAudioContext)();
-      //   console.log(test);
-      //   const audioCtx = Howler.ctx;
-      //   const audioSourceNode = audioCtx.createMediaElementSource(audio._sounds[0]._node);
-      //   console.log('Audio CTX', audioCtx);
-
-      //   const analyser = audioCtx.createAnalyser();
-      //   console.log('Audio Source Node - ', audioSourceNode);
-
-
-      //   analyser.fftsize = 512;
-      //   const bufferLength = analyser.frequencyBinCount;
-      //   const dataArray = new Uint8Array(bufferLength);
-
-      //   //Set up audio node network
-      //   audioSourceNode.connect(analyser);
-      //   analyser.connect(audioCtx.destination);
-
-      //   analyser.getByteFrequencyData(dataArray)
-      // //  console.log('Frequency Data - ', dataArray)
-    
-
-        /* Testing */
-        // var analyser =  this.analyser = Howler.ctx.createAnalyser();
-        // Howler.masterGain.connect(analyser);
-        // analyser.connect(Howler.ctx.destination);
-        // analyser.fftSize = 256;
-        // var bufferLength = analyser.frequencyBinCount;
-        // var dataArray = new Uint8Array(bufferLength);
-        // console.log('dataArray', dataArray)
-
-
-
-      /* 1st method from git issues */
-      const audio = new Howl({ src: 'http://64.95.243.43:8002/;stream/1', html5: true})
-      audio.play()
-      const audioCtx = Howler.ctx;
-
-      // Create analyser node
-      const audioSourceNode = audioCtx.createMediaElementSource(audio._sounds[0]._node);
-      console.log(audioSourceNode)
-
-      const analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 512;
-      const bufferLength = analyser.frequencyBinCount;
-      const dataArray = new Uint8Array(bufferLength);
-
-      //Set up audio node network
-      audioSourceNode.connect(analyser);
-      analyser.connect(audioCtx.destination);
-
-      analyser.getByteFrequencyData(dataArray) // Returns data as intended
-
-       console.log(dataArray)
-
-
-
-      /* 2nd method from git issues */
-      //  let context = audio._sounds[0]._node.context;
-      //  let src = audio._sounds[0]._node.bufferSource;
-      // var analyser = context.createAnalyser();
-      //  src.connect(analyser);
-      //  console.log(analyser)
-      // analyser.fftSize = 512;
-      // let bufferLength = analyser.frequencyBinCount;
-      // dataArray = new Uint8Array(bufferLength);
-    },
     /* START Radio */
     startRadio(stationSrc, stationID) {
       this.radioStarted = true;
       this.arrayID = stationID;
       this.stations[stationID].playing = true;
       this.sound = new Howl({
-        src: require('@/assets/audio.mp3'),
-      
-        format: ['mp3', 'aac'],
+        src: stationSrc,
+        html5: true,
         volume: this.volume,
       });
+      /* Hooking into Howler to be able to analyze sound via Audio Nodes*/
+      // ____________________________________________________
       // Create an analyser node in the Howler WebAudio context
-      var analyser = Howler.ctx.createAnalyser();
-      var dataArray = new Uint8Array(analyser.frequencyBinCount);
-console.log(analyser)
-      Howler.ctx.createGain = Howler.ctx.createGain || Howler.ctx.createGainNode;
-      var gainNode = Howler.ctx.createGain();
-      gainNode.gain.setValueAtTime(1, Howler.ctx.currentTime);
-      Howler.masterGain.connect(analyser);
-      analyser.connect(gainNode);
-      gainNode.connect(Howler.ctx.destination);
-
-      // Starting Playing Audio
+      // var analyser = Howler.ctx.createAnalyser();
+      // // Connect the masterGain -> analyser (disconnecting masterGain -> destination)
+      // Howler.masterGain.connect(analyser);
+      // console.log(analyser, "analyser");
+      // analyser.fftSize = 2048;
+      // var bufferLength = analyser.frequencyBinCount;
+      // var dataArray = new Uint8Array(bufferLength);
+      // analyser.getByteTimeDomainData(dataArray);
+      // console.log(dataArray, "dataArray");
+      // ____________________________________________________
+      // getByteFrequencyData(dataArray);         doesnt work
       this.soundID = this.sound.play();
       console.log("Radio Started Playing");
-
-      // Defining variables so they can be used globally
-      this.analyser = analyser;
-      this.gainNode = gainNode;
-      this.frequency = dataArray;
-      // Call function to show frequency data
-      this.drawAudioVisualizer();
-    },
- // Start getting Frequency Data
-  drawAudioVisualizer(){
-    // Animation ends when gain reaches 0
-    if(this.gainNode.gain.value === 0){
-
-      if(this.drawTimer){
-        window.cancelAnimationFrame(this.drawTimer);
-        return;
+      Howler.masterGain.gain.value = this.volume;
+      if (this.radioMuted === true) {
+        this.muteRadioOnStart()
       }
-    }
-    // Set 0 to 1. Drawing becomes smoother when it is closer to 0
-    this.analyser.smoothingTimeConstant = 0.1;
-    // FFT size
-    this.analyser.fftSize = 1024;
-    // Store the waveform data in the frequency domain in an array of arguments
-    this.analyser.getByteFrequencyData(this.frequency);
-    // Draw every frame
-    this.drawTimer = window.requestAnimationFrame(this.drawAudioVisualizer.bind(this));
-    console.log(this.frequency)
-  },
-
-
+    },
     /* PAUSE Radio */
     stopRadio(stationID) {
       this.stations[stationID].playing = false;
       (this.radioStarted = false), this.sound.unload();
       console.log("Radio Stopped");
     },
-
     /* MUTE Handler */
     isRadioMuted(soundID) {
       if (this.radioMuted === false) {
@@ -683,26 +576,34 @@ console.log(analyser)
         this.unmuteRadio(soundID);
       }
     },
-
     /* MUTE Radio */
     muteRadio() {
-      (this.radioMuted = true), this.sound.fade(this.volume, 0.0, 1200);
-      console.log("Radio Muted");
+      if (this.radioStarted === false) {
+        return;
+      } else {
+        (this.radioMuted = true), this.sound.fade(this.volume, 0.0, 1200);
+        console.log("Radio Muted");
+      }
     },
     /* UNMUTE Radio */
     unmuteRadio() {
       (this.radioMuted = false), this.sound.fade(0.0, this.volume, 1200);
       console.log("Radio Unmuted");
     },
-
+      /* MUTE Radio instantly if u chose to mute before starting any station */
+    muteRadioOnStart() {
+        this.sound.fade(this.volume, 0.0, 0);
+    },
     /* Volume Slider */
     volumeController() {
       this.$store.commit("volumeSlider", this.volume);
       if (this.radioStarted === false) {
-        console.log("volume ", this.volume);
+        return;
+      }
+      if (this.radioMuted === true) {
+        return;
       } else {
         this.sound.volume(this.volume);
-        console.log("volume ", this.volume);
       }
     },
     likeStation(stationID) {
@@ -721,11 +622,9 @@ console.log(analyser)
 li {
   list-style-type: none;
 }
-
 #information {
   align-items: center;
 }
-
 #AudioPlayerWrapper {
   background-color: #16171b;
   border-top-left-radius: 20px;
@@ -756,7 +655,6 @@ tr {
   border-end-start-radius: 20px;
   border-end-end-radius: 20px;
   background: hsla(338, 39%, 21%, 1);
-
   background: radial-gradient(
     circle,
     hsla(338, 39%, 21%, 1) 0%,
@@ -764,7 +662,6 @@ tr {
     hsla(280, 9%, 13%, 1) 45%,
     hsla(310, 20%, 17%, 1) 76%
   );
-
   background: -moz-radial-gradient(
     circle,
     hsla(338, 39%, 21%, 1) 0%,
@@ -772,7 +669,6 @@ tr {
     hsla(280, 9%, 13%, 1) 45%,
     hsla(310, 20%, 17%, 1) 76%
   );
-
   background: -webkit-radial-gradient(
     circle,
     hsla(338, 39%, 21%, 1) 0%,
@@ -786,15 +682,18 @@ tr {
   overflow: auto;
   overflow-x: hidden;
 }
-
+.PlayingStation {
+  background-color: #b71c1c !important;
+}
+.PlayingStation:hover {
+  background-color: #b71c1c !important;
+}
 .section::-webkit-scrollbar {
   width: 20px;
 }
-
 .section::-webkit-scrollbar-track {
   background-color: transparent;
 }
-
 .section::-webkit-scrollbar-thumb {
   border-radius: 80px;
   border: 5px solid transparent;
@@ -807,5 +706,20 @@ tr {
 a {
   text-decoration: none;
   font-size: 0.8em;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1.2s ease-in-out;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+.fade-enter-active {
+  transition: opacity 1.2s ease-in-out;
+}
+.fade-enter-to {
+  transition: opacity 1.2s ease-in-out;
 }
 </style>
