@@ -1,12 +1,12 @@
 <template>
-  <div>
-
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
   data: {},
+
+  /* Left for reference */
   methods: {
     startRadio(stationSrc, stationID) {
       this.radioStarted = true;
