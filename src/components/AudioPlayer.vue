@@ -538,31 +538,34 @@ export default {
     },
 
     testAnalyzer() {
-      var audio = new Howl({
-        src: ['http://149.56.175.167:5461/;stream/1'],
-        html5: true,
-        volume: this.volume,
-      });
+      // var audio = new Howl({
+      //   src: ['http://149.56.175.167:5461/;stream/1'],
+      //   volume: this.volume,
+      //   html5: true,
+      //   format: ['mp3', 'aac'],
+      // });
 
-        audio.play();
-        const audioCtx = Howler.ctx;
-        const audioSourceNode = audioCtx.createMediaElementSource(audio._sounds[0]._node);
-        console.log('Audio CTX', audioCtx);
+      //   audio.play();
+      //   var test = new (window.AudioContext || window.webkitAudioContext)();
+      //   console.log(test);
+      //   const audioCtx = Howler.ctx;
+      //   const audioSourceNode = audioCtx.createMediaElementSource(audio._sounds[0]._node);
+      //   console.log('Audio CTX', audioCtx);
 
-        const analyser = audioCtx.createAnalyser();
-        console.log('Audio Source Node - ', audioSourceNode);
+      //   const analyser = audioCtx.createAnalyser();
+      //   console.log('Audio Source Node - ', audioSourceNode);
 
 
-        analyser.fftsize = 512;
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
+      //   analyser.fftsize = 512;
+      //   const bufferLength = analyser.frequencyBinCount;
+      //   const dataArray = new Uint8Array(bufferLength);
 
-        //Set up audio node network
-        audioSourceNode.connect(analyser);
-        analyser.connect(audioCtx.destination);
+      //   //Set up audio node network
+      //   audioSourceNode.connect(analyser);
+      //   analyser.connect(audioCtx.destination);
 
-        analyser.getByteFrequencyData(dataArray)
-        console.log('Frequency Data - ', dataArray)
+      //   analyser.getByteFrequencyData(dataArray)
+      // //  console.log('Frequency Data - ', dataArray)
     
 
         /* Testing */
@@ -577,27 +580,26 @@ export default {
 
 
       /* 1st method from git issues */
-      // const audio = new Howl({ src: 'http://64.95.243.43:8002/;stream/1', html5: true})
-      // const audioCtx = Howler.ctx;
+      const audio = new Howl({ src: 'http://64.95.243.43:8002/;stream/1', html5: true})
+      audio.play()
+      const audioCtx = Howler.ctx;
 
-      // console.log(audio)
-      // // Create analyser node
-      // const audioSourceNode = audioCtx.createMediaElementSource(audio._sounds[0]._node);
-      // console.log(audioSourceNode)
+      // Create analyser node
+      const audioSourceNode = audioCtx.createMediaElementSource(audio._sounds[0]._node);
+      console.log(audioSourceNode)
 
-      // const analyser = audioCtx.createAnalyser();
-      // analyser.fftsize = 32768;
-      // const bufferLength = analyser.frequencyBinCount;
-      // const dataArray = new Uint8Array(bufferLength);
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 512;
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
 
-      // //Set up audio node network
-      // audioSourceNode.connect(analyser);
-      // analyser.connect(audioCtx.destination);
+      //Set up audio node network
+      audioSourceNode.connect(analyser);
+      analyser.connect(audioCtx.destination);
 
-      // analyser.getByteFrequencyData(dataArray) // Returns data as intended
+      analyser.getByteFrequencyData(dataArray) // Returns data as intended
 
-      // console.log(dataArray)
-
+       console.log(dataArray)
 
 
 
@@ -617,14 +619,15 @@ export default {
       this.arrayID = stationID;
       this.stations[stationID].playing = true;
       this.sound = new Howl({
-        src: stationSrc,
-        html5: true,
+        src: require('@/assets/audio.mp3'),
+      
+        format: ['mp3', 'aac'],
         volume: this.volume,
       });
       // Create an analyser node in the Howler WebAudio context
       var analyser = Howler.ctx.createAnalyser();
       var dataArray = new Uint8Array(analyser.frequencyBinCount);
-
+console.log(analyser)
       Howler.ctx.createGain = Howler.ctx.createGain || Howler.ctx.createGainNode;
       var gainNode = Howler.ctx.createGain();
       gainNode.gain.setValueAtTime(1, Howler.ctx.currentTime);
