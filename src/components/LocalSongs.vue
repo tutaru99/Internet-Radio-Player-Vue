@@ -49,8 +49,11 @@ export default {
       gainNode: null,
       drawTimer: null,
       frequency: [],
+      ffrequency: null,
       playing: false,
-    };
+      audio: null,
+      sourceAudio: null
+      };
   },
   methods: {
     playAudio() {
@@ -59,12 +62,10 @@ export default {
       this.drawAudioVisualizer();
     },
     createVisualizerData() {
-      this.drawTimer = null;
       var sound = new Howl({
-        src: require("@/assets/audio.mp3"),
-        format: ["mp3", "aac"],
-        loop: true,
-        volume: 1,
+        // src: require("@/assets/audio.mp3"),
+            src : ['https://musicbird.leanstream.co/JCB068-MP3'],
+             html5: true,
       });
       sound.play();
       this.sound = sound;
@@ -81,10 +82,20 @@ export default {
     initAudioVisualizer() {
       // Create an analyser node in the Howler WebAudio context
       var analyser = Howler.ctx.createAnalyser();
-      var dataArray = new Uint8Array(analyser.frequencyBinCount);
-      // console.log(analyser);
-      Howler.ctx.createGain =
-        Howler.ctx.createGain || Howler.ctx.createGainNode;
+      this.audio =  !this.audio ? Howler._html5AudioPool.slice(-1)[0] : this.audio;
+      this.audio.crossOrigin = 'anonymous';
+
+      this.sourceAudio = !this.sourceAudio ? Howler.ctx.createMediaElementSource(this.audio) : this.sourceAudio;
+      this.sourceAudio.connect(analyser);
+
+
+      this.frequency = new Uint8Array(analyser.frequencyBinCount);
+      this.ffrequency = new Uint8Array(1);
+      console.log(this.frequency);
+      console.log(this.ffrequency);
+
+
+      Howler.ctx.createGain = Howler.ctx.createGain || Howler.ctx.createGainNode;
       var gainNode = Howler.ctx.createGain();
       gainNode.gain.setValueAtTime(1, Howler.ctx.currentTime);
       Howler.masterGain.connect(analyser);
@@ -92,15 +103,12 @@ export default {
       gainNode.connect(Howler.ctx.destination);
 
       // Starting Playing Audio
-      //   this.sound.play();
       console.log("Radio Started Playing");
 
       // Defining variables so they can be used globally
       this.analyser = analyser;
       this.gainNode = gainNode;
-      this.frequency = dataArray;
     },
-
     drawAudioVisualizer() {
       // Animation ends when gain reaches 0
       if (this.gainNode.gain.value === 0) {
@@ -110,18 +118,24 @@ export default {
         }
       }
       // Set 0 to 1. Drawing becomes smoother when it is closer to 0
-      this.analyser.smoothingTimeConstant = 0.1;
+      this.analyser.smoothingTimeConstant = 0.05;
       // FFT size
       this.analyser.fftSize = 1024;
       // Store the waveform data in the frequency domain in an array of arguments
       this.analyser.getByteFrequencyData(this.frequency);
-      // draw svg with frquency data
+      this.analyser.getByteFrequencyData(this.ffrequency);
+
+
+      console.log(this.ffrequency);
+      console.log(this.frequency);
+
+
+      // draw svg with frequency data
       const barWidth =
         (document.getElementById("js-svg").width.baseVal.value * 1.5) /
         this.analyser.frequencyBinCount;
       this.drawSvgPath(barWidth);
 
-      console.log(this.frequency);
 
       // Draw every frame
       this.drawTimer = window.requestAnimationFrame(
