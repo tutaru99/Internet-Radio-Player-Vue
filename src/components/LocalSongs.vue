@@ -3,10 +3,6 @@
     <v-col cols="12">
       <v-row align="center" justify="center" class="d-flex">
         <div class="p-view">
-          <h1 class="text-center">
-            AudioVisualizer<br />
-            [ howler.js + SVG ]
-          </h1>
           <div class="p-view__box" id="js-view">
             <svg
               ref="jssvg"
@@ -116,18 +112,18 @@ export default {
       // Set 0 to 1. Drawing becomes smoother when it is closer to 0
       this.analyser.smoothingTimeConstant = 0.1;
       // FFT size
-      this.analyser.fftSize = 512;
+      this.analyser.fftSize = 1024;
       // Store the waveform data in the frequency domain in an array of arguments
       this.analyser.getByteFrequencyData(this.frequency);
-      // Draw every frame
-      this.drawTimer = window.requestAnimationFrame(
-        this.drawAudioVisualizer.bind(this)
-      );
-      //  console.log(this.frequency);
+      // draw svg with frquency data
       const barWidth =
         (document.getElementById("js-svg").width.baseVal.value * 1.5) /
         this.analyser.frequencyBinCount;
       this.drawSvgPath(barWidth);
+
+      console.log(this.frequency);
+
+      // Draw every frame
       this.drawTimer = window.requestAnimationFrame(
         this.drawAudioVisualizer.bind(this)
       );
