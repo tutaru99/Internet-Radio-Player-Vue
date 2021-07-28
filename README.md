@@ -1,5 +1,5 @@
 # Internet Radio Player with Visualizer
-### Description
+### [Internet Radio player](https://tutaru99.github.io/Internet-Radio-Player-Vue)
 ```
 Internet Radio Player made with VueJS, Vuetify and HowlerJS.
 Radio player has all usual controls - Play, Pause, Mute, Volume Controls.
