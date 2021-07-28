@@ -130,7 +130,6 @@ export default {
       this.analyser.getByteFrequencyData(this.frequency);
       this.analyser.getByteFrequencyData(this.ffrequency);
 
-
       // draw svg with frequency data
       const barWidth =
         (document.getElementById("js-svg").width.baseVal.value * 1.5) /

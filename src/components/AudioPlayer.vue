@@ -68,6 +68,7 @@
                   contain
                   max-height="200"
                   :src="this.stationData.imageSrc"
+                  @error="station.imageSrc = require('@/assets/placeholder.jpg')"
                 ></v-img>
               </div>
               <div v-else>
@@ -168,6 +169,7 @@
                                 min-height="80"
                                 min-width="80"
                                 :src="station.imageSrc"
+                                @error="station.imageSrc = require('@/assets/placeholder.jpg')"
                               >
                               </v-img>
                             </td>
@@ -404,7 +406,7 @@ export default {
           src: "http://144.217.203.184:8398/;stream/1",
           playing: false,
           imageSrc:
-            "https://www.bakaradio.net/wp-content/uploads/2015/12/bkrlogo.png",
+            "https://liveonlineradio.net/wp-content/uploads/2014/11/Baka-Radio.jpg",
           genres: "Anime",
           website: "http://www.bakaradio.net",
           liked: false,
@@ -631,7 +633,7 @@ p {
   font-weight: bold;
 }
 tr:hover {
-  background-color: #16171b !important;
+  background-color: #5e0303 !important;
 }
 tr {
   background-color: #19191d !important;
