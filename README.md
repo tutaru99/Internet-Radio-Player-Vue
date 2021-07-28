@@ -1,4 +1,4 @@
-# Internet Radio Player with Streamed Visualizer
+# Internet Radio Player with Visualizer
 ### Description
 ```
 Internet Radio Player made with VueJS, Vuetify and HowlerJS.
