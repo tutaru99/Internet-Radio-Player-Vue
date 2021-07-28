@@ -20,6 +20,7 @@ export default Vue.extend({
 
 <style lang="scss">
 *{
+scroll-behavior: smooth;
 padding: 0;
 font-family: 'Encode Sans SC', sans-serif;
 }

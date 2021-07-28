@@ -67,6 +67,7 @@
                   class="mt-2"
                   contain
                   max-height="200"
+                  min-height="200"
                   :src="this.stationData.imageSrc"
                   @error="
                     station.imageSrc = require('@/assets/placeholder.jpg')
@@ -78,6 +79,7 @@
                   class="mt-2"
                   contain
                   max-height="200"
+                  min-height="200"
                   src="../assets/radioplaceholder.jpg"
                 ></v-img>
               </div>
@@ -115,7 +117,7 @@
                     class="p-view__svg"
                     id="js-svg"
                     xmlns="http://www.w3.org/2000/svg"
-                    width="533"
+                    width="100%"
                     height="300"
                     viewBox="0 0 600 400"
                     preserveAspectRatio="none"
@@ -487,7 +489,7 @@ export default {
     };
   },
   created() {
-    this.loadAudioSournce();
+    this.loadAudioSource();
   },
 
   computed: {
@@ -514,7 +516,7 @@ export default {
     },
   },
   methods: {
-    loadAudioSournce() {
+    loadAudioSource() {
       var sound = new Howl({
         src: ["https://musicbird.leanstream.co/JCB068-MP3"],
         html5: true,
@@ -708,9 +710,9 @@ export default {
         }
       }
       // Set 0 to 1. Drawing becomes smoother when it is closer to 0
-      this.analyser.smoothingTimeConstant = 0.05;
+      this.analyser.smoothingTimeConstant = 0.03;
       // FFT size
-      this.analyser.fftSize = 1024;
+      this.analyser.fftSize = 2048;
       // Store the waveform data in the frequency domain in an array of arguments
       this.analyser.getByteFrequencyData(this.frequency);
       this.analyser.getByteFrequencyData(this.ffrequency);
