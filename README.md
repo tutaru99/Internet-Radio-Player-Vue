@@ -1,4 +1,4 @@
-# Internet Radio Player with Visualizer
+# Internet Radio Player with Audio Visualizer
 ### [Internet Radio player](https://tutaru99.github.io/Internet-Radio-Player-Vue)
 ```
 Internet Radio Player made with VueJS, Vuetify and HowlerJS.
