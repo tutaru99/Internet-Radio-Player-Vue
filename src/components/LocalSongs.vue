@@ -52,22 +52,24 @@ export default {
       ffrequency: null,
       playing: false,
       audio: null,
-      sourceAudio: null
-      };
+      sourceAudio: null,
+    };
   },
+  created() {
+    this.createVisualizerData(); // Read the sound source first
+  },
+
   methods: {
     playAudio() {
-      this.createVisualizerData();
       this.initAudioVisualizer();
+      this.sound.play();
       this.drawAudioVisualizer();
     },
     createVisualizerData() {
       var sound = new Howl({
-        // src: require("@/assets/audio.mp3"),
-            src : ['https://musicbird.leanstream.co/JCB068-MP3'],
-             html5: true,
+        src: ["https://musicbird.leanstream.co/JCB068-MP3"],
+        html5: true,
       });
-      sound.play();
       this.sound = sound;
     },
 
@@ -82,20 +84,23 @@ export default {
     initAudioVisualizer() {
       // Create an analyser node in the Howler WebAudio context
       var analyser = Howler.ctx.createAnalyser();
-      this.audio =  !this.audio ? Howler._html5AudioPool.slice(-1)[0] : this.audio;
-      this.audio.crossOrigin = 'anonymous';
+      this.audio = !this.audio
+        ? Howler._html5AudioPool.slice(-1)[0]
+        : this.audio;
+      this.audio.crossOrigin = "anonymous";
 
-      this.sourceAudio = !this.sourceAudio ? Howler.ctx.createMediaElementSource(this.audio) : this.sourceAudio;
+      this.sourceAudio = !this.sourceAudio
+        ? Howler.ctx.createMediaElementSource(this.audio)
+        : this.sourceAudio;
       this.sourceAudio.connect(analyser);
-
 
       this.frequency = new Uint8Array(analyser.frequencyBinCount);
       this.ffrequency = new Uint8Array(1);
       console.log(this.frequency);
       console.log(this.ffrequency);
 
-
-      Howler.ctx.createGain = Howler.ctx.createGain || Howler.ctx.createGainNode;
+      Howler.ctx.createGain =
+        Howler.ctx.createGain || Howler.ctx.createGainNode;
       var gainNode = Howler.ctx.createGain();
       gainNode.gain.setValueAtTime(1, Howler.ctx.currentTime);
       Howler.masterGain.connect(analyser);
@@ -126,16 +131,11 @@ export default {
       this.analyser.getByteFrequencyData(this.ffrequency);
 
 
-      console.log(this.ffrequency);
-      console.log(this.frequency);
-
-
       // draw svg with frequency data
       const barWidth =
         (document.getElementById("js-svg").width.baseVal.value * 1.5) /
         this.analyser.frequencyBinCount;
       this.drawSvgPath(barWidth);
-
 
       // Draw every frame
       this.drawTimer = window.requestAnimationFrame(
