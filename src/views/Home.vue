@@ -1,8 +1,5 @@
 <template>
   <div id="mainwrapper">
-    <v-btn to="MusicPlayer">
-      Audio Visualizer
-    </v-btn>
     <Stations />
   </div>
 </template>
@@ -20,4 +17,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+*{
+padding: 0;
+}
+</style>

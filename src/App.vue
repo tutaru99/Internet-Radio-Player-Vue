@@ -1,5 +1,5 @@
-<template id="dis">
-  <v-app id="mainWrapper">
+<template>
+  <v-app  id="mainWrapper">
     <v-main id="body">
       <router-view />
     </v-main>
@@ -20,6 +20,7 @@ export default Vue.extend({
 
 <style lang="scss">
 *{
+padding: 0;
 font-family: 'Encode Sans SC', sans-serif;
 }
 .v-application--is-ltr .v-messages {

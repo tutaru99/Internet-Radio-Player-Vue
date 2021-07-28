@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <v-container id="wrapper">
       <!-- Player -->
       <v-row no-gutters justify="center">
@@ -24,4 +24,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+*{
+  padding: 0;
+}
+</style>

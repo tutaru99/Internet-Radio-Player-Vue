@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-col cols="12">
+  <div style="padding-top: 0;">
+    <v-col style="padding-top: 0" cols="12">
       <v-row class="mt-5" id="Stationswrapper">
         <v-col cols="12">
           <v-row class="header">
@@ -64,16 +64,18 @@
             <transition name="fade">
               <div v-if="this.stationData.imageSrc">
                 <v-img
-                  class="mt-10"
+                  class="mt-2"
                   contain
                   max-height="200"
                   :src="this.stationData.imageSrc"
-                  @error="station.imageSrc = require('@/assets/placeholder.jpg')"
+                  @error="
+                    station.imageSrc = require('@/assets/placeholder.jpg')
+                  "
                 ></v-img>
               </div>
               <div v-else>
                 <v-img
-                  class="mt-16"
+                  class="mt-2"
                   contain
                   max-height="200"
                   src="../assets/radioplaceholder.jpg"
@@ -92,7 +94,7 @@
               <a :href="this.stationData.website" target="_blank">Website</a>
             </p>
 
-            <div class="mt-6">
+            <div class="mt-5">
               <v-btn icon>
                 <v-icon v-if="stationData.liked" dark style="color: red">
                   mdi-heart
@@ -106,10 +108,27 @@
                   mdi-dots-horizontal
                 </v-icon>
               </v-btn>
-              <div class="mt-9">
-                <transition name="fade" v-if="radioStarted">
-                  <AudioWave />
-                </transition>
+              <div class="mt-4">
+                <div class="p-view__box" id="js-view">
+                  <svg
+                    ref="jssvg"
+                    class="p-view__svg"
+                    id="js-svg"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="533"
+                    height="300"
+                    viewBox="0 0 600 400"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      ref="path"
+                      d="M0,200 L600,200"
+                      stroke="red"
+                      stroke-width="0.5"
+                      fill="none"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
           </v-col>
@@ -169,7 +188,9 @@
                                 min-height="80"
                                 min-width="80"
                                 :src="station.imageSrc"
-                                @error="station.imageSrc = require('@/assets/placeholder.jpg')"
+                                @error="
+                                  station.imageSrc = require('@/assets/placeholder.jpg')
+                                "
                               >
                               </v-img>
                             </td>
@@ -277,12 +298,9 @@
 </template>
 <script>
 import { Howl, Howler } from "howler";
-import AudioWave from "../components/AudioWave";
 export default {
   name: "Lobby",
-  components: {
-    AudioWave,
-  },
+  components: {},
   data() {
     return {
       stationData: [],
@@ -295,6 +313,13 @@ export default {
       soundID: null,
       volume: this.$store.state.volume,
       selectedGenre: "All",
+      analyser: null,
+      gainNode: null,
+      drawTimer: null,
+      frequency: [],
+      ffrequency: null,
+      audio: null,
+      sourceAudio: null,
       stations: [
         {
           id: 0,
@@ -447,9 +472,24 @@ export default {
           liked: false,
           genre: "Chill",
         },
+        {
+          id: 13,
+          title: "Be-Happy",
+          src: "https://musicbird.leanstream.co/JCB068-MP3",
+          playing: false,
+          imageSrc: "https://www.be-happy789.com/images/logo.png",
+          genres: "Japanese, Rock, Jpop, Anime, English Songs",
+          website: "https://www.be-happy789.com/",
+          liked: false,
+          genre: "Anime",
+        },
       ],
     };
   },
+  created() {
+    this.loadAudioSournce();
+  },
+
   computed: {
     selectedFilterGenre: function() {
       if (this.selectedGenre === "Anime") {
@@ -474,6 +514,13 @@ export default {
     },
   },
   methods: {
+    loadAudioSournce() {
+      var sound = new Howl({
+        src: ["https://musicbird.leanstream.co/JCB068-MP3"],
+        html5: true,
+      });
+      this.sound = sound;
+    },
     filterCategory(category) {
       if (category === "Anime") {
         this.selectedGenre = "Anime";
@@ -499,12 +546,12 @@ export default {
       }
       if (this.stationData.playing === false && this.radioStarted === false) {
         this.startRadio(this.stationData.src, this.stationDataIndex);
+        this.playAudio();
         this.radioPaused = false;
       } else if (
         this.stationData.playing === false &&
         this.radioStarted === true
       ) {
-        Howler.stop();
         console.log("Howler Fully Stopped everything");
         this.stopRadio(this.arrayID);
       } else {
@@ -516,16 +563,16 @@ export default {
     isRadioPlaying(stationSrc, isplaying, soundID, stationID) {
       if (isplaying === false && this.radioStarted === false) {
         this.startRadio(stationSrc, stationID);
+        this.playAudio();
         this.radioPaused = false;
-      } /* If another station is already playing stop that instance and start another station */
-      else if (
+      } /* If another station is already playing stop that instance and start another station */ else if (
         isplaying === false &&
         this.radioStarted === true
       ) {
-        Howler.stop();
         console.log("Howler Fully Stopped everything");
         this.stopRadio(this.arrayID);
         this.startRadio(stationSrc, stationID);
+        this.playAudio();
       } else {
         this.stopRadio(stationID);
         this.radioPaused = true;
@@ -541,14 +588,14 @@ export default {
         html5: true,
         volume: this.volume,
       });
-      this.soundID = this.sound.play();
-      console.log("Radio Started Playing");
+      console.log("Station Source Loaded into Howler");
       Howler.masterGain.gain.value = this.volume;
 
       if (this.radioMuted === true) {
-        this.muteRadioOnStart()
+        this.muteRadioOnStart();
       }
     },
+
     /* PAUSE Radio */
     stopRadio(stationID) {
       this.stations[stationID].playing = false;
@@ -577,9 +624,9 @@ export default {
       (this.radioMuted = false), this.sound.fade(0.0, this.volume, 1200);
       console.log("Radio Unmuted");
     },
-      /* MUTE Radio instantly if u chose to mute before starting any station */
+    /* MUTE Radio instantly if u chose to mute before starting any station */
     muteRadioOnStart() {
-        this.sound.fade(this.volume, 0.0, 0);
+      this.sound.fade(this.volume, 0.0, 0);
     },
     /* Volume Slider */
     volumeController() {
@@ -595,6 +642,109 @@ export default {
     },
     likeStation(stationID) {
       this.stations[stationID].liked = !this.stations[stationID].liked;
+    },
+
+    /* Visualizer Stuff */
+    unloadAll() {
+      Howler.unload();
+    },
+    playAudio() {
+      //  Howler.unload();
+      this.initAudioVisualizer();
+      console.log("Radio Started Playing");
+      this.soundID = this.sound.play();
+      this.drawAudioVisualizer();
+    },
+
+    initAudioVisualizer() {
+      var AudioContext = window.AudioContext || window.webkitAudioContext;
+
+      // Create an analyser node in the Howler WebAudio context
+      var analyser = Howler.ctx.createAnalyser();
+      this.audio = !this.audio
+        ? Howler._html5AudioPool.slice(-1)[0]
+        : this.audio;
+      this.audio.crossOrigin = "anonymous";
+      this.sourceAudio = !this.sourceAudio
+        ? Howler.ctx.createMediaElementSource(this.audio)
+        : this.sourceAudio;
+      this.sourceAudio.connect(analyser);
+
+      this.frequency = new Uint8Array(analyser.frequencyBinCount);
+      this.ffrequency = new Uint8Array(1);
+
+      if (this.gainNode === null) {
+        Howler.ctx.createGain =
+          Howler.ctx.createGain || Howler.ctx.createGainNode;
+        var gainNode = Howler.ctx.createGain();
+        gainNode.gain.setValueAtTime(1, Howler.ctx.currentTime);
+        Howler.masterGain.connect(analyser);
+        analyser.connect(gainNode);
+        gainNode.connect(Howler.ctx.destination);
+      } else {
+        /* You must disconnect gainNode before connecting with a
+    new one otherwise sound will get more distorted with each new station chosen/each time this method runs */
+        this.gainNode.disconnect();
+        Howler.ctx.createGain =
+          Howler.ctx.createGain || Howler.ctx.createGainNode;
+        gainNode = Howler.ctx.createGain();
+        gainNode.gain.setValueAtTime(1, Howler.ctx.currentTime);
+        Howler.masterGain.connect(analyser);
+        analyser.connect(gainNode);
+        gainNode.connect(Howler.ctx.destination);
+      }
+
+      // Defining variables so they can be used globally
+      this.analyser = analyser;
+      this.gainNode = gainNode;
+    },
+
+    drawAudioVisualizer() {
+      // Animation ends when gain reaches 0
+      if (this.gainNode.gain.value === 0) {
+        if (this.drawTimer) {
+          window.cancelAnimationFrame(this.drawTimer);
+          return;
+        }
+      }
+      // Set 0 to 1. Drawing becomes smoother when it is closer to 0
+      this.analyser.smoothingTimeConstant = 0.05;
+      // FFT size
+      this.analyser.fftSize = 1024;
+      // Store the waveform data in the frequency domain in an array of arguments
+      this.analyser.getByteFrequencyData(this.frequency);
+      this.analyser.getByteFrequencyData(this.ffrequency);
+
+      // draw svg with frequency data
+      const barWidth =
+        (document.getElementById("js-svg").width.baseVal.value * 1.5) /
+        this.analyser.frequencyBinCount;
+      this.drawSvgPath(barWidth);
+
+      // Draw every frame
+      this.drawTimer = window.requestAnimationFrame(
+        this.drawAudioVisualizer.bind(this)
+      );
+    },
+
+    drawSvgPath(barWidth) {
+      let d = "M";
+      const frequency = this.frequency;
+      frequency.forEach((y, i) => {
+        const x = i * barWidth;
+        const value = frequency[i];
+        const percent = value / 255;
+        const yBase = i % 2 === 0 ? 1 : -1;
+        const height =
+          this.$refs.jssvg.height.baseVal.value / 2 +
+          (this.$refs.jssvg.height.baseVal.value / 2) *
+            percent *
+            -1 *
+            yBase *
+            this.gainNode.gain.value;
+        d += `${x} ${height},`;
+      });
+      this.$refs.path.setAttribute("d", d);
     },
   },
 };
