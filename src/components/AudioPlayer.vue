@@ -614,15 +614,15 @@ export default {
         },
         {
           id: 22,
-          title: "DTLR Radio",
-          src: "http://108.178.13.122:8195/;stream/1",
+          title: "Deep House Radio",
+          src: "http://62.210.105.16:7000/;stream/1",
           playing: false,
           imageSrc:
-            "https://pbs.twimg.com/profile_images/1286019963086667776/umc6_KMf_400x400.jpg",
-          genres: "Hip Hop",
-          website: "http://www.dtlrradio.fm",
+            "https://setoftheday.com/wp-content/uploads/2019/10/0-1.jpg",
+          genres: "Romanian, House",
+          website: "http://www.dancemusic.ro",
           liked: false,
-          genre: "HipHop",
+          genre: "Chill",
         },
         {
           id: 23,
@@ -1005,7 +1005,7 @@ p {
   cursor: default;
 }
 p {
-  color: #38393c;
+  color: #545558;
   font-weight: bold;
 }
 tr:hover {
