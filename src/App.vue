@@ -1,8 +1,10 @@
 <template>
-  <v-app  id="mainWrapper">
-    <v-main id="body">
+  <v-app id="mainWrapper">
+     <v-main>
+    <v-container id="container" fluid>
       <router-view />
-    </v-main>
+    </v-container>
+  </v-main>
   </v-app>
 </template>
 
@@ -19,10 +21,12 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-*{
-scroll-behavior: smooth;
-padding: 0;
-font-family: 'Encode Sans SC', sans-serif;
+#container{
+  padding: 0;
+}
+* {
+  scroll-behavior: smooth;
+  font-family: "Encode Sans SC", sans-serif;
 }
 .v-application--is-ltr .v-messages {
   display: none;

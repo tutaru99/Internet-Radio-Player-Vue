@@ -1,24 +1,24 @@
 <template>
-  <div id="mainwrapper">
-    <Stations />
+  <div>
+    <v-row no-gutters justify="center">
+      <v-col cols="12" xs="12" sm="12" md="12" lg="12">
+        <AudioPlayer />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import Stations from "../components/Stations.vue";
+import AudioPlayer from "../components/AudioPlayer.vue";
 
 export default Vue.extend({
   name: "Home",
 
   components: {
-    Stations,
+    AudioPlayer,
   },
 });
 </script>
 
-<style scoped>
-*{
-padding: 0;
-}
-</style>
+<style scoped></style>

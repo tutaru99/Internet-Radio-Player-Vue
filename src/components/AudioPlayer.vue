@@ -1,158 +1,191 @@
 <template>
-  <div style="padding-top: 0;">
-    <v-col style="padding-top: 0" cols="12">
-      <v-row class="mt-5" id="Stationswrapper">
-        <v-col cols="12">
-          <v-row class="header">
-            <v-col cols="4">
-              <div>
-                <h3 class="text-center">
-                  The Radio
-                </h3>
-              </div>
-            </v-col>
-            <v-col cols="8" md="8">
-              <div class="d-flex flex-row-reverse">
-                <v-btn
-                  width="100"
-                  text
-                  color="white"
-                  class="mr-2"
-                  :class="this.selectedGenre === 'Anime' ? 'red darken-4' : ''"
-                  @click="filterCategory('Anime')"
-                  >Anime</v-btn
+  <div style="padding-top: 0; margin-top: -20px;">
+    <transition name="fade" appear>
+      <v-col style="padding-top: 0" cols="12">
+        <v-row class="mt-5" id="Stationswrapper">
+          <v-col cols="12">
+            <v-row class="header">
+              <transition name="fade" appear>
+                <v-col
+                  cols="4"
+                  style="background-color: #000; border-right: 1px solid #282828;"
                 >
-                <v-btn
-                  width="100"
-                  text
-                  color="white"
-                  class="mr-2"
-                  :class="this.selectedGenre === 'HipHop' ? 'red darken-4' : ''"
-                  @click="filterCategory('HipHop')"
-                  >HipHop</v-btn
-                >
-                <v-btn
-                  width="100"
-                  text
-                  color="white"
-                  class="mr-2"
-                  :class="this.selectedGenre === 'Chill' ? 'red darken-4' : ''"
-                  @click="filterCategory('Chill')"
-                  >Chill</v-btn
-                >
-                <v-btn
-                  width="100"
-                  text
-                  color="white"
-                  class=""
-                  @click="filterCategory('All')"
-                  >All</v-btn
-                >
-              </div>
-            </v-col>
-          </v-row>
-        </v-col>
-        <transition name="fade" appear>
-          <v-col
-            align="center"
-            id="AudioPlayerWrapper"
-            class="py-2"
-            cols="12"
-            md="3"
-            lg="4"
-          >
-            <transition name="fade">
-              <div v-if="this.stationData.imageSrc">
-                <v-img
-                  class="mt-2"
-                  contain
-                  max-height="200"
-                  min-height="200"
-                  :src="this.stationData.imageSrc"
-                  @error="
-                    station.imageSrc = require('@/assets/placeholder.jpg')
-                  "
-                ></v-img>
-              </div>
-              <div v-else>
-                <v-img
-                  class="mt-2"
-                  contain
-                  max-height="200"
-                  min-height="200"
-                  src="../assets/radioplaceholder.jpg"
-                ></v-img>
-              </div>
-            </transition>
-            <h2 v-if="this.stationData.title" class="text-center mt-3">
-              {{ this.stationData.title }}
-            </h2>
-
-            <p v-if="this.stationData.genres" class="text-center mt-4">
-              {{ this.stationData.genres }}
-            </p>
-
-            <p v-if="this.stationData.website" class="text-center">
-              <a :href="this.stationData.website" target="_blank">Website</a>
-            </p>
-
-            <div class="mt-5">
-              <v-btn icon>
-                <v-icon v-if="stationData.liked" dark style="color: red">
-                  mdi-heart
-                </v-icon>
-                <v-icon v-else dark style="color: #E0E0E0">
-                  mdi-heart-outline
-                </v-icon>
-              </v-btn>
-              <v-btn class="pa-5" icon>
-                <v-icon dark style="color: #E0E0E0">
-                  mdi-dots-horizontal
-                </v-icon>
-              </v-btn>
-              <div class="mt-4">
-                <div class="p-view__box" id="js-view">
-                  <svg
-                    ref="jssvg"
-                    class="p-view__svg"
-                    id="js-svg"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="100%"
-                    height="300"
-                    viewBox="0 0 600 400"
-                    preserveAspectRatio="none"
+                  <div>
+                    <h3 class="text-center mt-1">
+                      The Radio
+                    </h3>
+                  </div>
+                </v-col>
+              </transition>
+              <v-col style="border-bottom: 1px solid #282828;" cols="8" md="8">
+                <div class="d-flex flex-row-reverse">
+                  <v-btn
+                    width="100"
+                    text
+                    color="white"
+                    class="mr-2"
+                    :class="
+                      this.selectedGenre === 'Anime' ? 'red darken-4' : ''
+                    "
+                    @click="filterCategory('Anime')"
+                    >Anime</v-btn
                   >
-                    <path
-                      ref="path"
-                      d="M0,200 L600,200"
-                      stroke="red"
-                      stroke-width="0.5"
-                      fill="none"
-                    />
-                  </svg>
+                  <v-btn
+                    width="100"
+                    text
+                    color="white"
+                    class="mr-2"
+                    :class="
+                      this.selectedGenre === 'HipHop' ? 'red darken-4' : ''
+                    "
+                    @click="filterCategory('HipHop')"
+                    >HipHop</v-btn
+                  >
+                  <v-btn
+                    width="100"
+                    text
+                    color="white"
+                    class="mr-2"
+                    :class="
+                      this.selectedGenre === 'Chill' ? 'red darken-4' : ''
+                    "
+                    @click="filterCategory('Chill')"
+                    >Chill</v-btn
+                  >
+                  <v-btn
+                    width="100"
+                    text
+                    color="white"
+                    :class="this.selectedGenre === 'All' ? 'red darken-4' : ''"
+                    @click="filterCategory('All')"
+                    >All</v-btn
+                  >
+                </div>
+              </v-col>
+            </v-row>
+          </v-col>
+          <transition name="fade" appear>
+            <v-col
+              style="border-right: 1px solid #282828;"
+              align="center"
+              id="AudioPlayerWrapper"
+              class="py-2"
+              cols="12"
+              md="3"
+              lg="4"
+            >
+              <transition name="fade">
+                <div v-if="this.stationData.imageSrc">
+                  <v-img
+                    class="mt-2"
+                    contain
+                    max-height="200"
+                    min-height="200"
+                    :src="this.stationData.imageSrc"
+                    @error="
+                      station.imageSrc = require('@/assets/placeholder.jpg')
+                    "
+                  ></v-img>
+                </div>
+                <div v-else>
+                  <v-img
+                    class="mt-2"
+                    contain
+                    max-height="200"
+                    min-height="200"
+                    src="../assets/radioplaceholder.jpg"
+                  ></v-img>
+                </div>
+              </transition>
+              <h2 v-if="this.stationData.title" class="text-center mt-3">
+                {{ this.stationData.title }}
+              </h2>
+
+              <p v-if="this.stationData.genres" class="text-center mt-4">
+                {{ this.stationData.genres }}
+              </p>
+
+              <p v-if="this.stationData.website" class="text-center">
+                <a :href="this.stationData.website" target="_blank">Website</a>
+              </p>
+
+              <div class="mt-5">
+                <v-btn icon>
+                  <v-icon v-if="stationData.liked" dark style="color: red">
+                    mdi-heart
+                  </v-icon>
+                  <v-icon v-else dark style="color: #E0E0E0">
+                    mdi-heart-outline
+                  </v-icon>
+                </v-btn>
+                <v-btn class="pa-5" icon>
+                  <v-icon dark style="color: #E0E0E0">
+                    mdi-dots-horizontal
+                  </v-icon>
+                </v-btn>
+                <div class="mt-4">
+                  <div class="p-view__box" id="js-view">
+                    <svg
+                      ref="jssvg"
+                      class="p-view__svg"
+                      id="js-svg"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="100%"
+                      height="300"
+                      viewBox="0 0 600 400"
+                      preserveAspectRatio="none"
+                    >
+                      <path
+                        ref="path"
+                        d="M0,200 L600,200"
+                        stroke="red"
+                        stroke-width="0.5"
+                        fill="none"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </div>
-            </div>
-          </v-col>
-        </transition>
-        <v-col style="padding: 0">
-          <transition name="fade" appear>
-            <div id="tableWrapper" class="section">
-              <li v-for="station in selectedFilterGenre" :key="station.id">
-                <v-row>
-                  <v-col>
-                    <v-simple-table dark class="red">
-                      <template>
-                        <tbody>
-                          <tr
-                            :class="
-                              station.playing === true ? 'PlayingStation' : ''
-                            "
-                          >
-                            <td width="5%">
-                              <v-btn
-                                icon
-                                color="white"
+            </v-col>
+          </transition>
+          <v-col style="padding: 0">
+            <transition name="fade" appear>
+              <div id="tableWrapper" class="section">
+                <li v-for="station in selectedFilterGenre" :key="station.id">
+                  <v-row>
+                    <v-col>
+                      <v-simple-table dark class="red">
+                        <template>
+                          <tbody>
+                            <tr
+                              :class="
+                                station.playing === true ? 'PlayingStation' : ''
+                              "
+                            >
+                              <td width="5%">
+                                <v-btn
+                                  icon
+                                  color="white"
+                                  @click="
+                                    isRadioPlaying(
+                                      station.src,
+                                      station.playing,
+                                      soundID,
+                                      station.id
+                                    ),
+                                      storeStationData(station, station.id)
+                                  "
+                                >
+                                  <v-icon dark v-if="!station.playing">
+                                    mdi-play
+                                  </v-icon>
+                                  <v-icon dark v-if="station.playing">
+                                    mdi-pause
+                                  </v-icon>
+                                </v-btn>
+                              </td>
+                              <td
+                                width="15%"
                                 @click="
                                   isRadioPlaying(
                                     station.src,
@@ -163,139 +196,137 @@
                                     storeStationData(station, station.id)
                                 "
                               >
-                                <v-icon dark v-if="!station.playing">
-                                  mdi-play
-                                </v-icon>
-                                <v-icon dark v-if="station.playing">
-                                  mdi-pause
-                                </v-icon>
-                              </v-btn>
-                            </td>
-                            <td
-                              width="15%"
-                              @click="
-                                isRadioPlaying(
-                                  station.src,
-                                  station.playing,
-                                  soundID,
-                                  station.id
-                                ),
-                                  storeStationData(station, station.id)
-                              "
-                            >
-                              <v-img
-                                contain
-                                max-height="80"
-                                max-width="80"
-                                min-height="80"
-                                min-width="80"
-                                :src="station.imageSrc"
-                                @error="
-                                  station.imageSrc = require('@/assets/placeholder.jpg')
+                                <v-img
+                                  contain
+                                  max-height="80"
+                                  max-width="80"
+                                  min-height="80"
+                                  min-width="80"
+                                  :src="station.imageSrc"
+                                  @error="
+                                    station.imageSrc = require('@/assets/placeholder.jpg')
+                                  "
+                                >
+                                </v-img>
+                              </td>
+                              <td
+                                width="65"
+                                @click="
+                                  isRadioPlaying(
+                                    station.src,
+                                    station.playing,
+                                    soundID,
+                                    station.id
+                                  ),
+                                    storeStationData(station, station.id)
                                 "
                               >
-                              </v-img>
-                            </td>
-                            <td
-                              width="65"
-                              @click="
-                                isRadioPlaying(
-                                  station.src,
-                                  station.playing,
-                                  soundID,
-                                  station.id
-                                ),
-                                  storeStationData(station, station.id)
-                              "
-                            >
-                              <h3>{{ station.title }}</h3>
-                            </td>
-                            <td width="10%">
-                              <v-btn icon @click="likeStation(station.id)">
-                                <v-icon
-                                  v-if="station.liked"
-                                  dark
-                                  style="color: red"
-                                >
-                                  mdi-heart
-                                </v-icon>
-                                <v-icon v-else dark style="color: #E0E0E0">
-                                  mdi-heart-outline
-                                </v-icon>
-                              </v-btn>
-                            </td>
-                            <td width="10%">
-                              <v-btn icon>
-                                <v-icon dark style="color: #E0E0E0">
-                                  mdi-dots-horizontal
-                                </v-icon>
-                              </v-btn>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </template>
-                    </v-simple-table>
-                  </v-col>
-                </v-row>
-              </li>
-            </div>
-          </transition>
-        </v-col>
-      </v-row>
+                                <h3>{{ station.title }}</h3>
+                              </td>
+                              <td width="10%">
+                                <v-btn icon @click="likeStation(station.id)">
+                                  <v-icon
+                                    v-if="station.liked"
+                                    dark
+                                    style="color: red"
+                                  >
+                                    mdi-heart
+                                  </v-icon>
+                                  <v-icon v-else dark style="color: #E0E0E0">
+                                    mdi-heart-outline
+                                  </v-icon>
+                                </v-btn>
+                              </td>
+                              <td width="10%">
+                                <v-btn icon>
+                                  <v-icon dark style="color: #E0E0E0">
+                                    mdi-dots-horizontal
+                                  </v-icon>
+                                </v-btn>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </template>
+                      </v-simple-table>
+                    </v-col>
+                  </v-row>
+                </li>
+              </div>
+            </transition>
+          </v-col>
+        </v-row>
 
-      <!-- RADIO CONTROLS -->
-
-      <v-row align="center" class="d-flex pt-2" id="controllerWrapper">
-        <v-col cols="12" sm="12" md="12" xs="12" class="d-flex space-between">
-          <!-- Play/Stop Controlls -->
-          <v-btn
-            class="ml-2"
-            fab
-            outlined
-            x-small
-            color="white"
-            @click="isRadioPaused()"
+        <!-- RADIO CONTROLS -->
+        <v-footer fixed class="pa-0">
+          <v-row
+            align="center"
+            class="d-flex pt-2"
+            id="controllerWrapper"
+            justify="center"
           >
-            <v-icon dark v-if="radioPaused">
-              mdi-play
-            </v-icon>
-            <v-icon dark v-else>
-              mdi-stop
-            </v-icon>
-          </v-btn>
+            <v-col
+              cols="12"
+              sm="12"
+              md="12"
+              xs="12"
+              class="pt-0 d-flex justify-center"
+            >
+              <!-- Play/Stop Controlls -->
+              <v-col cols="1" md="1" lg="1" sm="4" xs="4" align="end">
+                <v-btn
+                  class="mr-6  mb-2"
+                  fab
+                  outlined
+                  small
+                  color="white"
+                  @click="isRadioPaused()"
+                >
+                  <v-icon dark v-if="radioPaused">
+                    mdi-play
+                  </v-icon>
+                  <v-icon dark v-else>
+                    mdi-stop
+                  </v-icon>
+                </v-btn>
+              </v-col>
+              <!-- Volume Slider -->
+              <v-col cols="4" md="4" lg="5" sm="4" xs="4">
+                <v-slider
+                  class="mt-1"
+                  :color="!radioMuted ? 'white' : 'white'"
+                  thumb-color="white"
+                  :track-color="!radioMuted ? 'grey darken-1' : 'red darken-4'"
+                  max="1.0"
+                  step="0.05"
+                  v-model="volume"
+                  :prepend-icon="
+                    !radioMuted ? 'mdi-volume-high' : 'mdi-volume-variant-off'
+                  "
+                  @change="volumeController()"
+                  @click:prepend="isRadioMuted(soundID)"
+                ></v-slider>
+              </v-col>
 
-          <!-- Volume Slider -->
-          <v-slider
-            class="ml-7"
-            :color="!radioMuted ? 'white' : 'white'"
-            thumb-color="white"
-            :track-color="!radioMuted ? 'grey darken-1' : 'red darken-4'"
-            max="1.0"
-            step="0.05"
-            v-model="volume"
-            :prepend-icon="
-              !radioMuted ? 'mdi-volume-high' : 'mdi-volume-variant-off'
-            "
-            @change="volumeController()"
-            @click:prepend="isRadioMuted(soundID)"
-          ></v-slider>
-
-          <v-btn
-            icon
-            color="white"
-            @click="isRadioMuted(soundID)"
-            class="mr-1 ml-7"
-          >
-            <v-icon dark v-if="radioMuted">
-              mdi-volume-variant-off
-            </v-icon>
-            <v-icon dark v-if="!radioMuted">
-              mdi-volume-source
-            </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-col>
+              <v-col cols="1" md="1" lg="1" sm="4" xs="4">
+                <v-btn
+                  icon
+                  color="white"
+                  @click="isRadioMuted(soundID)"
+                  class="ml-6"
+                >
+                  <v-icon dark v-if="radioMuted">
+                    mdi-volume-variant-off
+                  </v-icon>
+                  <v-icon dark v-if="!radioMuted">
+                    mdi-volume-source
+                  </v-icon>
+                </v-btn>
+              </v-col>
+            </v-col>
+          </v-row>
+        </v-footer>
+      </v-col>
+    </transition>
   </div>
 </template>
 <script>
@@ -383,15 +414,15 @@ export default {
         },
         {
           id: 5,
-          title: "Jake Radio Live",
-          src: "http://188.165.192.5:8015/autodj",
+          title: "RadioDoki",
+          src: "http://144.217.203.184:8972/;stream/1",
           playing: false,
           imageSrc:
-            "https://jakeradiolive.com/wp-content/uploads/2019/11/773eba52-880d-4ae4-aa5b-b0cd8ae2fa3a_200x200.png",
-          genres: "Hip Hop",
-          website: "https://jakeradiolive.com",
+            "https://seeded-session-images.scdn.co/v1/img/artist/3ToMMHLyKIJnyMJ5Y7vllT/en",
+          genres: "J-Pop J-Music Anime Vocaloid",
+          website: "http://www.radiodoki.com",
           liked: false,
-          genre: "HipHop",
+          genre: "Anime",
         },
         {
           id: 6,
@@ -484,6 +515,199 @@ export default {
           website: "https://www.be-happy789.com/",
           liked: false,
           genre: "Anime",
+        },
+        {
+          id: 14,
+          title: "Chilltrax",
+          src: "https://streamssl.chilltrax.com:80/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://www.chilltrax.com/images/chilltrax-header-logo.svg",
+          genres: "Chill, Downtempo, Ambient",
+          website: "http://www.chilltrax.com",
+          liked: false,
+          genre: "Chill",
+        },
+        {
+          id: 15,
+          title: "Radio DHR",
+          src: "http://37.187.93.104:8589/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://static.wixstatic.com/media/da966a_f5f97999e9404436a2c30e3336a3e307~mv2.png/v1/fill/w_183,h_183,al_c,q_95/da966a_f5f97999e9404436a2c30e3336a3e307~mv2.webp",
+          genres: "Chill, Electronic",
+          website: "https://www.deephouse-radio.com",
+          liked: false,
+          genre: "Chill",
+        },
+        {
+          id: 16,
+          title: "PulseEDM",
+          src: "http://pulseedm.cdnstream1.com:8124/1373_128",
+          playing: false,
+          imageSrc:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSa4Dhl-XtQlsHiQipt3ezHqLY3imWV66V8jL-AwY96saoIEjYhXGbKnBV36eWlxG_Vw_c&usqp=CAU",
+          genres:
+            "Electronic, dance, house, trance, pop, EDM, techno, electro, dubstep",
+          website: "www.pulseedm.com",
+          liked: false,
+          genre: "Chill",
+        },
+        {
+          id: 17,
+          title: "80s 90s Pop Hits",
+          src: "http://51.222.42.9:2000/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://direct.rhapsody.com/imageserver/images/alb.398906129/500x500.jpg",
+          genres: "80s 90s Pop Hits",
+          website: "http://www.977music.net",
+          liked: false,
+          genre: "Chill",
+        },
+        {
+          id: 18,
+          title: "Hot Hitz 80's",
+          src: "http://63.143.40.238:9900/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://www.storefrontier.com/sites/default/files/artwork_preview/front/50611/hothitz_logo_45colors_1560782314_preview_1083_53_black.png",
+          genres: "80s 90s Pop Hits, Retro",
+          website: "http://www.hothitzradio.com",
+          liked: false,
+          genre: "Chill",
+        },
+        {
+          id: 19,
+          title: "Alabama's Finest Radio",
+          src: "http://alabamasfinest.net:8000/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://www.fleetradionetwork.com/wp-content/uploads/2020/05/Alabama_Fleet_Radio.jpg",
+          genres: "Urban Contemporary Underground Hip Hop Rap",
+          website: "http://alabamasfinest.net",
+          liked: false,
+          genre: "HipHop",
+        },
+        {
+          id: 20,
+          title: "WHAT?! - HipHop",
+          src: "http://162.144.106.6:9119/;stream/1",
+          playing: false,
+          imageSrc: "https://cdn-radiotime-logos.tunein.com/s151508g.png",
+          genres: "Hip Hop",
+          website: "http://www.itswhatradio.com",
+          liked: false,
+          genre: "HipHop",
+        },
+        {
+          id: 21,
+          title: "Hip Hop and RNB FM",
+          src: "http://192.99.41.102:5429/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://static.tuneyou.com/images/logos/500_500/3/15303/.100HipHopandRNBFM_5.png",
+          genres: "Urban RnB, Hip Hop, Soul, House, Urban",
+          website: "http://www.100HipHopandRNB.FM",
+          liked: false,
+          genre: "HipHop",
+        },
+        {
+          id: 22,
+          title: "DTLR Radio",
+          src: "http://108.178.13.122:8195/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://pbs.twimg.com/profile_images/1286019963086667776/umc6_KMf_400x400.jpg",
+          genres: "Hip Hop",
+          website: "http://www.dtlrradio.fm",
+          liked: false,
+          genre: "HipHop",
+        },
+        {
+          id: 23,
+          title: "RnB Channel (HD)",
+          src: "http://192.99.8.192:3132/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://www.radio.dk/images/broadcasts/cc/d9/34436/c300.png",
+          genres: "Hip Hop, RnB",
+          website: "http://www.thernbchannel.com/",
+          liked: false,
+          genre: "HipHop",
+        },
+        {
+          id: 24,
+          title: "J-Pop Sakura",
+          src: "https://igor.torontocast.com:1710/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://i1.sndcdn.com/artworks-000205160237-4h6tl8-t500x500.jpg",
+          genres: "Jpop",
+          website: "https://asiadreamradio.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 25,
+          title: "Asia DREAM Radio - Japan Hits",
+          src: "http://184.75.212.82:1025/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://mytuner.global.ssl.fastly.net/media/tvos_radios/nxrsacawm2ey.png",
+          genres: "Jpop",
+          website: "https://asiadreamradio.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 26,
+          title: "J-Rock Powerplay",
+          src: "https://kathy.torontocast.com:3340/stream/1/",
+          playing: false,
+          imageSrc:
+            "https://www.radio.net/images/broadcasts/be/67/39809/1/c300.png",
+          genres: "Nagoya, Japan Rock, Pop",
+          website: "https://asiadreamradio.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 27,
+          title: "J-Club asia DREAM",
+          src: "https://kathy.torontocast.com:3350/stream/1/",
+          playing: false,
+          imageSrc:
+            "https://www.radio.net/images/broadcasts/d2/e8/35558/1/c300.png",
+          genres:
+            "From Japan - The hottest Japanese Hip-Hop and R&B music anywhere on the net",
+          website: "https://asiadreamradio.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 28,
+          title: "ZipFM LT",
+          src: "https://stream2.zipfm.lt/zipfm128.mp3",
+          playing: false,
+          imageSrc:
+            "https://zipfm.lt/wp-content/themes/zipfm/img/headerlogo.jpg",
+          genres: "International Pop, rock, hiphop",
+          website: "zipfm.lt",
+          liked: false,
+          genre: "Chill",
+        },
+        {
+          id: 29,
+          title: "Power Hit Radio LT",
+          src: "https://powerhit.ls.lv/PHR_AAC?nocache=0.7866212939226969",
+          playing: false,
+          imageSrc:
+            "https://www.radio.net/images/broadcasts/79/8c/13985/c300.png",
+          genres: "International Pop, rock, hiphop, Dance",
+          website: "https://powerhitradio.tv3.lt",
+          liked: false,
+          genre: "Chill",
         },
       ],
     };
@@ -765,11 +989,11 @@ li {
   align-items: center;
 }
 #AudioPlayerWrapper {
-  background-color: #16171b;
+  background-color: #000000;
   border-top-left-radius: 20px;
 }
 #Stationswrapper {
-  background-color: #19191d;
+  background-color: #121212;
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
 }
@@ -788,36 +1012,16 @@ tr:hover {
   background-color: #5e0303 !important;
 }
 tr {
-  background-color: #19191d !important;
+  background-color: #121212 !important;
 }
 #controllerWrapper {
   border-end-start-radius: 20px;
   border-end-end-radius: 20px;
-  background: hsla(338, 39%, 21%, 1);
-  background: radial-gradient(
-    circle,
-    hsla(338, 39%, 21%, 1) 0%,
-    hsla(338, 39%, 21%, 1) 16%,
-    hsla(280, 9%, 13%, 1) 45%,
-    hsla(310, 20%, 17%, 1) 76%
-  );
-  background: -moz-radial-gradient(
-    circle,
-    hsla(338, 39%, 21%, 1) 0%,
-    hsla(338, 39%, 21%, 1) 16%,
-    hsla(280, 9%, 13%, 1) 45%,
-    hsla(310, 20%, 17%, 1) 76%
-  );
-  background: -webkit-radial-gradient(
-    circle,
-    hsla(338, 39%, 21%, 1) 0%,
-    hsla(338, 39%, 21%, 1) 16%,
-    hsla(280, 9%, 13%, 1) 45%,
-    hsla(310, 20%, 17%, 1) 76%
-  );
+  background-color: #16171b;
+  border-top: 1px solid #282828;
 }
 #tableWrapper {
-  height: 77vh;
+  height: 86vh;
   overflow: auto;
   overflow-x: hidden;
 }
