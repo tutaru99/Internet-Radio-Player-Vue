@@ -1,10 +1,10 @@
 <template>
   <v-app id="mainWrapper">
-     <v-main>
-    <v-container id="container" fluid>
-      <router-view />
-    </v-container>
-  </v-main>
+    <v-main>
+      <v-container id="container" fluid>
+        <router-view />
+      </v-container>
+    </v-main>
   </v-app>
 </template>
 
@@ -21,7 +21,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-#container{
+#container {
   padding: 0;
 }
 * {
@@ -43,6 +43,8 @@ html {
   ::-webkit-scrollbar {
     display: none !important;
   }
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
 
   ::-webkit-scrollbar {
     width: 20px;
