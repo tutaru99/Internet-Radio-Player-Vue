@@ -79,6 +79,7 @@
                   <v-img
                     class="mt-2"
                     contain
+                    max-width="70%"
                     max-height="200"
                     min-height="200"
                     :src="this.stationData.imageSrc"
@@ -91,6 +92,7 @@
                   <v-img
                     class="mt-2"
                     contain
+                    max-width="70%"
                     max-height="200"
                     min-height="200"
                     src="../assets/radioplaceholder.jpg"
