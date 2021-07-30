@@ -115,7 +115,7 @@
               </p>
 
               <div class="mt-5">
-                <div v-if="soundID">
+                <!-- <dgiv v-if="soundID">
                   <v-btn icon>
                     <v-icon v-if="stationData.liked" dark style="color: red">
                       mdi-heart
@@ -129,7 +129,7 @@
                       mdi-dots-horizontal
                     </v-icon>
                   </v-btn>
-                </div>
+                </dgiv> -->
                 <div class="mt-4">
                   <div class="p-view__box" id="js-view">
                     <svg
@@ -245,7 +245,7 @@
                                 </v-btn>
                               </td>
                               <td width="10%">
-                                <v-btn icon>
+                                <v-btn icon disabled>
                                   <v-icon dark style="color: #E0E0E0">
                                     mdi-dots-horizontal
                                   </v-icon>
