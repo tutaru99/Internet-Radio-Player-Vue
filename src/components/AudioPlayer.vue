@@ -8,6 +8,9 @@
               <transition name="fade" appear>
                 <v-col
                   cols="4"
+                  md="3"
+                  lg="3"
+                  sm="12"
                   style="background-color: #000; border-right: 1px solid #282828;"
                 >
                   <div>
@@ -17,7 +20,7 @@
                   </div>
                 </v-col>
               </transition>
-              <v-col style="border-bottom: 1px solid #282828;" cols="8" md="8">
+              <v-col style="border-bottom: 1px solid #282828;" cols="9" md="9">
                 <div class="d-flex flex-row-reverse">
                   <v-btn
                     width="100"
@@ -72,7 +75,7 @@
               class="py-2"
               cols="12"
               md="3"
-              lg="4"
+              lg="3"
             >
               <transition name="fade">
                 <div v-if="this.stationData.imageSrc">
@@ -112,6 +115,7 @@
               </p>
 
               <div class="mt-5">
+                <div v-if="soundID">
                 <v-btn icon>
                   <v-icon v-if="stationData.liked" dark style="color: red">
                     mdi-heart
@@ -125,6 +129,7 @@
                     mdi-dots-horizontal
                   </v-icon>
                 </v-btn>
+                </div>
                 <div class="mt-4">
                   <div class="p-view__box" id="js-view">
                     <svg
@@ -150,7 +155,7 @@
               </div>
             </v-col>
           </transition>
-          <v-col style="padding: 0">
+          <v-col style="padding: 0" >
             <transition name="fade" appear>
               <div id="tableWrapper" class="section">
                 <li v-for="station in selectedFilterGenre" :key="station.id">
