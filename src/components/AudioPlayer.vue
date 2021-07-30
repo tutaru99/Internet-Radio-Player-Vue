@@ -816,6 +816,7 @@ export default {
       this.radioStarted = true;
       this.arrayID = stationID;
       this.stations[stationID].playing = true;
+      this.changeTitle(this.stations[stationID].title);
       this.sound = new Howl({
         src: stationSrc,
         html5: true,
@@ -876,7 +877,9 @@ export default {
     likeStation(stationID) {
       this.stations[stationID].liked = !this.stations[stationID].liked;
     },
-
+    changeTitle (title) {
+      document.title = "Playing" + " " + title;
+    },
     /* Visualizer Stuff */
     unloadAll() {
       Howler.unload();
