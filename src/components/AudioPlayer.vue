@@ -116,19 +116,19 @@
 
               <div class="mt-5">
                 <div v-if="soundID">
-                <v-btn icon>
-                  <v-icon v-if="stationData.liked" dark style="color: red">
-                    mdi-heart
-                  </v-icon>
-                  <v-icon v-else dark style="color: #E0E0E0">
-                    mdi-heart-outline
-                  </v-icon>
-                </v-btn>
-                <v-btn class="pa-5" icon>
-                  <v-icon dark style="color: #E0E0E0">
-                    mdi-dots-horizontal
-                  </v-icon>
-                </v-btn>
+                  <v-btn icon>
+                    <v-icon v-if="stationData.liked" dark style="color: red">
+                      mdi-heart
+                    </v-icon>
+                    <v-icon v-else dark style="color: #E0E0E0">
+                      mdi-heart-outline
+                    </v-icon>
+                  </v-btn>
+                  <v-btn class="pa-5" icon>
+                    <v-icon dark style="color: #E0E0E0">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </v-btn>
                 </div>
                 <div class="mt-4">
                   <div class="p-view__box" id="js-view">
@@ -155,7 +155,7 @@
               </div>
             </v-col>
           </transition>
-          <v-col style="padding: 0" >
+          <v-col style="padding: 0">
             <transition name="fade" appear>
               <div id="tableWrapper" class="section">
                 <li v-for="station in selectedFilterGenre" :key="station.id">
@@ -877,8 +877,8 @@ export default {
     likeStation(stationID) {
       this.stations[stationID].liked = !this.stations[stationID].liked;
     },
-    changeTitle (title) {
-      document.title = "Playing" + " " + title;
+    changeTitle(title) {
+      document.title = "Streaming" + " ~" + title + "~";
     },
     /* Visualizer Stuff */
     unloadAll() {
