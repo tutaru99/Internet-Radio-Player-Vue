@@ -304,7 +304,7 @@
                   thumb-color="white"
                   :track-color="!radioMuted ? 'grey darken-1' : 'red darken-4'"
                   max="1.0"
-                  step="0.05"
+                  step="0.04"
                   v-model="volume"
                   :prepend-icon="
                     !radioMuted ? 'mdi-volume-high' : 'mdi-volume-variant-off'
