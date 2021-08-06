@@ -7,8 +7,8 @@ The radio player has a visualizer which gets frequency data from the stations an
 Also saves user chosen preferences in local storage in order to make app more convenient.
 The Player has a bunch of radio stations, dynamically showing data about each chosen station.
 
-``**Huge thanks to [inos3910](https://github.com/inos3910) for helping me out to setup his audio visualizer and explaining Audio API concepts.
-Check out his [Audio Visualizer](https://inos3910.github.io/audio-visualizer-by-howlerjs/).**``
+**Huge thanks to [inos3910](https://github.com/inos3910) for helping me out to setup his audio visualizer and explaining Audio API concepts.
+Check out his [Audio Visualizer](https://inos3910.github.io/audio-visualizer-by-howlerjs/).**
 
 ### To Start Project
 ```
