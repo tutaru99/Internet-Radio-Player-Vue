@@ -233,7 +233,7 @@
                               <td width="10%">
                                 <v-btn icon @click="likeStation(station.id)">
                                   <v-icon
-                                    v-if="station.liked"
+                                    v-if="likedSationsObj[station.id]"
                                     dark
                                     style="color: red"
                                   >
@@ -343,6 +343,7 @@ export default {
   components: {},
   data() {
     return {
+      likedSationsObj: this.$store.state.likedStations,
       stationData: [],
       stationDataIndex: null,
       arrayID: null,
@@ -366,7 +367,7 @@ export default {
           title: "Mi-Soul",
           src: "http://178.159.3.22:8177/;stream/1",
           playing: false,
-          imageSrc: "https://mi-soul.com/wp-content/uploads/play.gif",
+          imageSrc: "https://upload.wikimedia.org/wikipedia/en/c/cc/Mi-Soul_logo.png",
           genres: "Soul R&B House Reggae Hip Hop Dance Soulful Music",
           website: "http://mi-soul.com",
           liked: false,
@@ -374,17 +375,42 @@ export default {
         },
         {
           id: 1,
-          title: "Anison.FM",
-          src: "https://pool.anison.fm:9000/AniSonFM(320)",
+          title: "Deep House Radio",
+          src: "http://62.210.105.16:7000/;stream/1",
           playing: false,
-          imageSrc: "https://anison.fm/images/logo_h_summer.png",
-          genres: "Anime Variety",
-          website: "http://www.anison.fm",
+          imageSrc:
+            "https://setoftheday.com/wp-content/uploads/2019/10/0-1.jpg",
+          genres: "Romanian, House",
+          website: "http://www.dancemusic.ro",
           liked: false,
-          genre: "Anime",
+          genre: "Chill",
         },
         {
           id: 2,
+          title: "Deep House",
+          src: "http://91.121.175.25:8000/stream/1/",
+          playing: false,
+          imageSrc:
+            "https://direct.rhapsody.com/imageserver/images/alb.454322485/500x500.jpg",
+          genres: "House",
+          website: "http://www.deephousenetwork.tv",
+          liked: false,
+          genre: "Chill",
+        },
+        {
+          id: 3,
+          title: "BLUE MARLIN IBIZA RADIO",
+          src: "http://95.211.3.65:8635/stream/1/",
+          playing: false,
+          imageSrc:
+            "https://mytuner.global.ssl.fastly.net/media/tvos_radios/jh7ku6ss9y9b.jpg",
+          genres: "Electronic House",
+          website: "http://www.deephousenetwork.tv",
+          liked: false,
+          genre: "Chill",
+        },
+        {
+          id: 4,
           title: "Dance UK Radio",
           src: "https://uk2.internet-radio.com/proxy/danceradiouk?mp=/stream;",
           playing: false,
@@ -396,66 +422,7 @@ export default {
           genre: "Chill",
         },
         {
-          id: 3,
-          title: "JapanNext",
-          src: "http://198.50.158.92:8803/;stream/1",
-          playing: false,
-          imageSrc:
-            "http://1.bp.blogspot.com/-WYvLtD46Tik/XHuMLFCHJTI/AAAAAAAAHag/zil8qukJvU8eWZvlbqIHZT8Ej9NZ-dRvwCK4BGAYYCw/s1600/Logo%2Bcopia.png",
-          genres: "Anime",
-          website: "http://www.japan-next.blogspot.com",
-          liked: false,
-          genre: "Anime",
-        },
-        {
-          id: 4,
-          title: "Radio Isekai",
-          src: "http://66.70.249.70:5080/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://fastcast4u.com/player/radioisekai/_user/logo/r/radioisekai/ch0.png",
-          genres: "Anime Kpop Krock Jpop Jrock Others",
-          website: "https://www.radioisekai.com/",
-          liked: false,
-          genre: "Anime",
-        },
-        {
           id: 5,
-          title: "RadioDoki",
-          src: "http://144.217.203.184:8972/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://seeded-session-images.scdn.co/v1/img/artist/3ToMMHLyKIJnyMJ5Y7vllT/en",
-          genres: "J-Pop J-Music Anime Vocaloid",
-          website: "http://www.radiodoki.com",
-          liked: false,
-          genre: "Anime",
-        },
-        {
-          id: 6,
-          title: "Nei-Di's ACG",
-          src: "http://106.104.32.86:8080/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://images-na.ssl-images-amazon.com/images/I/61ent1CSpRL.png",
-          genres: "Anime",
-          liked: false,
-          genre: "Anime",
-        },
-        {
-          id: 7,
-          title: "Tsubaki Radio",
-          src: "http://stream.tsubakianimeradio.com:9000/;stream/1",
-          playing: false,
-          imageSrc:
-            "http://tsubakianimeradio.com/wp-content/uploads/2020/08/logo-new.png",
-          genres: "Anime Openings Endings OST Japan Japanese Jpop Jrock",
-          website: "http://tsubakianimeradio.com",
-          liked: false,
-          genre: "Anime",
-        },
-        {
-          id: 8,
           title: "Hip-Hop Hits",
           src: "https://streaming.radio.co/s97881c7e0/listen",
           playing: false,
@@ -466,19 +433,7 @@ export default {
           genre: "HipHop",
         },
         {
-          id: 9,
-          title: "BakaRadio",
-          src: "http://144.217.203.184:8398/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://liveonlineradio.net/wp-content/uploads/2014/11/Baka-Radio.jpg",
-          genres: "Anime",
-          website: "http://www.bakaradio.net",
-          liked: false,
-          genre: "Anime",
-        },
-        {
-          id: 10,
+          id: 6,
           title: "Hip Hop Request # 1 In Hip-Hop and RnB",
           src: "http://149.56.175.167:5461/;stream/1",
           playing: false,
@@ -490,7 +445,7 @@ export default {
           genre: "HipHop",
         },
         {
-          id: 11,
+          id: 7,
           title: "BEST SMOOTH JAZZ - UK",
           src: "http://64.95.243.43:8002/;stream/1",
           playing: false,
@@ -501,7 +456,7 @@ export default {
           genre: "Chill",
         },
         {
-          id: 12,
+          id: 8,
           title: "LIFE CHILL MUSIC",
           src: "http://aska.ru-hoster.com:8053/autodj",
           playing: false,
@@ -513,18 +468,7 @@ export default {
           genre: "Chill",
         },
         {
-          id: 13,
-          title: "Be-Happy",
-          src: "https://musicbird.leanstream.co/JCB068-MP3",
-          playing: false,
-          imageSrc: "https://www.be-happy789.com/images/logo.png",
-          genres: "Japanese, Rock, Jpop, Anime, English Songs",
-          website: "https://www.be-happy789.com/",
-          liked: false,
-          genre: "Anime",
-        },
-        {
-          id: 14,
+          id: 9,
           title: "Chilltrax",
           src: "https://streamssl.chilltrax.com:80/;stream/1",
           playing: false,
@@ -536,7 +480,7 @@ export default {
           genre: "Chill",
         },
         {
-          id: 15,
+          id: 10,
           title: "Radio DHR",
           src: "http://37.187.93.104:8589/;stream/1",
           playing: false,
@@ -548,7 +492,7 @@ export default {
           genre: "Chill",
         },
         {
-          id: 16,
+          id: 11,
           title: "PulseEDM",
           src: "http://pulseedm.cdnstream1.com:8124/1373_128",
           playing: false,
@@ -561,7 +505,7 @@ export default {
           genre: "Chill",
         },
         {
-          id: 17,
+          id: 12,
           title: "80s 90s Pop Hits",
           src: "http://51.222.42.9:2000/;stream/1",
           playing: false,
@@ -573,7 +517,7 @@ export default {
           genre: "Chill",
         },
         {
-          id: 18,
+          id: 13,
           title: "Hot Hitz 80's",
           src: "http://63.143.40.238:9900/;stream/1",
           playing: false,
@@ -585,7 +529,7 @@ export default {
           genre: "Chill",
         },
         {
-          id: 19,
+          id: 14,
           title: "Alabama's Finest Radio",
           src: "http://alabamasfinest.net:8000/;stream/1",
           playing: false,
@@ -597,7 +541,7 @@ export default {
           genre: "HipHop",
         },
         {
-          id: 20,
+          id: 15,
           title: "WHAT?! - HipHop",
           src: "http://162.144.106.6:9119/;stream/1",
           playing: false,
@@ -608,7 +552,7 @@ export default {
           genre: "HipHop",
         },
         {
-          id: 21,
+          id: 16,
           title: "Hip Hop and RNB FM",
           src: "http://192.99.41.102:5429/;stream/1",
           playing: false,
@@ -620,19 +564,7 @@ export default {
           genre: "HipHop",
         },
         {
-          id: 22,
-          title: "Deep House Radio",
-          src: "http://62.210.105.16:7000/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://setoftheday.com/wp-content/uploads/2019/10/0-1.jpg",
-          genres: "Romanian, House",
-          website: "http://www.dancemusic.ro",
-          liked: false,
-          genre: "Chill",
-        },
-        {
-          id: 23,
+          id: 17,
           title: "RnB Channel (HD)",
           src: "http://192.99.8.192:3132/;stream/1",
           playing: false,
@@ -644,56 +576,7 @@ export default {
           genre: "HipHop",
         },
         {
-          id: 24,
-          title: "J-Pop Sakura",
-          src: "https://igor.torontocast.com:1710/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://i1.sndcdn.com/artworks-000205160237-4h6tl8-t500x500.jpg",
-          genres: "Jpop",
-          website: "https://asiadreamradio.com",
-          liked: false,
-          genre: "Anime",
-        },
-        {
-          id: 25,
-          title: "Asia DREAM Radio - Japan Hits",
-          src: "http://184.75.212.82:1025/;stream/1",
-          playing: false,
-          imageSrc:
-            "https://mytuner.global.ssl.fastly.net/media/tvos_radios/nxrsacawm2ey.png",
-          genres: "Jpop",
-          website: "https://asiadreamradio.com",
-          liked: false,
-          genre: "Anime",
-        },
-        {
-          id: 26,
-          title: "J-Rock Powerplay",
-          src: "https://kathy.torontocast.com:3340/stream/1/",
-          playing: false,
-          imageSrc:
-            "https://www.radio.net/images/broadcasts/be/67/39809/1/c300.png",
-          genres: "Nagoya, Japan Rock, Pop",
-          website: "https://asiadreamradio.com",
-          liked: false,
-          genre: "Anime",
-        },
-        {
-          id: 27,
-          title: "J-Club asia DREAM",
-          src: "https://kathy.torontocast.com:3350/stream/1/",
-          playing: false,
-          imageSrc:
-            "https://www.radio.net/images/broadcasts/d2/e8/35558/1/c300.png",
-          genres:
-            "From Japan - The hottest Japanese Hip-Hop and R&B music anywhere on the net",
-          website: "https://asiadreamradio.com",
-          liked: false,
-          genre: "Anime",
-        },
-        {
-          id: 28,
+          id: 18,
           title: "ZipFM LT",
           src: "https://stream2.zipfm.lt/zipfm128.mp3",
           playing: false,
@@ -705,7 +588,7 @@ export default {
           genre: "Chill",
         },
         {
-          id: 29,
+          id: 19,
           title: "Power Hit Radio LT",
           src: "https://powerhit.ls.lv/PHR_AAC?nocache=0.7866212939226969",
           playing: false,
@@ -715,6 +598,137 @@ export default {
           website: "https://powerhitradio.tv3.lt",
           liked: false,
           genre: "Chill",
+        },
+        {
+          id: 20,
+          title: "Anison.FM",
+          src: "https://pool.anison.fm:9000/AniSonFM(320)",
+          playing: false,
+          imageSrc: "https://anison.fm/images/logo_h_summer.png",
+          genres: "Anime Variety",
+          website: "http://www.anison.fm",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 21,
+          title: "JapanNext",
+          src: "http://198.50.158.92:8803/;stream/1",
+          playing: false,
+          imageSrc:
+            "http://1.bp.blogspot.com/-WYvLtD46Tik/XHuMLFCHJTI/AAAAAAAAHag/zil8qukJvU8eWZvlbqIHZT8Ej9NZ-dRvwCK4BGAYYCw/s1600/Logo%2Bcopia.png",
+          genres: "Anime",
+          website: "http://www.japan-next.blogspot.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 22,
+          title: "Radio Isekai",
+          src: "http://66.70.249.70:5080/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://fastcast4u.com/player/radioisekai/_user/logo/r/radioisekai/ch0.png",
+          genres: "Anime Kpop Krock Jpop Jrock Others",
+          website: "https://www.radioisekai.com/",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 23,
+          title: "RadioDoki",
+          src: "http://144.217.203.184:8972/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://seeded-session-images.scdn.co/v1/img/artist/3ToMMHLyKIJnyMJ5Y7vllT/en",
+          genres: "J-Pop J-Music Anime Vocaloid",
+          website: "http://www.radiodoki.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 24,
+          title: "Tsubaki Radio",
+          src: "http://stream.tsubakianimeradio.com:9000/;stream/1",
+          playing: false,
+          imageSrc:
+            "http://tsubakianimeradio.com/wp-content/uploads/2020/08/logo-new.png",
+          genres: "Anime Openings Endings OST Japan Japanese Jpop Jrock",
+          website: "http://tsubakianimeradio.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 25,
+          title: "BakaRadio",
+          src: "http://144.217.203.184:8398/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://liveonlineradio.net/wp-content/uploads/2014/11/Baka-Radio.jpg",
+          genres: "Anime",
+          website: "http://www.bakaradio.net",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 26,
+          title: "Be-Happy",
+          src: "https://musicbird.leanstream.co/JCB068-MP3",
+          playing: false,
+          imageSrc: "https://www.be-happy789.com/images/logo.png",
+          genres: "Japanese, Rock, Jpop, Anime, English Songs",
+          website: "https://www.be-happy789.com/",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 27,
+          title: "J-Pop Sakura",
+          src: "https://igor.torontocast.com:1710/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://i1.sndcdn.com/artworks-000205160237-4h6tl8-t500x500.jpg",
+          genres: "Jpop",
+          website: "https://asiadreamradio.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 28,
+          title: "Asia DREAM Radio - Japan Hits",
+          src: "http://184.75.212.82:1025/;stream/1",
+          playing: false,
+          imageSrc:
+            "https://mytuner.global.ssl.fastly.net/media/tvos_radios/nxrsacawm2ey.png",
+          genres: "Jpop",
+          website: "https://asiadreamradio.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 29,
+          title: "J-Rock Powerplay",
+          src: "https://kathy.torontocast.com:3340/stream/1/",
+          playing: false,
+          imageSrc:
+            "https://www.radio.net/images/broadcasts/be/67/39809/1/c300.png",
+          genres: "Nagoya, Japan Rock, Pop",
+          website: "https://asiadreamradio.com",
+          liked: false,
+          genre: "Anime",
+        },
+        {
+          id: 30,
+          title: "J-Club asia DREAM",
+          src: "https://kathy.torontocast.com:3350/stream/1/",
+          playing: false,
+          imageSrc:
+            "https://www.radio.net/images/broadcasts/d2/e8/35558/1/c300.png",
+          genres:
+            "From Japan - The hottest Japanese Hip-Hop and R&B music anywhere on the net",
+          website: "https://asiadreamradio.com",
+          liked: false,
+          genre: "Anime",
         },
       ],
     };
@@ -875,7 +889,20 @@ export default {
       }
     },
     likeStation(stationID) {
-      this.stations[stationID].liked = !this.stations[stationID].liked;
+      if (!this.likedSationsObj[stationID]) {
+        // Like a station
+        this.stations[stationID].liked = true;
+        this.$store.commit("saveLikedStation", this.stations[stationID]);
+        console.log("liked a brand new station")
+        this.$forceUpdate();
+        return
+      } if (this.likedSationsObj[stationID].liked === true) {
+        // Delete liked station
+        this.stations[stationID].liked = false;
+        this.$store.commit("removeLikedStation", this.stations[stationID])
+        console.log("already liked loser")
+        this.$forceUpdate();
+      }
     },
     changeTitle(title) {
       document.title = "Streaming" + " ~" + title + "~";
