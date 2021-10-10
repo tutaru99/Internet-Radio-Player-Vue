@@ -735,8 +735,11 @@ export default {
   },
   created() {
     this.loadAudioSource();
+    window.addEventListener('keydown', this.keyDownHandler)
   },
-
+  destroyed() {
+    window.removeEventListener('keydown', this.keyDownHandler)
+},
   computed: {
     selectedFilterGenre: function() {
       if (this.selectedGenre === "Anime") {
@@ -780,6 +783,13 @@ export default {
       }
       if (category === "Chill") {
         this.selectedGenre = "Chill";
+      }
+    },
+    keyDownHandler(e) {
+      if (e.keyCode === 32) {
+        this.isRadioMuted(this.soundID)
+      } else {
+          return
       }
     },
     storeStationData(station, id) {
