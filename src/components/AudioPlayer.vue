@@ -59,6 +59,16 @@
                     width="100"
                     text
                     color="white"
+                    :class="
+                      this.selectedGenre === 'Liked' ? 'red darken-4' : ''
+                    "
+                    @click="filterCategory('Liked')"
+                    >Liked</v-btn
+                  >
+                  <v-btn
+                    width="100"
+                    text
+                    color="white"
                     :class="this.selectedGenre === 'All' ? 'red darken-4' : ''"
                     @click="filterCategory('All')"
                     >All</v-btn
@@ -367,7 +377,8 @@ export default {
           title: "Mi-Soul",
           src: "http://178.159.3.22:8177/;stream/1",
           playing: false,
-          imageSrc: "https://upload.wikimedia.org/wikipedia/en/c/cc/Mi-Soul_logo.png",
+          imageSrc:
+            "https://upload.wikimedia.org/wikipedia/en/c/cc/Mi-Soul_logo.png",
           genres: "Soul R&B House Reggae Hip Hop Dance Soulful Music",
           website: "http://mi-soul.com",
           liked: false,
@@ -735,13 +746,22 @@ export default {
   },
   created() {
     this.loadAudioSource();
-    window.addEventListener('keydown', this.keyDownHandler)
+    window.addEventListener("keydown", this.keyDownHandler);
   },
   destroyed() {
-    window.removeEventListener('keydown', this.keyDownHandler)
-},
+    window.removeEventListener("keydown", this.keyDownHandler);
+  },
   computed: {
     selectedFilterGenre: function() {
+      if (this.selectedGenre === "Liked") {
+        const likedRadios = this.$store.state.likedStations;
+        for (let likedRadio in likedRadios) {
+          likedRadio = this.stations.find((station) => {
+            return station.id === likedRadio.id;
+          });
+        }
+        return likedRadios;
+      }
       if (this.selectedGenre === "Anime") {
         return this.stations.filter(function(u) {
           return u.genre === "Anime";
@@ -784,12 +804,15 @@ export default {
       if (category === "Chill") {
         this.selectedGenre = "Chill";
       }
+      if (category === "Liked") {
+        this.selectedGenre = "Liked";
+      }
     },
     keyDownHandler(e) {
       if (e.keyCode === 32) {
-        this.isRadioMuted(this.soundID)
+        this.isRadioMuted(this.soundID);
       } else {
-          return
+        return;
       }
     },
     storeStationData(station, id) {
@@ -903,14 +926,15 @@ export default {
         // Like a station
         this.stations[stationID].liked = true;
         this.$store.commit("saveLikedStation", this.stations[stationID]);
-        console.log("liked a brand new station")
+        console.log("liked a brand new station");
         this.$forceUpdate();
-        return
-      } if (this.likedSationsObj[stationID].liked === true) {
+        return;
+      }
+      if (this.likedSationsObj[stationID].liked === true) {
         // Delete liked station
         this.stations[stationID].liked = false;
-        this.$store.commit("removeLikedStation", this.stations[stationID])
-        console.log("already liked loser")
+        this.$store.commit("removeLikedStation", this.stations[stationID]);
+        console.log("already liked loser");
         this.$forceUpdate();
       }
     },
