@@ -755,12 +755,15 @@ export default {
     selectedFilterGenre: function() {
       if (this.selectedGenre === "Liked") {
         const likedRadios = this.$store.state.likedStations;
+        const radiosToReturn = [];
         for (let likedRadio in likedRadios) {
-          likedRadio = this.stations.find((station) => {
-            return station.id === likedRadio.id;
-          });
+          radiosToReturn.push(
+            this.stations.find((station) => {
+              return station.id === likedRadios[likedRadio].id;
+            })
+          );
         }
-        return likedRadios;
+        return radiosToReturn;
       }
       if (this.selectedGenre === "Anime") {
         return this.stations.filter(function(u) {
