@@ -753,6 +753,7 @@ export default {
   },
   computed: {
     selectedFilterGenre: function() {
+      /* Get liked stations from local storage, match against local object by id and return only matched stations on the local array */
       if (this.selectedGenre === "Liked") {
         const likedRadios = this.$store.state.likedStations;
         const radiosToReturn = [];
