@@ -1,4 +1,11 @@
 todo
     - Error handling on radios that dont work anymore(links broken) + visual error for the user
-    - Update/investigate broken radio links - known to be broken: HipHop requests 1# and rnb, be-happy radio and some more.
+    - Update/investigate broken radio links
+        known to be broken as of 2022/05:
+            HipHop requests 1# and rnb
+            be-happy
+            RadioDoki
+            Radio Isekai
+            Power Hit radio
+            Life chill music
     - Make radio play on tab/mobile devices
