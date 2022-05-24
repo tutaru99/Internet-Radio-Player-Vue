@@ -1,3 +1,4 @@
 todo
     - Error handling on radios that dont work anymore(links broken) + visual error for the user
     - Update/investigate broken radio links - known to be broken: HipHop requests 1# and rnb, be-happy radio and some more.
+    - Make radio play on tab/mobile devices
