@@ -1,4 +1,4 @@
-todo
+TODO
     - Error handling on radios that dont work anymore(links broken) + visual error for the user
     - Update/investigate broken radio links
         known to be broken as of 2022/05:
@@ -9,3 +9,8 @@ todo
             Power Hit radio
             Life chill music
     - Make radio play on tab/mobile devices
+
+Possible future improvements
+    - Setup youtube video & playlist import system where users can either create rooms or somehow have
+    the ability to add/import from youtube vids to share(their fav music) and listen together
+    with other users in real time (kinda like a group session)
