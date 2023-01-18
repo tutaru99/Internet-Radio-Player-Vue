@@ -11,18 +11,23 @@ const vuexLocal = new VuexPersistence({
 export default new Vuex.Store({
   state: {
     volume: 1,
-    likedStations: {}
+    likedStations: {},
   },
+
   mutations: {
     volumeSlider(state, value) {
       state.volume = value;
     },
+
     saveLikedStation(state, station) {
-      state.likedStations[station.id] = station;
+      // state.likedStations[station.id] = station;
+      Vue.set(state.likedStations, station.id, station);
     },
+
     removeLikedStation(state, station) {
-      delete state.likedStations[station.id];
-    }
+      // delete state.likedStations[station.id];
+      Vue.delete(state.likedStations, station.id);
+    },
   },
   actions: {},
   plugins: [vuexLocal.plugin],
